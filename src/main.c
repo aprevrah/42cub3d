@@ -6,7 +6,7 @@
 /*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 22:34:46 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/02/06 19:12:53 by aprevrha         ###   ########.fr       */
+/*   Updated: 2024/02/09 23:11:00 by aprevrha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <X11/keysym.h>
+#include <stdlib.h>
 
 typedef struct	s_data {
 	void	*mlx;
@@ -30,7 +31,7 @@ typedef struct s_map
 {
 	int	*arr;
 	int	length;
-	int	hight;
+	int	height;
 }				t_map;
 
 
@@ -113,7 +114,7 @@ int	handle_keydown(int keycode, t_data *data)
 	return (0);
 }
 
-char	*str_append(char *a, char *b)
+char	*ft_str_append(char *a, char *b)
 {
 	char	*str;
 	str = ft_strjoin(a, b);
@@ -149,27 +150,90 @@ unsigned int	count_token(char *str, char c)
 	return (count);
 }
 
-void	*parse_map(int	fd)
+int	fill_map(char const *s, char c, t_map map)
+{
+	int		i;
+	int		col;
+	int		line;
+	int		size;
+
+	i = 0;
+	line = 0;
+	col = 0;
+	while (line < map.height)
+	{
+		while (col < map.length)
+		{
+			while (s[i] == c)
+				i++;
+			map.arr[map.length * line + col] = ft_atoi(&s[i]);
+			printf("%i\n", map.arr[map.length * line + col]);
+			while (s[i] != c && s[i] != '\n')
+				i++;
+			if (s[i] == '\n')
+			{
+				i++;
+				break ;
+			}
+			col++;
+		}
+		col = 0;
+		line++;
+	}
+	return (1);
+}
+
+void	print_map(t_map map)
+{
+	int		col;
+	int		line;
+
+	col = 0;
+	line = 0;
+	while(line < map.height)
+	{
+		while(col < map.length)
+		{
+			ft_printf(" %i", map.arr[map.length * line + col]);
+			col++;
+		}
+		ft_printf("\n");
+		col = 0;
+		line++;
+	}
+}
+
+void	parse_map(int fd)
 {
 	char	*line;
 	char	*content;
 	t_map	map;
 
-	map.hight = 0;
+	content = NULL;
+	map.height = 0;
 	map.length = 0;
 	while (1)
 	{
 		line = get_next_line(fd);
+		if (!line)
+			break ;
 		if (!content)
 		{
 			map.length = count_token(line, ' ');
+			map.height = 1;
 			content = ft_strdup(line);
 			free(line);
 		}
 		else
-			content = str_append(content, line);
+		{
+			content = ft_str_append(content, line);
+			map.height++;
+		}
 	}
 	printf("\n%s\n", content);
+	map.arr = (int *)malloc(sizeof(int) * map.length * map.height);
+	fill_map(content, ' ', map);
+	print_map(map);
 }
 
 int	main(int argc, char **argv)
