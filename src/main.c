@@ -6,7 +6,7 @@
 /*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 22:34:46 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/02/09 23:11:00 by aprevrha         ###   ########.fr       */
+/*   Updated: 2024/02/15 00:01:18 by aprevrha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,7 @@ unsigned int	count_token(char *str, char c)
 	return (count);
 }
 
-int	fill_map(char const *s, char c, t_map map)
+int	fill_map(char const *s, char c, t_map *map)
 {
 	int		i;
 	int		col;
@@ -160,14 +160,14 @@ int	fill_map(char const *s, char c, t_map map)
 	i = 0;
 	line = 0;
 	col = 0;
-	while (line < map.height)
+	while (line < map->height)
 	{
-		while (col < map.length)
+		while (col < map->length)
 		{
 			while (s[i] == c)
 				i++;
-			map.arr[map.length * line + col] = ft_atoi(&s[i]);
-			printf("%i\n", map.arr[map.length * line + col]);
+			map->arr[map->length * line + col] = ft_atoi(&s[i]);
+			printf("%i\n", map->arr[map->length * line + col]);
 			while (s[i] != c && s[i] != '\n')
 				i++;
 			if (s[i] == '\n')
@@ -183,18 +183,18 @@ int	fill_map(char const *s, char c, t_map map)
 	return (1);
 }
 
-void	print_map(t_map map)
+void	print_map(t_map *map)
 {
 	int		col;
 	int		line;
 
 	col = 0;
 	line = 0;
-	while(line < map.height)
+	while(line < map->height)
 	{
-		while(col < map.length)
+		while(col < map->length)
 		{
-			ft_printf(" %i", map.arr[map.length * line + col]);
+			ft_printf(" %i", map->arr[map->length * line + col]);
 			col++;
 		}
 		ft_printf("\n");
@@ -203,15 +203,16 @@ void	print_map(t_map map)
 	}
 }
 
-void	parse_map(int fd)
+t_map	*parse_map(int fd)
 {
 	char	*line;
 	char	*content;
-	t_map	map;
+	t_map	*map;
 
+	map = (t_map *)malloc(sizeof(t_map));
 	content = NULL;
-	map.height = 0;
-	map.length = 0;
+	map->height = 0;
+	map->length = 0;
 	while (1)
 	{
 		line = get_next_line(fd);
@@ -219,21 +220,37 @@ void	parse_map(int fd)
 			break ;
 		if (!content)
 		{
-			map.length = count_token(line, ' ');
-			map.height = 1;
+			map->length = count_token(line, ' ');
+			map->height = 1;
 			content = ft_strdup(line);
 			free(line);
 		}
 		else
 		{
 			content = ft_str_append(content, line);
-			map.height++;
+			map->height++;
 		}
 	}
 	printf("\n%s\n", content);
-	map.arr = (int *)malloc(sizeof(int) * map.length * map.height);
+	map->arr = (int *)malloc(sizeof(int) * map->length * map->height);
 	fill_map(content, ' ', map);
 	print_map(map);
+	return (map);
+}
+
+void	render_map(t_map *map, t_data *data)
+{
+	int	i;
+	int	unit;
+
+	unit = 50;
+	i = 0;
+	while(i < map->height * map->length)
+	{
+		line_put(data, i * unit, (i/map->length) * unit, (i+1) * unit, (i/map->length) * unit, 0x00FFFFFF);
+		line_put(data, i * unit, (i/map->length) * unit, i * unit, ((i/map->length) + 1) * unit, 0x00FFFFFF);
+		i++;
+	}
 }
 
 int	main(int argc, char **argv)
@@ -242,6 +259,7 @@ int	main(int argc, char **argv)
 	void	*mlx_win;
 	t_data	data;
 	int		fd;
+	t_map	*map;
 
 	if (argc > 2)
 		return (1);
@@ -258,7 +276,8 @@ int	main(int argc, char **argv)
 	line_put(&data, 10, 10, 100, 50, 0x00FF0000);
 	line_put(&data, 10, 30, 50, 200, 0x00FF0000);
 	line_put(&data, 900, 600, 50, 200, 0x00FF0000);
-	parse_map(fd);
+	map = parse_map(fd);
+	render_map(map, &data);
 
 	mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
 	close(fd);
