@@ -6,7 +6,7 @@
 /*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/08 13:01:15 by aprevrha          #+#    #+#             */
-/*   Updated: 2023/12/19 22:42:19 by aprevrha         ###   ########.fr       */
+/*   Updated: 2024/02/21 21:57:59 by aprevrha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,13 @@
 # define MAP_SEP " "
 # define PI 3.141592678
 
+typedef struct s_map
+{
+	int length;
+	int height;
+    int *arr;
+}				t_map;
+
 typedef struct	s_data {
 	void	*mlx;
 	void	*win;
@@ -30,14 +37,8 @@ typedef struct	s_data {
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
+	t_map	*map;
 }				t_data;
-
-typedef struct s_map
-{
-	int length;
-	int height;
-    int *arr;
-}				t_map;
 
 typedef struct s_ivec2
 {

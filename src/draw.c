@@ -9,7 +9,7 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {
 	char	*dst;
 
-	if (y < 0 || x < 0)
+	if (x < 0 || y < 0 || x > 1920 || y > 1080)
 		return ;
 	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
 	*(unsigned int*)dst = color;
@@ -18,11 +18,11 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 int isignum(int x)
 {
 	if (x > 0) 
-		return 1;
+		return (1);
 	else if(x < 0)
-		return -1;
+		return (-1);
 	else
-		return 0;
+		return (0);
 }
 
 int iabs(int x)
@@ -55,10 +55,12 @@ void	line_put(t_data *data, t_ivec2 a, t_ivec2 b, int color)
 	// 	a.y = b.y;
 	// 	b.y = i;
 	// }
+	dx = 0;
+	dy = 0;
 	dx = b.x - a.x;
 	dy = b.y - a.y;
 	i = 0;
-	if (dx == 0.0)
+	if (dx == 0)
 	{
 		while(i <= iabs(dy))
 		{

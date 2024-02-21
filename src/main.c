@@ -6,7 +6,7 @@
 /*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 22:34:46 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/02/15 00:01:18 by aprevrha         ###   ########.fr       */
+/*   Updated: 2024/02/21 23:26:34 by aprevrha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <fcntl.h>
 #include <X11/keysym.h>
 #include <stdlib.h>
+#include <string.h>
 
 /* 
 int	has_extension(char * fname, char *fextension)
@@ -24,17 +25,35 @@ int	has_extension(char * fname, char *fextension)
 	ft_strc
 }*/
 
+void	free_and_exit(t_data data, int code)
+{
+	if (data.map)
+	{
+		if (data.map->arr)
+			free(data.map->arr);
+		free(data.map);
+	}
+	if (data.img)
+		mlx_destroy_image(data.mlx, data.img);
+	if (data.win)
+		mlx_destroy_window(data.mlx, data.win);
+	if (data.mlx)
+		free(data.mlx);
+	exit(code);
+}
+
 int	close_win(int keycode, t_data *data)
 {
-	mlx_destroy_window(data->mlx, data->win);
+	free_and_exit(*data, 0);
 	return (0);
 }
 
 int	handle_keydown(int keycode, t_data *data)
 {
-	printf("Keycode: %i\n", keycode);
+	//printf("--");
+	//printf("Keycode: %i\n", keycode);
 	if (keycode == XK_Escape)
-		mlx_destroy_window(data->mlx, data->win);
+		free_and_exit(*data, 0);
 	return (0);
 }
 
@@ -49,10 +68,12 @@ void	print_map(t_map *map)
 	{
 		while(col < map->length)
 		{
-			ft_printf(" %i", map->arr[map->length * line + col]);
+			//printf("--");
+			//printf(" %i", map->arr[map->length * line + col]);
 			col++;
 		}
-		ft_printf("\n");
+		//printf("--");
+		//printf("\n");
 		col = 0;
 		line++;
 	}
@@ -65,7 +86,8 @@ t_vec4 get_mapcoords(t_map *map, int index)
     p.f.y = index / map->length;
 	p.f.z = (float)(map->arr[index]);
 	p.f.w = 1;
-	printf("MapIdx: %i Coords: %.1fx %.1fy %.1fz\n", index, p.f.x, p.f.y, p.f.z);
+	//printf("--");
+	//printf("MapIdx: %i Coords: %.1fx %.1fy %.1fz\n", index, p.f.x, p.f.y, p.f.z);
 	return (p);
 }
 
@@ -113,13 +135,20 @@ t_v2	vect_multi(t_vec4 )
 	return (result);
 }
  */
+
 t_vec4 multiply(t_vec4 vec, t_tmatrix mat) {
     t_vec4	result;
 
-    result.f.x = vec.f.x * mat.f.x1 + vec.f.y * mat.f.x2 + vec.f.z * mat.f.x3 + vec.f.w * mat.f.x4;
-    result.f.y = vec.f.x * mat.f.y1 + vec.f.y * mat.f.y2 + vec.f.z * mat.f.y3 + vec.f.w * mat.f.y4;
-    result.f.z = vec.f.x * mat.f.z1 + vec.f.y * mat.f.z2 + vec.f.z * mat.f.z3 + vec.f.w * mat.f.z4;
-    result.f.w = vec.f.x * mat.f.w1 + vec.f.y * mat.f.w2 + vec.f.z * mat.f.w3 + vec.f.w * mat.f.w4;
+    //result.f.x = vec.f.x * mat.f.x1 + vec.f.y * mat.f.x2 + vec.f.z * mat.f.x3 + vec.f.w * mat.f.x4;
+    //result.f.y = vec.f.x * mat.f.y1 + vec.f.y * mat.f.y2 + vec.f.z * mat.f.y3 + vec.f.w * mat.f.y4;
+    //result.f.z = vec.f.x * mat.f.z1 + vec.f.y * mat.f.z2 + vec.f.z * mat.f.z3 + vec.f.w * mat.f.z4;
+    //result.f.w = vec.f.x * mat.f.w1 + vec.f.y * mat.f.w2 + vec.f.z * mat.f.w3 + vec.f.w * mat.f.w4;
+
+	result.f.x = vec.f.x * mat.f.x1 + vec.f.y * mat.f.y1 + vec.f.z * mat.f.z1 + vec.f.w * mat.f.w1;
+	result.f.y = vec.f.x * mat.f.x2 + vec.f.y * mat.f.y2 + vec.f.z * mat.f.z2 + vec.f.w * mat.f.w2;
+	result.f.z = vec.f.x * mat.f.x3 + vec.f.y * mat.f.y3 + vec.f.z * mat.f.z3 + vec.f.w * mat.f.w3;
+	result.f.w = vec.f.x * mat.f.x4 + vec.f.y * mat.f.y4 + vec.f.z * mat.f.z4 + vec.f.w * mat.f.w4;
+	
     return (result);
 }
 
@@ -149,7 +178,8 @@ void	render_map(t_map *map, t_data *data, t_tmatrix tmat)
 			p1 = get_sspace(get_mapcoords(map, i), tmat);
 			p2 = get_sspace(get_mapcoords(map, i + 1), tmat);
 			line_put(data, p1, p2, 0x00FFFFFF);
-			printf("Horizontal i:%i P1:%ix %iy P2:%ix %iy\n", i, p1.x, p1.y, p2.x, p2.y);
+			//printf("--");
+			//printf("Horizontal i:%i P1:%ix %iy P2:%ix %iy\n", i, p1.x, p1.y, p2.x, p2.y);
 		}
 			
 		if (i < (map->height - 1) * map->length)
@@ -157,7 +187,8 @@ void	render_map(t_map *map, t_data *data, t_tmatrix tmat)
 			p1 = get_sspace(get_mapcoords(map, i), tmat);
 			p2 = get_sspace(get_mapcoords(map, i + map->length), tmat);
 			line_put(data, p1, p2, 0x00FFFFFF);
-			printf("Vertical i:%i P1:%ix %iy P2:%ix %iy\n", i, p1.x, p1.y, p2.x, p2.y);
+			//printf("--");
+			//printf("Vertical i:%i P1:%ix %iy P2:%ix %iy\n", i, p1.x, p1.y, p2.x, p2.y);
 		}
 			
 		i++;
@@ -230,11 +261,9 @@ t_tmatrix	get_tmatrix(t_vec3 rotaxis, float rotang, t_vec3 translation)
 	tmat.f.w2 = translation.y;
 	tmat.f.w3 = translation.z;
 	tmat.f.w4 = 1;
-	// i = -1;
-	// while (i < 16)
-	// 	smat.arr[++i] = 0;
 	return (tmat);
 }
+
 
 
 int	main(int argc, char **argv)
@@ -248,26 +277,33 @@ int	main(int argc, char **argv)
 	if (argc > 2)
 		return (1);
 	if (argv)
-		printf("av\n");
+		//printf("av\n");
 
-	
 	fd = open(argv[1], O_RDONLY);
-	map = parse_map(fd);
+	data.map = parse_map(fd);
 	close(fd);
-	
-	
+
 	data.mlx = mlx_init();
+	if (!data.mlx)
+		return (0);
 	data.win = mlx_new_window(data.mlx, 1920, 1080, "Hello world!");
+	if (!data.mlx)
+		return (free(data.mlx), 0);
 	data.img = mlx_new_image(data.mlx, 1920, 1080);
+	if (!data.mlx)
+		return (mlx_destroy_window(data.mlx, data.win), free(data.mlx), 0);
 	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel, &data.line_length, &data.endian);
+	if (!data.addr)
+		return (mlx_destroy_image(data.mlx, data.img), mlx_destroy_window(data.mlx, data.win), free(data.mlx), 0);
 
 	t_vec3 ra;
 	ra.x = 0, ra.y = 1, ra.z = 0;
 	t_vec3 t;
 	t.x = 10, t.y = 10, t.z = 0;
 	
-	tmat = get_tmatrix(ra, PI/2., t);
-	render_map(map, &data, tmat);
+	tmat = get_tmatrix(ra, 0, t);
+
+	render_map(data.map, &data, tmat);
 
 	mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
 	mlx_hook(data.win, 2, 1L<<0, handle_keydown, &data);

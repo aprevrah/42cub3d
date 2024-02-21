@@ -55,7 +55,7 @@ int	fill_map(char const *s, char c, t_map *map)
 			while (s[i] == c)
 				i++;
 			map->arr[map->length * line + col] = ft_atoi(&s[i]);
-			printf("%i\n", map->arr[map->length * line + col]);
+			ft_printf("%i\n", map->arr[map->length * line + col]);
 			while (s[i] != c && s[i] != '\n')
 				i++;
 			if (s[i] == '\n')
@@ -85,8 +85,8 @@ int fill_map(char const *s, char c, t_map *map)
             i++;
         // if (s[i] == '\0') // Check for premature end of string
         //     return 0;
-		printf("\n%s \n", &s[i]);
-        map->arr[index] = ft_atoi(&s[i]); // Convert substring to integer
+		ft_printf("\n%s \n", &s[i]);
+        map->arr[index] = ft_atoi(s + i); // Convert substring to integer
 		index++;
         while (s[i] != c && s[i] != '\n' && s[i] != '\0') // Skip to next token or line
             i++;
@@ -103,6 +103,8 @@ t_map	*parse_map(int fd)
 	t_map	*map;
 
 	map = (t_map *)malloc(sizeof(t_map));
+	if (!map)
+		return (NULL);
 	content = NULL;
 	map->height = 0;
 	map->length = 0;
@@ -124,12 +126,15 @@ t_map	*parse_map(int fd)
 			map->height++;
 		}
 	}
-	//printf("\n%s\n", content);
-	map->arr = (int *)malloc(map->length * map->height);
+	//ft_printf("\n%s\n", content);
+	map->arr = (int *)malloc((map->length * map->height) * sizeof(int));
+	if(!map->arr)
+		return (free(map), NULL);
     ft_bzero(map->arr, map->length * map->height);
-	printf("Content: %s \n Length: %i Height: %i\n", content, map->length, map->height);
+	ft_printf("Content: %s \n Length: %i Height: %i\n", content, map->length, map->height);
 	fill_map(content, ' ', map);
-	printf("Done Pasing!\n");
+	free(content);
+	ft_printf("Done Pasing!\n");
 	return (map);
 }
 
