@@ -37,24 +37,6 @@ void	line_put(t_data *data, t_ivec2 a, t_ivec2 b, int color)
 	int		dy;
 	float	m;
 
-	// if (a.x > b.x)
-	// {
-	// 	i = a.x;
-	// 	a.x = b.x;
-	// 	b.x = i;
-	// 	i = a.y;
-	// 	a.y = b.y;
-	// 	b.y = i;
-	// }
-	// if (a.y > b.y)
-	// {
-	// 	i = a.x;
-	// 	a.x = b.x;
-	// 	b.x = i;
-	// 	i = a.y;
-	// 	a.y = b.y;
-	// 	b.y = i;
-	// }
 	dx = 0;
 	dy = 0;
 	dx = b.x - a.x;

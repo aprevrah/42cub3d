@@ -85,7 +85,7 @@ int fill_map(char const *s, char c, t_map *map)
             i++;
         // if (s[i] == '\0') // Check for premature end of string
         //     return 0;
-		ft_printf("\n%s \n", &s[i]);
+		//ft_printf("\n%s \n", &s[i]);
         map->arr[index] = ft_atoi(s + i); // Convert substring to integer
 		index++;
         while (s[i] != c && s[i] != '\n' && s[i] != '\0') // Skip to next token or line
