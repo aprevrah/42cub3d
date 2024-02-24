@@ -6,7 +6,7 @@
 /*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 22:34:46 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/02/21 23:26:34 by aprevrha         ###   ########.fr       */
+/*   Updated: 2024/02/24 18:10:24 by aprevrha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,11 @@
 #include <X11/keysym.h>
 #include <stdlib.h>
 #include <string.h>
+
+# include <mlx.h>
+# include <X11/X.h>
+
+
 
 void	free_and_exit(t_data data, int code)
 {
@@ -35,7 +40,7 @@ void	free_and_exit(t_data data, int code)
 	exit(code);
 }
 
-int	close_win(int keycode, t_data *data)
+int	win_close_button(int keycode, t_data *data)
 {
 	free_and_exit(*data, 0);
 	return (0);
@@ -47,7 +52,62 @@ void	clear_img(t_data *data)
 	ft_bzero(data->addr, W_HEIGHT * data->line_length);
 }
 
+int	init_keys(t_keys *keys)
+{
+	int i;
+	
+	keys->codes[0] = XK_w;
+	keys->oper[0].func = rot_x; keys->oper[0].value = 1; keys->oper[0].matrix = 'o';
+	keys->codes[1] = XK_s;
+	keys->oper[1].func = rot_x; keys->oper[1].value = -1; keys->oper[1].matrix = 'o';
+	keys->codes[0] = XK_a;
+	keys->oper[2].func = rot_y; keys->oper[2].value = 1; keys->oper[2].matrix = 'o';
+	keys->codes[3] = XK_d;
+	keys->oper[3].func = rot_y; keys->oper[3].value = -1; keys->oper[3].matrix = 'o';
+	
+	i = 0;
+	while(i < NUM_OF_KEYS)
+	{
+		keys->state[i] = 0;
+		i++;
+	}
+}
+
 int	handle_keydown(int keycode, t_data *data)
+{
+	int i;
+	
+	i = 0;
+	while(i < NUM_OF_KEYS)
+	{
+		if(data->keys.codes[i] == keycode)
+		{
+			data->keys.state[i] = 1;
+			break ;
+		}
+		i++;
+	}
+	return (0);
+}
+
+int	handle_keyup(int keycode, t_data *data)
+{
+	int i;
+	
+	i = 0;
+	while(i < NUM_OF_KEYS)
+	{
+		if(data->keys.codes[i] == keycode)
+		{
+			data->keys.state[i] = 0;
+			break ;
+		}
+		i++;
+	}
+	return (0);
+}
+
+/* int	handle_keydown(int keycode, t_data *data)
 {
 	printf("Keycode Recived: 0x%x\n", keycode);
 	if (keycode == XK_Escape)
@@ -81,120 +141,31 @@ int	handle_keydown(int keycode, t_data *data)
 		mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
 	}
 	return (0);
-}
+} */
 
-/*
-void	print_map(t_map *map)
+loop_hook(t_data *data)
 {
-	int		col;
-	int		line;
-
-	col = 0;
-	line = 0;
-	while(line < map->height)
+	int i;
+	int keys_pressed;
+	
+	keys_pressed = 0;
+	i = 0;
+	while (i < NUM_OF_KEYS)
 	{
-		while(col < map->length)
+		if (data->keys.state[i] == 1)
 		{
-			//printf(" %i", map->arr[map->length * line + col]);
-			col++;
+			(data->keys.oper[i].func)(data->keys.oper[i].value, data->keys.oper[i].matrix, data);
+			keys_pressed++;
 		}
-		//printf("\n");
-		col = 0;
-		line++;
+		i++;
+	}
+	if (keys_pressed > 0)
+	{
+		clear_img(data);
+		render_map(data);
+		mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
 	}
 }
-*/
-/* 
-int	get_x(t_map *map, int index)
-{
-    return (index % map->length);
-}
-
-int	get_y(t_map *map, int index)
-{
-    return (index / map->length);
-}
-
-int	get_index(t_map *map, int x, int y)
-{
-	if (x >= 0 && x < map->length && y >= 0 && y < map->height)
-        return (y * map->length + x);
-	return (-1);
-}
- */
-/* 
-t_v2	vect_multi(t_v3 point, t_v6 view, t_v2 offset)
-{
-	t_v2	result;
-	result.x = point.x * view.x1 + point.y * view.y1 + point.z * view.z1;
-	result.y = point.x * view.x2 + point.y * view.y2 + point.z * view.z2;
-	result.x *= 20;
-	result.y *= 20;
-	result.x += offset.x;
-	result.y += offset.y;
-	return (result);
-}
-*/
-/* 
-t_v2	vect_multi(u_vec4 )
-{
-	t_ivec2	result;
-	result.x = point.x * view.x1 + point.y * view.y1 + point.z * view.z1;
-	result.y = point.x * view.x2 + point.y * view.y2 + point.z * view.z2;
-	result.x *= 20;
-	result.y *= 20;
-	result.x += offset.x;
-	result.y += offset.y;
-	return (result);
-}
- */
-/*
-t_vec3 normalize(t_vec3 v) 
-{
-    float magnitude = sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
-
-    if (magnitude != 0)
-	{
-        v.x /= magnitude;
-        v.y /= magnitude;
-        v.z /= magnitude;
-    }
-    return (v);
-}
-
-u_tmatrix	get_tmatrix(t_vec3 rotaxis, float rotang, t_vec3 translation)
-{
-	u_tmatrix	obj_tmat;
-
-	rotaxis = normalize(rotaxis);
-
-	float cos_theta = cos(rotang);
-	float sin_theta = sin(rotang);
-	float one_minus_cos_theta = 1 - cos_theta;
-
-	obj_tmat.f.x1 = cos_theta + rotaxis.x * rotaxis.x * one_minus_cos_theta;
-	obj_tmat.f.x2 = rotaxis.x * rotaxis.y * one_minus_cos_theta - rotaxis.z * sin_theta;
-	obj_tmat.f.x3 = rotaxis.x * rotaxis.z * one_minus_cos_theta + rotaxis.y * sin_theta;
-	obj_tmat.f.x4 = 0;
-
-	obj_tmat.f.y1 = rotaxis.y * rotaxis.x * one_minus_cos_theta + rotaxis.z * sin_theta;
-	obj_tmat.f.y2 = cos_theta + rotaxis.y * rotaxis.y * one_minus_cos_theta;
-	obj_tmat.f.y3 = rotaxis.y * rotaxis.z * one_minus_cos_theta - rotaxis.x * sin_theta;
-	obj_tmat.f.y4 = 0;
-
-	obj_tmat.f.z1 = rotaxis.z * rotaxis.x * one_minus_cos_theta - rotaxis.y * sin_theta;
-	obj_tmat.f.z2 = rotaxis.z * rotaxis.y * one_minus_cos_theta + rotaxis.x * sin_theta;
-	obj_tmat.f.z3 = cos_theta + rotaxis.z * rotaxis.z * one_minus_cos_theta;
-	obj_tmat.f.z4 = 0;
-
-	obj_tmat.f.w1 = translation.x;
-	obj_tmat.f.w2 = translation.y;
-	obj_tmat.f.w3 = translation.z;
-	obj_tmat.f.w4 = 1;
-	return (obj_tmat);
-}
-*/
-
 
 int	main(int argc, char **argv)
 {
@@ -235,7 +206,9 @@ int	main(int argc, char **argv)
 	render_map(&data);
 
 	mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
-	mlx_hook(data.win, 2, 1L<<0, handle_keydown, &data);
-	mlx_hook(data.win, 17, 0, close_win, &data);
+	mlx_loop_hook(data.mlx, loop_hook, &data);
+	mlx_hook(data.win, 2, KeyPressMask, handle_keydown, &data);
+	mlx_hook(data.win, 3, KeyReleaseMask, handle_keyup, &data);
+	mlx_hook(data.win, 17, ButtonPressMask, win_close_button, &data);
 	mlx_loop(data.mlx);
 }
