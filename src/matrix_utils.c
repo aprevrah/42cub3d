@@ -6,11 +6,23 @@
 /*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 17:24:32 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/02/24 17:24:34 by aprevrha         ###   ########.fr       */
+/*   Updated: 2024/02/25 03:02:47 by aprevrha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/fdf.h"
+
+//New Vector = nv
+u_vec4 nv(float x, float y, float z)
+{
+	u_vec4 v;
+	
+	v.f.x = x;
+	v.f.y = y;
+	v.f.z = z;
+	v.f.w = 1;
+	return (v);
+}
 
 // Function to create a rotation matrix for rotation about the x-axis by an angle in radians
 u_tmatrix rotation_m_x(float angle)
@@ -26,7 +38,7 @@ u_tmatrix rotation_m_x(float angle)
     result.f.z3 = cos_theta;
     result.f.w4 = 1;
 
-    return result;
+    return (result);
 }
 
 // Function to create a rotation matrix for rotation about the y-axis by an angle in radians
@@ -43,7 +55,7 @@ u_tmatrix rotation_m_y(float angle)
     result.f.z3 = cos_theta;
     result.f.w4 = 1;
 
-    return result;
+    return (result);
 }
 
 // Function to create a rotation matrix for rotation about the z-axis by an angle in radians
@@ -60,21 +72,21 @@ u_tmatrix rotation_m_z(float angle)
     result.f.z3 = 1;
     result.f.w4 = 1;
 
-    return result;
+    return (result);
 }
 
-u_tmatrix scale_m(float scale)
+u_tmatrix scale_m(u_vec4 vec)
 {
     u_tmatrix result = {0};
-    result.f.x1 = scale;
-    result.f.y2 = scale;
-    result.f.z3 = scale;
+    result.f.x1 = vec.f.x;
+    result.f.y2 = vec.f.y;
+    result.f.z3 = vec.f.z;
     result.f.w4 = 1;
 
-    return result;
+    return (result);
 }
 
-u_tmatrix translate_m(float x, float y, float z) 
+u_tmatrix translate_m(u_vec4 vec)
 {
     u_tmatrix result = {0};
     result.f.x1 = 1;
@@ -82,11 +94,43 @@ u_tmatrix translate_m(float x, float y, float z)
     result.f.z3 = 1;
     result.f.w4 = 1;
 
-    result.f.w1 = x;
-    result.f.w2 = y;
-    result.f.w3 = z;
+    result.f.w1 = vec.f.x;
+    result.f.w2 = vec.f.y;
+    result.f.w3 = vec.f.z;
 
-    return result;
+    return (result);
+}
+
+u_tmatrix	perspec_project_m(float f)
+{
+    u_tmatrix result = {0};
+    result.f.x1 = 1;
+    result.f.y2 = 1;
+    result.f.z3 = 1;
+	result.f.z4 = 2;
+    result.f.w3 = 2;
+	result.f.w4 = 1;
+
+    return (result);
+}
+
+u_vec4	perspec_div(u_vec4 vec)
+{
+	// int i;
+	
+	// printf("perspec_div");
+	// i = 0;
+	// while (i < 4)
+	// {
+	// 	vec.arr[i] /= vec.f.w;
+	// 	i++;
+	// }
+	float inv_w = 1.0/vec.f.w;
+	vec.f.x *= inv_w;
+	vec.f.y *= inv_w;
+	vec.f.z *= inv_w;
+	vec.f.w = 1;
+	return (vec);
 }
 
 u_tmatrix multiply_tmats(u_tmatrix mat1, u_tmatrix mat2)

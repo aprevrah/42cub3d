@@ -6,39 +6,29 @@
 /*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 17:23:53 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/02/24 18:11:44 by aprevrha         ###   ########.fr       */
+/*   Updated: 2024/02/24 23:22:41 by aprevrha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/fdf.h"
 
-u_tmatrix	*get_matrix(char mchar, t_data *data)
-{
-	if (mchar == 'o')
-		return (&(data->obj_tmat));
-	return (&(data->view_tmat));
+
+void	rotate(u_vec4 v, u_tmatrix *matrix)
+{	
+	if (v.f.x != 0)
+		*matrix = multiply_tmats(rotation_m_x(v.f.x), *matrix);
+	if (v.f.y != 0)
+		*matrix = multiply_tmats(rotation_m_y(v.f.y), *matrix);
+	if (v.f.z != 0)
+		*matrix = multiply_tmats(rotation_m_z(v.f.z), *matrix);
 }
 
-void	rot_x(int value, char matrix_char, void *data)
+void	translate(u_vec4 v, u_tmatrix *matrix)
 {
-	u_tmatrix	*matrix;
-	
-	matrix = get_matrix(matrix, data);
-	multiply_tmats(rotation_m_x(value * OPER_FACTOR), *matrix);
+	*matrix = multiply_tmats(translate_m(v), *matrix);
 }
 
-void	rot_y(int value, char matrix_char, void *data)
+void	scale(u_vec4 v, u_tmatrix *matrix)
 {
-	u_tmatrix	*matrix;
-	
-	matrix = get_matrix(matrix, data);
-	multiply_tmats(rotation_m_y(value * OPER_FACTOR), *matrix);
-}
-
-void	rot_z(int value, char matrix_char, void *data)
-{
-	u_tmatrix	*matrix;
-	
-	matrix = get_matrix(matrix, data);
-	multiply_tmats(rotation_m_z(value * OPER_FACTOR), *matrix);
+	*matrix = multiply_tmats(scale_m(v), *matrix);
 }

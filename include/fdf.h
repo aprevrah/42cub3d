@@ -6,7 +6,7 @@
 /*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/08 13:01:15 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/02/24 18:12:03 by aprevrha         ###   ########.fr       */
+/*   Updated: 2024/02/25 01:35:59 by aprevrha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,10 @@
 # define PI 3.141592678
 # define W_WIDTH 1920
 # define W_HEIGHT 1080
-# define NUM_OF_KEYS 10
-# define OPER_FACTOR 0.05
+# define NUM_OF_KEYS 20 //Change to number of keys added
+# define OPER_FACTOR 0.02
 
+typedef struct s_data t_data;
 
 typedef struct s_map
 {
@@ -52,21 +53,16 @@ typedef union
     float arr[16];
 }	u_tmatrix;
 
-typedef void	(*t_key_func)(int value, char matrix_char, void *data);
+typedef void	(*t_key_func)(u_vec4 vec, u_tmatrix	*tmat);
 
-typedef struct s_operation
+typedef struct s_key
 {
+	int			code;
+	int			state;
 	t_key_func	func;
-	int			value;
-	char		matrix;
-}	t_operation;
-
-typedef struct s_keys
-{
-	int			codes[NUM_OF_KEYS];
-	int			state[NUM_OF_KEYS];
-	t_operation	oper[NUM_OF_KEYS];
-}	t_keys;
+	u_vec4		v;
+	u_tmatrix	*matrix;
+}	t_key;
 
 typedef struct  s_data
 {
@@ -78,9 +74,8 @@ typedef struct  s_data
 	int		    line_length;
 	int		    endian;
 	t_map	    *map;
-    u_tmatrix   obj_tmat;
-    u_tmatrix   view_tmat;
-	t_keys		keys;
+    u_tmatrix	tmatrices[2];
+	t_key		keys[NUM_OF_KEYS];
 }				t_data;
 
 typedef struct s_ivec2
@@ -104,17 +99,19 @@ void        my_mlx_pixel_put(t_data *data, int x, int y, int color);
 void        line_put(t_data *data, t_ivec2 a, t_ivec2 b, int color);
 
 //matrix_utils.c
+u_vec4		nv(float x, float y, float z);
 u_tmatrix   rotation_m_x(float angle);
 u_tmatrix   rotation_m_y(float angle);
 u_tmatrix   rotation_m_z(float angle);
-u_tmatrix   scale_m(float scale);
-u_tmatrix   translate_m(float x, float y, float z);
+u_tmatrix   scale_m(u_vec4 vec);
+u_tmatrix   translate_m(u_vec4 vec);
+u_tmatrix	perspec_project_m(float f);
+u_vec4		perspec_div(u_vec4 vec);
 u_tmatrix   multiply_tmats(u_tmatrix mat1, u_tmatrix mat2);
 
 //oper.c
-void		rot_x(int value, char matrix_char, void *data);
-void		rot_y(int value, char matrix_char, void *data);
-void		rot_z(int value, char matrix_char, void *data);
+void		rotate(u_vec4 v, u_tmatrix *matrix);
+void		translate(u_vec4 v, u_tmatrix *matrix);
 
 //parse.c
 t_map       *parse_map(int fd);

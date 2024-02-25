@@ -6,7 +6,7 @@
 /*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 22:34:46 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/02/24 18:10:24 by aprevrha         ###   ########.fr       */
+/*   Updated: 2024/02/25 03:38:56 by aprevrha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,37 +52,55 @@ void	clear_img(t_data *data)
 	ft_bzero(data->addr, W_HEIGHT * data->line_length);
 }
 
-int	init_keys(t_keys *keys)
+void	init_key(t_key *key, int keycode, t_key_func function, u_tmatrix *tmatrix, u_vec4 vec)
 {
 	int i;
 	
-	keys->codes[0] = XK_w;
-	keys->oper[0].func = rot_x; keys->oper[0].value = 1; keys->oper[0].matrix = 'o';
-	keys->codes[1] = XK_s;
-	keys->oper[1].func = rot_x; keys->oper[1].value = -1; keys->oper[1].matrix = 'o';
-	keys->codes[0] = XK_a;
-	keys->oper[2].func = rot_y; keys->oper[2].value = 1; keys->oper[2].matrix = 'o';
-	keys->codes[3] = XK_d;
-	keys->oper[3].func = rot_y; keys->oper[3].value = -1; keys->oper[3].matrix = 'o';
-	
+	key->state = 0;
+	key->code = keycode;
+	key->func = function;
+	key->matrix = tmatrix;
 	i = 0;
-	while(i < NUM_OF_KEYS)
+	while (i < 3)
 	{
-		keys->state[i] = 0;
+		vec.arr[i] *= OPER_FACTOR;
 		i++;
 	}
+	key->v = vec;
 }
 
-int	handle_keydown(int keycode, t_data *data)
+//Needs to match NUM_OF_KEYS
+int	init_keys(t_key *keys, u_tmatrix *tmatrices)
+{	
+	init_key(&keys[0], XK_i, rotate, &tmatrices[1], nv(1, 0, 0));
+	init_key(&keys[1], XK_k, rotate, &tmatrices[1], nv(-1, 0, 0));
+	init_key(&keys[2], XK_j, rotate, &tmatrices[1], nv(0, 1, 0));
+	init_key(&keys[3], XK_l, rotate, &tmatrices[1], nv(0, -1, 0));
+
+	init_key(&keys[4], XK_w, translate, &tmatrices[0], nv(0, 0, 50));
+	init_key(&keys[5], XK_s, translate, &tmatrices[0], nv(0, 0, -50));
+	init_key(&keys[6], XK_a, translate, &tmatrices[0], nv(50, 0, 0));
+	init_key(&keys[7], XK_d, translate, &tmatrices[0], nv(-50, 0, 0));
+	init_key(&keys[8], XK_space, translate, &tmatrices[0], nv(0, 50, 0));
+	init_key(&keys[9], XK_Shift_L, translate, &tmatrices[0], nv(0, -50, 0));
+
+	init_key(&keys[10], XK_Up, rotate, &tmatrices[0], nv(1, 0, 0));
+	init_key(&keys[11], XK_Down, rotate, &tmatrices[0], nv(-1, 0, 0));
+	init_key(&keys[12], XK_Left, rotate, &tmatrices[0], nv(0, 1, 0));
+	init_key(&keys[13], XK_Right, rotate, &tmatrices[0], nv(0, -1, 0));
+	return (0);
+}
+
+int	handle_keydown(int keycode, t_key *keys)
 {
 	int i;
 	
 	i = 0;
 	while(i < NUM_OF_KEYS)
 	{
-		if(data->keys.codes[i] == keycode)
+		if(keys[i].code == keycode)
 		{
-			data->keys.state[i] = 1;
+			keys[i].state = 1;
 			break ;
 		}
 		i++;
@@ -90,16 +108,16 @@ int	handle_keydown(int keycode, t_data *data)
 	return (0);
 }
 
-int	handle_keyup(int keycode, t_data *data)
+int	handle_keyup(int keycode, t_key *keys)
 {
 	int i;
 	
 	i = 0;
 	while(i < NUM_OF_KEYS)
 	{
-		if(data->keys.codes[i] == keycode)
+		if(keys[i].code == keycode)
 		{
-			data->keys.state[i] = 0;
+			keys[i].state = 0;
 			break ;
 		}
 		i++;
@@ -107,43 +125,8 @@ int	handle_keyup(int keycode, t_data *data)
 	return (0);
 }
 
-/* int	handle_keydown(int keycode, t_data *data)
-{
-	printf("Keycode Recived: 0x%x\n", keycode);
-	if (keycode == XK_Escape)
-		free_and_exit(*data, 0);
-	if (keycode == XK_w)
-	{
-		clear_img(data);
-		data->obj_tmat = multiply_tmats(rotation_m_x(PI/8), data->obj_tmat);
-		render_map(data);
-		mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
-	}
-	if (keycode == XK_s)
-	{
-		clear_img(data);
-		data->obj_tmat = multiply_tmats(rotation_m_x(-PI/8), data->obj_tmat);
-		render_map(data);
-		mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
-	}
-	if (keycode == XK_a)
-	{
-		clear_img(data);
-		data->obj_tmat = multiply_tmats(rotation_m_y(PI/8), data->obj_tmat);
-		render_map(data);
-		mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
-	}
-	if (keycode == XK_d)
-	{
-		clear_img(data);
-		data->obj_tmat = multiply_tmats(rotation_m_y(-PI/8), data->obj_tmat);
-		render_map(data);
-		mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
-	}
-	return (0);
-} */
 
-loop_hook(t_data *data)
+int	loop_hook(t_data *data)
 {
 	int i;
 	int keys_pressed;
@@ -152,9 +135,9 @@ loop_hook(t_data *data)
 	i = 0;
 	while (i < NUM_OF_KEYS)
 	{
-		if (data->keys.state[i] == 1)
+		if (data->keys[i].state == 1)
 		{
-			(data->keys.oper[i].func)(data->keys.oper[i].value, data->keys.oper[i].matrix, data);
+			(data->keys[i].func)(data->keys[i].v, data->keys[i].matrix);
 			keys_pressed++;
 		}
 		i++;
@@ -165,6 +148,7 @@ loop_hook(t_data *data)
 		render_map(data);
 		mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
 	}
+	return (0);
 }
 
 int	main(int argc, char **argv)
@@ -195,20 +179,17 @@ int	main(int argc, char **argv)
 	if (!data.addr)
 		return (mlx_destroy_image(data.mlx, data.img), mlx_destroy_window(data.mlx, data.win), free(data.mlx), 0);
 	
-	scale = 40;
-	data.obj_tmat = translate_m(-((data.map->length - 1)/ 2.f), -((data.map->height - 1)/ 2.f), 0.f);
-	data.obj_tmat = multiply_tmats(scale_m(scale), data.obj_tmat);
-
-	data.view_tmat = translate_m(W_WIDTH/2, W_HEIGHT/2, 0);
-	
-
-
+	scale = 50;
+	data.tmatrices[1] = translate_m(nv(-((data.map->length - 1)/ 2.f), -((data.map->height - 1)/ 2.f), 0.f));
+	data.tmatrices[1] = multiply_tmats(scale_m(nv(scale, scale, scale)), data.tmatrices[1]);
+	data.tmatrices[0] = translate_m(nv(W_WIDTH/2, W_HEIGHT/2, -10));
 	render_map(&data);
-
 	mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
-	mlx_loop_hook(data.mlx, loop_hook, &data);
-	mlx_hook(data.win, 2, KeyPressMask, handle_keydown, &data);
-	mlx_hook(data.win, 3, KeyReleaseMask, handle_keyup, &data);
+
+	init_keys(data.keys, data.tmatrices);
+	mlx_hook(data.win, 2, KeyPressMask, handle_keydown, data.keys);
+	mlx_hook(data.win, 3, KeyReleaseMask, handle_keyup, data.keys);
 	mlx_hook(data.win, 17, ButtonPressMask, win_close_button, &data);
+	mlx_loop_hook(data.mlx, loop_hook, &data);
 	mlx_loop(data.mlx);
 }
