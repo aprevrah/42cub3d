@@ -101,15 +101,15 @@ u_tmatrix translate_m(u_vec4 vec)
     return (result);
 }
 
-u_tmatrix	perspec_project_m(float f)
+u_tmatrix	perspec_project_m(float n, float f)
 {
     u_tmatrix result = {0};
     result.f.x1 = 1;
     result.f.y2 = 1;
-    result.f.z3 = 1;
-	result.f.z4 = 2;
-    result.f.w3 = 2;
-	result.f.w4 = 1;
+    result.f.z3 = (f/(f-n));
+	result.f.z4 = ((f*n)/(f-n));
+    result.f.w3 = 1;
+	result.f.w4 = 0;
 
     return (result);
 }

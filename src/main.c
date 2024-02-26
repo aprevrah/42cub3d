@@ -54,47 +54,45 @@ void	clear_img(t_data *data)
 
 void	init_key(t_key *key, int keycode, t_key_func function, u_tmatrix *tmatrix, u_vec4 vec)
 {
-	int i;
-	
 	key->state = 0;
 	key->code = keycode;
 	key->func = function;
 	key->matrix = tmatrix;
-	i = 0;
-	while (i < 3)
-	{
-		vec.arr[i] *= OPER_FACTOR;
-		i++;
-	}
 	key->v = vec;
 }
 
-//Needs to match NUM_OF_KEYS
-int	init_keys(t_key *keys, u_tmatrix *tmatrices)
-{	
-	init_key(&keys[0], XK_i, rotate, &tmatrices[1], nv(1, 0, 0));
-	init_key(&keys[1], XK_k, rotate, &tmatrices[1], nv(-1, 0, 0));
-	init_key(&keys[2], XK_j, rotate, &tmatrices[1], nv(0, 1, 0));
-	init_key(&keys[3], XK_l, rotate, &tmatrices[1], nv(0, -1, 0));
-
+/* Old Binds
 	init_key(&keys[4], XK_w, translate, &tmatrices[0], nv(0, 0, 50));
 	init_key(&keys[5], XK_s, translate, &tmatrices[0], nv(0, 0, -50));
 	init_key(&keys[6], XK_a, translate, &tmatrices[0], nv(50, 0, 0));
 	init_key(&keys[7], XK_d, translate, &tmatrices[0], nv(-50, 0, 0));
 	init_key(&keys[8], XK_space, translate, &tmatrices[0], nv(0, 50, 0));
 	init_key(&keys[9], XK_Shift_L, translate, &tmatrices[0], nv(0, -50, 0));
+ */
+//Needs to match NUM_OF_KEYS
+int	init_keys(t_key *keys, u_tmatrix *tmatrices)
+{
+	init_key(&keys[0], XK_w, rotate, &tmatrices[1], nv(-R_SPEED, 0, 0));
+	init_key(&keys[1], XK_s, rotate, &tmatrices[1], nv(R_SPEED, 0, 0));
+	init_key(&keys[2], XK_a, rotate, &tmatrices[1], nv(0, R_SPEED, 0));
+	init_key(&keys[3], XK_d, rotate, &tmatrices[1], nv(0, -R_SPEED, 0));
+	init_key(&keys[4], XK_q, rotate, &tmatrices[1], nv(0, 0, R_SPEED));
+	init_key(&keys[5], XK_e, rotate, &tmatrices[1], nv(0, 0, -R_SPEED));
+	init_key(&keys[6], XK_r, scale, &tmatrices[1], nv(1.0 + S_SPEED, 1.0 + S_SPEED, 1.0 + S_SPEED));
+	init_key(&keys[7], XK_f, scale, &tmatrices[1], nv(1.0 - S_SPEED, 1.0 - S_SPEED, 1.0 - S_SPEED));
 
-	init_key(&keys[10], XK_Up, rotate, &tmatrices[0], nv(1, 0, 0));
-	init_key(&keys[11], XK_Down, rotate, &tmatrices[0], nv(-1, 0, 0));
-	init_key(&keys[12], XK_Left, rotate, &tmatrices[0], nv(0, 1, 0));
-	init_key(&keys[13], XK_Right, rotate, &tmatrices[0], nv(0, -1, 0));
+	init_key(&keys[8], XK_Up, translate, &tmatrices[0], nv(0, -T_SPEED, 0));
+	init_key(&keys[9], XK_Down, translate, &tmatrices[0], nv(0, T_SPEED, 0));
+	init_key(&keys[10], XK_Left, translate, &tmatrices[0], nv(-T_SPEED, 0, 0));
+	init_key(&keys[11], XK_Right, translate, &tmatrices[0], nv(T_SPEED, 0, 0));
+	
 	return (0);
 }
 
 int	handle_keydown(int keycode, t_key *keys)
 {
 	int i;
-	
+
 	i = 0;
 	while(i < NUM_OF_KEYS)
 	{
@@ -182,7 +180,8 @@ int	main(int argc, char **argv)
 	scale = 50;
 	data.tmatrices[1] = translate_m(nv(-((data.map->length - 1)/ 2.f), -((data.map->height - 1)/ 2.f), 0.f));
 	data.tmatrices[1] = multiply_tmats(scale_m(nv(scale, scale, scale)), data.tmatrices[1]);
-	data.tmatrices[0] = translate_m(nv(W_WIDTH/2, W_HEIGHT/2, -10));
+	//data.tmatrices[0] = scale_m(nv(1, 1, 1));
+	data.tmatrices[0] = translate_m(nv(W_WIDTH/2, W_HEIGHT/2, 0));
 	render_map(&data);
 	mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
 

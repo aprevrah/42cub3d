@@ -24,7 +24,9 @@
 # define W_WIDTH 1920
 # define W_HEIGHT 1080
 # define NUM_OF_KEYS 20 //Change to number of keys added
-# define OPER_FACTOR 0.02
+# define R_SPEED 0.03
+# define T_SPEED 10
+# define S_SPEED 0.03
 
 typedef struct s_data t_data;
 
@@ -105,13 +107,14 @@ u_tmatrix   rotation_m_y(float angle);
 u_tmatrix   rotation_m_z(float angle);
 u_tmatrix   scale_m(u_vec4 vec);
 u_tmatrix   translate_m(u_vec4 vec);
-u_tmatrix	perspec_project_m(float f);
+u_tmatrix	perspec_project_m(float n, float f);
 u_vec4		perspec_div(u_vec4 vec);
 u_tmatrix   multiply_tmats(u_tmatrix mat1, u_tmatrix mat2);
 
 //oper.c
 void		rotate(u_vec4 v, u_tmatrix *matrix);
 void		translate(u_vec4 v, u_tmatrix *matrix);
+void		scale(u_vec4 v, u_tmatrix *matrix);
 
 //parse.c
 t_map       *parse_map(int fd);
