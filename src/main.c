@@ -179,9 +179,9 @@ int	main(int argc, char **argv)
 	
 	scale = 50;
 	data.tmatrices[1] = translate_m(nv(-((data.map->length - 1)/ 2.f), -((data.map->height - 1)/ 2.f), 0.f));
-	data.tmatrices[1] = multiply_tmats(scale_m(nv(scale, scale, scale)), data.tmatrices[1]);
+	data.tmatrices[1] = multiply_tmats(data.tmatrices[1], scale_m(nv(scale, scale, scale)));
 	//data.tmatrices[0] = scale_m(nv(1, 1, 1));
-	data.tmatrices[0] = translate_m(nv(W_WIDTH/2, W_HEIGHT/2, 0));
+	data.tmatrices[0] = translate_m(nv(W_WIDTH/2, W_HEIGHT/2, 0.f));
 	render_map(&data);
 	mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
 

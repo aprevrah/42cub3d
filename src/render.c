@@ -12,6 +12,23 @@
 
 #include "../include/fdf.h"
 
+void	print_vec(u_tmatrix mat) {
+	int i;
+	int j;
+	i = 0;
+	while (i < 4)
+	{
+		j = 0;
+		while (j < 4)
+		{
+			printf("%.1f	", mat.arr[i+j]);
+			j++;
+		}
+		printf("\n");
+		i++;
+	}
+}
+
 u_vec4 left_multiply(u_tmatrix mat, u_vec4 vec) {
     u_vec4	result;
 
@@ -50,6 +67,11 @@ void	render_map(t_data *data)
 	u_vec4 mverts[data->map->length * data->map->height];
 	t_ivec2 spoints[data->map->length * data->map->height];
 	
+	printf("view mat:\n");
+	print_vec(data->tmatrices[0]);
+	printf("obj mat:\n");
+	print_vec(data->tmatrices[1]);
+
     u_tmatrix	tmat;
 	int			i;
 
@@ -61,6 +83,7 @@ void	render_map(t_data *data)
 	while(i < map->height * map->length)
 	{
 		mverts[i] = get_mapcoords(map, i);
+		i++;
 	}
 
 	i = 0;
