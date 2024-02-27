@@ -6,15 +6,14 @@
 /*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 17:23:53 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/02/24 23:22:41 by aprevrha         ###   ########.fr       */
+/*   Updated: 2024/02/27 22:00:48 by aprevrha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/fdf.h"
 
-
 void	rotate(u_vec4 v, u_tmatrix *matrix)
-{	
+{
 	if (v.f.x != 0)
 		*matrix = multiply_tmats(rotation_m_x(v.f.x), *matrix);
 	if (v.f.y != 0)

@@ -6,16 +6,16 @@
 /*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 17:24:06 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/02/24 17:24:07 by aprevrha         ###   ########.fr       */
+/*   Updated: 2024/02/27 22:00:45 by aprevrha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/fdf.h"
 
-
 char	*ft_str_append(char *a, char *b)
 {
 	char	*str;
+
 	str = ft_strjoin(a, b);
 	free(a);
 	free(b);
@@ -52,10 +52,10 @@ unsigned int	count_token(char *str, char c)
 /*
 int	fill_map(char const *s, char c, t_map *map)
 {
-	int		i;
-	int		col;
-	int		line;
-	int		size;
+	int	i;
+	int	col;
+	int	line;
+	int	size;
 
 	i = 0;
 	line = 0;
@@ -84,28 +84,31 @@ int	fill_map(char const *s, char c, t_map *map)
 }
 */
 
-//Updata this to handle edge cases
+// Updata this to handle edge cases
 
-int fill_map(char const *s, char c, t_map *map)
+int	fill_map(char const *s, char c, t_map *map)
 {
-    int i = 0;
-    int index = 0;
+	int	i;
+	int	index;
 
-    while (index < (map->height * map->length))
-    {
-        while (s[i] == c || s[i] == '\n') // Skip spaces
-            i++;
-        // if (s[i] == '\0') // Check for premature end of string
-        //     return 0;
-		//ft_printf("\n%s \n", &s[i]);
-        map->arr[index] = ft_atoi(s + i); // Convert substring to integer
+	i = 0;
+	index = 0;
+	while (index < (map->height * map->length))
+	{
+		while (s[i] == c || s[i] == '\n') // Skip spaces
+			i++;
+		// if (s[i] == '\0') // Check for premature end of string
+		//     return (0);
+		// ft_printf("\n%s \n", &s[i]);
+		map->arr[index] = ft_atoi(s + i); // Convert substring to integer
 		index++;
-        while (s[i] != c && s[i] != '\n' && s[i] != '\0') // Skip to next token or line
-            i++;
-        if (s[i] == '\n') // Skip newline character
-            i++;
-    }
-    return 1;
+		while (s[i] != c && s[i] != '\n' && s[i] != '\0')
+			// Skip to next token or line
+			i++;
+		if (s[i] == '\n') // Skip newline character
+			i++;
+	}
+	return (1);
 }
 
 t_map	*parse_map(int fd)
@@ -138,15 +141,15 @@ t_map	*parse_map(int fd)
 			map->height++;
 		}
 	}
-	//ft_printf("\n%s\n", content);
+	// ft_printf("\n%s\n", content);
 	map->arr = (int *)malloc((map->length * map->height) * sizeof(int));
-	if(!map->arr)
+	if (!map->arr)
 		return (free(map), NULL);
-    ft_bzero(map->arr, map->length * map->height);
-	ft_printf("Content: %s \n Length: %i Height: %i\n", content, map->length, map->height);
+	ft_bzero(map->arr, map->length * map->height);
+	ft_printf("Content: %s \n Length: %i Height: %i\n", content, map->length,
+		map->height);
 	fill_map(content, ' ', map);
 	free(content);
 	ft_printf("Done Pasing!\n");
 	return (map);
 }
-
