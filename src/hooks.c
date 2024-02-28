@@ -6,11 +6,14 @@
 /*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 23:22:56 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/02/27 23:29:56 by aprevrha         ###   ########.fr       */
+/*   Updated: 2024/02/28 17:48:56 by aprevrha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/fdf.h"
+#include <X11/X.h>
+#include <X11/keysym.h>
+#include <mlx.h>
 
 int	loop_hook(t_data *data)
 {
@@ -19,6 +22,8 @@ int	loop_hook(t_data *data)
 
 	keys_pressed = 0;
 	i = 0;
+	if (data->keys[0].state == 1)
+		free_and_exit(data, 0);
 	while (i < NUM_OF_KEYS)
 	{
 		if (data->keys[i].state == 1)
@@ -56,7 +61,7 @@ int	handle_keydown(int keycode, t_key *keys)
 
 int	handle_keyup(int keycode, t_key *keys)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < NUM_OF_KEYS)

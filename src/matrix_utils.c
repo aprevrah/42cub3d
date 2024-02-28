@@ -6,16 +6,16 @@
 /*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 17:24:32 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/02/27 23:52:32 by aprevrha         ###   ########.fr       */
+/*   Updated: 2024/02/28 17:00:54 by aprevrha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/fdf.h"
 
 // New Vector = nv
-u_vec4	nv(float x, float y, float z)
+t_vec4	nv(float x, float y, float z)
 {
-	u_vec4	v;
+	t_vec4	v;
 
 	v.f.x = x;
 	v.f.y = y;
@@ -24,101 +24,26 @@ u_vec4	nv(float x, float y, float z)
 	return (v);
 }
 
-// Function to create a rotation matrix for rotation about the x-axis by an angle in radians
-u_tmatrix	rotation_m_x(float angle)
+t_vec4	left_multiply(t_tmatrix mat, t_vec4 vec)
 {
-	float		cos_theta;
-	float		sin_theta;
-	u_tmatrix	result;
+	t_vec4	result;
 
-	cos_theta = cos(angle);
-	sin_theta = sin(angle);
-	ft_bzero(&result, sizeof(result));
-	result.f.x1 = 1;
-	result.f.y2 = cos_theta;
-	result.f.z2 = -sin_theta;
-	result.f.y3 = sin_theta;
-	result.f.z3 = cos_theta;
-	result.f.w4 = 1;
+	result.f.x = vec.f.x * mat.f.x1 + vec.f.y * mat.f.y1 + vec.f.z * mat.f.z1
+		+ vec.f.w * mat.f.w1;
+	result.f.y = vec.f.x * mat.f.x2 + vec.f.y * mat.f.y2 + vec.f.z * mat.f.z2
+		+ vec.f.w * mat.f.w2;
+	result.f.z = vec.f.x * mat.f.x3 + vec.f.y * mat.f.y3 + vec.f.z * mat.f.z3
+		+ vec.f.w * mat.f.w3;
+	result.f.w = vec.f.x * mat.f.x4 + vec.f.y * mat.f.y4 + vec.f.z * mat.f.z4
+		+ vec.f.w * mat.f.w4;
 	return (result);
 }
 
-// Function to create a rotation matrix for rotation about the y-axis by an angle in radians
-u_tmatrix	rotation_m_y(float angle)
+t_tmatrix	perspec_project_m(float n, float f)
 {
-	float		cos_theta;
-	float		sin_theta;
-	u_tmatrix	result;
-
-	cos_theta = cos(angle);
-	sin_theta = sin(angle);
-	ft_bzero(&result, sizeof(result));
-	result.f.x1 = cos_theta;
-	result.f.z1 = sin_theta;
-	result.f.y2 = 1;
-	result.f.x3 = -sin_theta;
-	result.f.z3 = cos_theta;
-	result.f.w4 = 1;
-	return (result);
-}
-
-// Function to create a rotation matrix for rotation about the z-axis by an angle in radians
-u_tmatrix	rotation_m_z(float angle)
-{
-	float		cos_theta;
-	float		sin_theta;
-	u_tmatrix	result;
-
-	cos_theta = cos(angle);
-	sin_theta = sin(angle);
-	ft_bzero(&result, sizeof(result));
-	result.f.x1 = cos_theta;
-	result.f.y1 = -sin_theta;
-	result.f.x2 = sin_theta;
-	result.f.y2 = cos_theta;
-	result.f.z3 = 1;
-	result.f.w4 = 1;
-	return (result);
-}
-
-u_tmatrix	scale_m(u_vec4 vec)
-{
-	u_tmatrix	result;
+	t_tmatrix	result;
 
 	ft_bzero(&result, sizeof(result));
-	result.f.x1 = vec.f.x;
-	result.f.y2 = vec.f.y;
-	result.f.z3 = vec.f.z;
-	result.f.w4 = 1;
-	return (result);
-}
-
-u_tmatrix	translate_m(u_vec4 vec)
-{
-	u_tmatrix	result;
-
-	ft_bzero(&result, sizeof(result));
-	result.f.x1 = 1;
-	result.f.y2 = 1;
-	result.f.z3 = 1;
-	result.f.w4 = 1;
-	result.f.w1 = vec.f.x;
-	result.f.w2 = vec.f.y;
-	result.f.w3 = vec.f.z;
-	return (result);
-}
-
-u_tmatrix	perspec_project_m(float n, float f)
-{
-	u_tmatrix	result;
-
-	ft_bzero(&result, sizeof(result));
-	// result.f.x1 = 1;
-	// result.f.y2 = 1;
-	// result.f.z3 = (f / (f - n));
-	// result.f.z4 = ((f * n) / (f - n));
-	// result.f.w3 = 1;
-	// result.f.w4 = 0;
 	result.f.x1 = 1;
 	result.f.y2 = 1;
 	result.f.z3 = -1;
@@ -126,18 +51,10 @@ u_tmatrix	perspec_project_m(float n, float f)
 	return (result);
 }
 
-u_vec4	perspec_div(u_vec4 vec)
+t_vec4	perspec_div(t_vec4 vec)
 {
 	float	inv_w;
 
-	// int i;
-	// printf("perspec_div");
-	// i = 0;
-	// while (i < 4)
-	// {
-	// 	vec.arr[i] /= vec.f.w;
-	// 	i++;
-	// }
 	inv_w = 1.0 / vec.f.w;
 	vec.f.x *= inv_w;
 	vec.f.y *= inv_w;
@@ -146,12 +63,12 @@ u_vec4	perspec_div(u_vec4 vec)
 	return (vec);
 }
 
-u_tmatrix	multiply_tmats(u_tmatrix mat1, u_tmatrix mat2)
+t_tmatrix	multiply_tmats(t_tmatrix mat1, t_tmatrix mat2)
 {
-	u_tmatrix result;
-	int i;
-	int j;
-	int k;
+	t_tmatrix	result;
+	int			i;
+	int			j;
+	int			k;
 
 	i = 0;
 	while (i < 4)
@@ -173,3 +90,21 @@ u_tmatrix	multiply_tmats(u_tmatrix mat1, u_tmatrix mat2)
 	}
 	return (result);
 }
+
+/* int i;
+printf("perspec_div");
+i = 0;
+while (i < 4)
+{
+	float	inv_w;
+
+	vec.arr[i] /= vec.f.w;
+	i++;
+} */
+
+/* 	result.f.x1 = 1;
+	result.f.y2 = 1;
+	result.f.z3 = (f / (f - n));
+	result.f.z4 = ((f * n) / (f - n));
+	result.f.w3 = 1;
+	result.f.w4 = 0; */

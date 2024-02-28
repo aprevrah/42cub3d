@@ -6,13 +6,13 @@
 /*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 17:23:53 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/02/27 22:00:48 by aprevrha         ###   ########.fr       */
+/*   Updated: 2024/02/28 15:53:28 by aprevrha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/fdf.h"
 
-void	rotate(u_vec4 v, u_tmatrix *matrix)
+void	rotate(t_vec4 v, t_tmatrix *matrix)
 {
 	if (v.f.x != 0)
 		*matrix = multiply_tmats(rotation_m_x(v.f.x), *matrix);
@@ -22,12 +22,12 @@ void	rotate(u_vec4 v, u_tmatrix *matrix)
 		*matrix = multiply_tmats(rotation_m_z(v.f.z), *matrix);
 }
 
-void	translate(u_vec4 v, u_tmatrix *matrix)
+void	translate(t_vec4 v, t_tmatrix *matrix)
 {
 	*matrix = multiply_tmats(translate_m(v), *matrix);
 }
 
-void	scale(u_vec4 v, u_tmatrix *matrix)
+void	scale(t_vec4 v, t_tmatrix *matrix)
 {
 	*matrix = multiply_tmats(scale_m(v), *matrix);
 }

@@ -6,7 +6,7 @@ SRC_DIR = src
 OBJ_DIR = objs
 
 SRCS = $(addprefix $(SRC_DIR)/,\
-main.c draw.c hooks.c init.c matrix_utils.c oper.c parse.c render.c)
+main.c draw.c hooks.c init.c matrix_affine.c matrix_utils.c oper.c parse.c render.c)
 
 OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
 
