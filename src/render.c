@@ -6,7 +6,7 @@
 /*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 17:24:17 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/02/28 17:24:11 by aprevrha         ###   ########.fr       */
+/*   Updated: 2024/02/29 19:44:04 by aprevrha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ t_vec4	get_mapcoords(t_map *map, int index)
 	return (p);
 }
 
-// v = perspec_div(v);
 t_ivec2	get_sspace(t_vec4 v)
 {
 	t_ivec2	p;
@@ -62,9 +61,9 @@ static void	connect_spoints(t_ivec2 *spoints, t_data *data)
 	while (i < map->height * map->length)
 	{
 		if ((i + 1) % (map->length) != 0)
-			line_put(data, spoints[i], spoints[i + 1], 0x00FFFFFF);
+			line_put(data, spoints[i], spoints[i + 1], COLOR);
 		if (i < (map->height - 1) * map->length)
-			line_put(data, spoints[i], spoints[i + map->length], 0x00FFFFFF);
+			line_put(data, spoints[i], spoints[i + map->length], COLOR);
 		i++;
 	}
 }
@@ -79,8 +78,7 @@ void	render_map(t_data *data)
 			* data->map->height);
 	if (!spoints)
 		free_and_exit(data, 1);
-	tmat = multiply_tmats(perspec_project_m(1, 100),
-			multiply_tmats(data->tmatrices[0], data->tmatrices[1]));
+	tmat = multiply_tmats(data->tmatrices[0], data->tmatrices[1]);
 	i = 0;
 	while (i < data->map->height * data->map->length)
 	{
@@ -91,11 +89,3 @@ void	render_map(t_data *data)
 	connect_spoints(spoints, data);
 	free(spoints);
 }
-// printf("view mat:\n");
-// print_vec(data->tmatrices[0]);
-// printf("obj mat:\n");
-// print_vec(data->tmatrices[1]);
-// printf("tmat:\n");
-// print_vec(tmat);
-
-// printf("%ix %iy\n", spoints[0].x, spoints[0].y);

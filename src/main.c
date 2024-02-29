@@ -6,7 +6,7 @@
 /*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 22:34:46 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/02/28 18:31:56 by aprevrha         ###   ########.fr       */
+/*   Updated: 2024/02/29 19:56:26 by aprevrha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,27 @@ int	win_close_button(t_data *data)
 	return (0);
 }
 
+int	file_type_matches(char *filename)
+{
+	int	len;
+
+	len = ft_strlen(filename);
+	if (len < 4)
+		return (0);
+	if (ft_strncmp(filename + len - 4, ".fdf", 4))
+		return (0);
+	return (1);
+}
+
 int	main(int argc, char **argv)
 {
 	t_data	data;
 	int		fd;
 
-	if (argc > 2)
-		return (ft_printf("No map arg!"), 1);
+	if (argc != 2)
+		return (ft_printf("(Only) one argument needed.\n"), 1);
+	if (!file_type_matches(argv[1]))
+		return (ft_printf("Wrong filetype, \".fdf\" needed.\n"), 1);
 	fd = open(argv[1], O_RDONLY);
 	data.map = parse_map(fd);
 	close(fd);

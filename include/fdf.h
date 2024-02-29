@@ -6,7 +6,7 @@
 /*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/08 13:01:15 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/02/28 18:13:58 by aprevrha         ###   ########.fr       */
+/*   Updated: 2024/02/29 19:44:39 by aprevrha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,8 @@
 # include <stdio.h>
 # include <stdlib.h>
 
-# define VERBOSE_ERR 0
+# define COLOR 0x00FFFFFF
 # define MAP_SEP " "
-# define PI 3.141592678
 # define W_WIDTH 1920
 # define W_HEIGHT 1080
 # define NUM_OF_KEYS 13 // Change to number of keys added
@@ -104,13 +103,6 @@ typedef struct s_ivec2
 	int					y;
 }						t_ivec2;
 
-// typedef struct s_vec3
-// {
-//     float x;
-//     float y;
-// 	float z;
-// }		t_vec3;
-
 // draw.c
 void					my_mlx_pixel_put(t_data *data, int x, int y, int color);
 void					line_put(t_data *data, t_ivec2 a, t_ivec2 b, int color);
@@ -135,13 +127,6 @@ t_tmatrix				rotation_m_z(float angle);
 t_tmatrix				scale_m(t_vec4 vec);
 t_tmatrix				translate_m(t_vec4 vec);
 
-// matrix_utils.c
-t_vec4					nv(float x, float y, float z);
-t_vec4					left_multiply(t_tmatrix mat, t_vec4 vec);
-t_tmatrix				perspec_project_m(float n, float f);
-t_vec4					perspec_div(t_vec4 vec);
-t_tmatrix				multiply_tmats(t_tmatrix mat1, t_tmatrix mat2);
-
 // oper.c
 void					rotate(t_vec4 v, t_tmatrix *matrix);
 void					translate(t_vec4 v, t_tmatrix *matrix);
@@ -152,5 +137,10 @@ t_map					*parse_map(int fd);
 
 // render.c
 void					render_map(t_data *data);
+
+// utils.c
+t_vec4					nv(float x, float y, float z);
+t_vec4					left_multiply(t_tmatrix mat, t_vec4 vec);
+t_tmatrix				multiply_tmats(t_tmatrix mat1, t_tmatrix mat2);
 
 #endif

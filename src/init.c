@@ -6,7 +6,7 @@
 /*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 23:25:37 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/02/28 18:36:58 by aprevrha         ###   ########.fr       */
+/*   Updated: 2024/02/29 18:43:32 by aprevrha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,11 +87,3 @@ void	init_tmatrices(t_tmatrix *tmatrices, t_map *map)
 					scale)));
 	tmatrices[0] = translate_m(nv(W_WIDTH / 2, W_HEIGHT / 2, 0.f));
 }
-
-/* Old Binds
-	init_key(&keys[4], XK_w, translate, &tmatrices[0], nv(0, 0, 50));
-	init_key(&keys[5], XK_s, translate, &tmatrices[0], nv(0, 0, -50));
-	init_key(&keys[6], XK_a, translate, &tmatrices[0], nv(50, 0, 0));
-	init_key(&keys[7], XK_d, translate, &tmatrices[0], nv(-50, 0, 0));
-	init_key(&keys[8], XK_space, translate, &tmatrices[0], nv(0, 50, 0));
-	init_key(&keys[9], XK_Shift_L, translate, &tmatrices[0], nv(0, -50, 0)); */

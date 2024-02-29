@@ -6,7 +6,7 @@
 /*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 17:24:06 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/02/28 16:56:10 by aprevrha         ###   ########.fr       */
+/*   Updated: 2024/02/29 20:16:57 by aprevrha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,12 @@ static unsigned int	count_token(char *str, char c)
 	count = 0;
 	while (str[i])
 	{
-		if (!in_token && str[i] != c)
+		if (!in_token && str[i] != c && str[i] != '\n')
 		{
 			in_token = 1;
 			count++;
 		}
-		else if (in_token && str[i] == c)
+		else if (in_token && (str[i] == c || str[i] == '\n'))
 		{
 			in_token = 0;
 		}
@@ -49,8 +49,7 @@ static unsigned int	count_token(char *str, char c)
 	return (count);
 }
 
-// Updata this to handle edge cases
-
+// Update this to handle edge cases
 static int	fill_map(char const *s, char c, t_map *map)
 {
 	int	i;
@@ -65,8 +64,6 @@ static int	fill_map(char const *s, char c, t_map *map)
 		map->arr[index] = ft_atoi(s + i);
 		index++;
 		while (s[i] != c && s[i] != '\n' && s[i] != '\0')
-			i++;
-		if (s[i] == '\n')
 			i++;
 	}
 	return (1);
@@ -114,10 +111,7 @@ t_map	*parse_map(int fd)
 	if (!map->arr)
 		return (free(map), NULL);
 	ft_bzero(map->arr, map->length * map->height);
-	ft_printf("Content: %s \n Length: %i Height: %i\n", content, map->length,
-		map->height);
 	fill_map(content, ' ', map);
 	free(content);
-	ft_printf("Done Pasing!\n");
 	return (map);
 }

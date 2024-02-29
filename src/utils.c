@@ -6,7 +6,7 @@
 /*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 17:24:32 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/02/28 17:00:54 by aprevrha         ###   ########.fr       */
+/*   Updated: 2024/02/29 18:55:58 by aprevrha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,30 +39,6 @@ t_vec4	left_multiply(t_tmatrix mat, t_vec4 vec)
 	return (result);
 }
 
-t_tmatrix	perspec_project_m(float n, float f)
-{
-	t_tmatrix	result;
-
-	ft_bzero(&result, sizeof(result));
-	result.f.x1 = 1;
-	result.f.y2 = 1;
-	result.f.z3 = -1;
-	result.f.w3 = -1;
-	return (result);
-}
-
-t_vec4	perspec_div(t_vec4 vec)
-{
-	float	inv_w;
-
-	inv_w = 1.0 / vec.f.w;
-	vec.f.x *= inv_w;
-	vec.f.y *= inv_w;
-	vec.f.z *= inv_w;
-	vec.f.w = 1;
-	return (vec);
-}
-
 t_tmatrix	multiply_tmats(t_tmatrix mat1, t_tmatrix mat2)
 {
 	t_tmatrix	result;
@@ -90,21 +66,3 @@ t_tmatrix	multiply_tmats(t_tmatrix mat1, t_tmatrix mat2)
 	}
 	return (result);
 }
-
-/* int i;
-printf("perspec_div");
-i = 0;
-while (i < 4)
-{
-	float	inv_w;
-
-	vec.arr[i] /= vec.f.w;
-	i++;
-} */
-
-/* 	result.f.x1 = 1;
-	result.f.y2 = 1;
-	result.f.z3 = (f / (f - n));
-	result.f.z4 = ((f * n) / (f - n));
-	result.f.w3 = 1;
-	result.f.w4 = 0; */
