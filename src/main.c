@@ -6,7 +6,7 @@
 /*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 22:34:46 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/09/30 15:29:07 by aprevrha         ###   ########.fr       */
+/*   Updated: 2024/09/30 15:43:16 by aprevrha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,10 @@ int	main(int argc, char **argv)
 	fd = open(argv[1], O_RDONLY);
 	data.map = parse_map(fd);
 	close(fd);
+
 	if (!init_mlx(&data))
 		free_and_exit(&data, 1);
+		
 	init_tmatrices(data.tmatrices, data.map);
 	render_map(&data);
 	mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);

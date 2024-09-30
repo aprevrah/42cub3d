@@ -6,7 +6,7 @@
 /*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 17:24:17 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/09/30 15:29:07 by aprevrha         ###   ########.fr       */
+/*   Updated: 2024/09/30 16:25:08 by aprevrha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ t_vec4	get_mapcoords(t_map *map, int index)
 
 	p.f.x = index % map->length;
 	p.f.y = index / map->length;
-	p.f.z = (float)(map->arr[index]);
+	//p.f.z = (float)(map->arr[index]);
 	p.f.w = 1;
 	return (p);
 }
