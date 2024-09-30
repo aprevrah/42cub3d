@@ -6,11 +6,11 @@
 /*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 17:24:45 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/02/29 19:54:30 by aprevrha         ###   ########.fr       */
+/*   Updated: 2024/09/30 15:29:07 by aprevrha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/fdf.h"
+#include "../include/cub3d.h"
 #include "mlx.h"
 #include <X11/keysym.h>
 #include <fcntl.h>
