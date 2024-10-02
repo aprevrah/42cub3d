@@ -6,7 +6,7 @@
 /*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/08 13:01:15 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/10/02 12:49:03 by aprevrha         ###   ########.fr       */
+/*   Updated: 2024/10/02 18:54:12 by aprevrha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # define MAP_SEP " "
 # define W_WIDTH 1920
 # define W_HEIGHT 1080
-# define NUM_OF_KEYS 13 // Change to number of keys added
+# define NUM_OF_KEYS 7 // Change to number of keys added
 # define R_SPEED 0.03
 # define T_SPEED 10
 # define S_SPEED 0.03
@@ -39,6 +39,7 @@ typedef struct s_player
 {
 	t_dvec2 position;
 	t_dvec2	orientation;
+	double	movement_speed;
 }						t_player;
 
 typedef struct s_map
@@ -90,16 +91,32 @@ typedef union u_tmatrix
 	float				arr[16];
 }						t_tmatrix;
 
-typedef void			(*t_key_func)(t_vec4 vec, t_tmatrix *tmat);
+// Move function arguments
+typedef struct s_move_args {
+    t_player *player;
+    t_dvec2 direction;
+} t_move_args;
 
-typedef struct s_key
-{
-	int					code;
-	int					state;
-	t_key_func			func;
-	t_vec4				v;
-	t_tmatrix			*matrix;
-}						t_key;
+// Look/rotate function arguments
+typedef struct s_look_args {
+    t_player *player;
+    double rotation;
+} t_look_args;
+
+// Union to store different types of function arguments
+typedef union u_args {
+    t_move_args move_args;  // Move arguments
+    t_look_args look_args;  // Look/rotate arguments
+    void *ptr;              // Generic pointer (for other use cases)
+} u_args;
+
+// Define the key structure
+typedef struct s_key {
+    int        code;
+    int        state;
+    void       (*func)(void *); // Function pointer to different actions
+    u_args     args;            // Union to hold function-specific arguments
+} t_key;
 
 typedef struct s_data
 {
@@ -111,7 +128,7 @@ typedef struct s_data
 	int					line_length;
 	int					endian;
 	t_map				*map;
-	t_tmatrix			tmatrices[2];
+	t_player			*players;
 	t_key				keys[NUM_OF_KEYS];
 }						t_data;
 
@@ -126,9 +143,9 @@ void					my_mlx_pixel_put(t_data *data, int x, int y, int color);
 void					line_put(t_data *data, t_ivec2 a, t_ivec2 b, int color);
 
 // init.c
-int						init_keys(t_key *keys, t_tmatrix *tmatrices);
+int						init_keys(t_key *keys, t_player *players);
 int						init_mlx(t_data *data);
-void					init_tmatrices(t_tmatrix *tmatrices, t_map *map);
+int						init_players(t_player **players, t_map *map);
 
 // hooks.c
 int						loop_hook(t_data *data);
@@ -138,17 +155,9 @@ int						handle_keyup(int keycode, t_key *keys);
 // main.c
 void					free_and_exit(t_data *data, int code);
 
-// matrix_affine.c
-t_tmatrix				rotation_m_x(float angle);
-t_tmatrix				rotation_m_y(float angle);
-t_tmatrix				rotation_m_z(float angle);
-t_tmatrix				scale_m(t_vec4 vec);
-t_tmatrix				translate_m(t_vec4 vec);
-
 // oper.c
-void					rotate(t_vec4 v, t_tmatrix *matrix);
-void					translate(t_vec4 v, t_tmatrix *matrix);
-void					scale(t_vec4 v, t_tmatrix *matrix);
+void					move(void *args);
+void					look(void *args);
 
 // parse.c
 t_map					*parse_map(int fd);

@@ -6,7 +6,7 @@
 /*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 23:22:56 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/09/30 15:29:07 by aprevrha         ###   ########.fr       */
+/*   Updated: 2024/10/02 16:29:35 by aprevrha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	loop_hook(t_data *data)
 	{
 		if (data->keys[i].state == 1)
 		{
-			(data->keys[i].func)(data->keys[i].v, data->keys[i].matrix);
+			(data->keys[i].func)(&data->keys[i].args);
 			keys_pressed++;
 		}
 		i++;

@@ -6,7 +6,7 @@
 /*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 23:25:37 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/09/30 15:29:07 by aprevrha         ###   ########.fr       */
+/*   Updated: 2024/10/02 20:36:51 by aprevrha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,37 +20,56 @@
 #include <string.h>
 #include <unistd.h>
 
-static t_key	init_key(int keycode, t_key_func function, t_tmatrix *tmatrix,
-		t_vec4 vec)
+// static t_key	init_key(int keycode, void	(*func)(void))
+// {
+// 	t_key	key;
+
+// 	key.state = 0;
+// 	key.code = keycode;
+// 	key.func = func;
+// 	key.args = 0;
+// 	return (key);
+// }
+
+static t_key	init_key_move(int keycode, t_player *player, t_dvec2 direction)
 {
 	t_key	key;
 
 	key.state = 0;
 	key.code = keycode;
-	key.func = function;
-	key.matrix = tmatrix;
-	key.v = vec;
+	key.func = move;
+	key.args.move_args.player = player;
+    key.args.move_args.direction = direction;
+	return (key);
+}
+
+static t_key	init_key_look(int keycode, t_player *player, double rotation)
+{
+	t_key	key;
+
+	key.state = 0;
+	key.code = keycode;
+	key.func = look;
+	key.args.look_args.player = player;
+    key.args.look_args.rotation = rotation;
 	return (key);
 }
 
 // Needs to match NUM_OF_KEYS
-int	init_keys(t_key *keys, t_tmatrix *tmatrices)
+int	init_keys(t_key *keys, t_player *players)
 {
-	keys[0] = init_key(XK_Escape, scale, &tmatrices[1], nv(0, 0, 0));
-	keys[1] = init_key(XK_w, rotate, &tmatrices[1], nv(-R_SPEED, 0, 0));
-	keys[2] = init_key(XK_s, rotate, &tmatrices[1], nv(R_SPEED, 0, 0));
-	keys[3] = init_key(XK_a, rotate, &tmatrices[1], nv(0, R_SPEED, 0));
-	keys[4] = init_key(XK_d, rotate, &tmatrices[1], nv(0, -R_SPEED, 0));
-	keys[5] = init_key(XK_q, rotate, &tmatrices[1], nv(0, 0, R_SPEED));
-	keys[6] = init_key(XK_e, rotate, &tmatrices[1], nv(0, 0, -R_SPEED));
-	keys[7] = init_key(XK_r, scale, &tmatrices[1], nv(1.0 + S_SPEED, 1.0
-				+ S_SPEED, 1.0 + S_SPEED));
-	keys[8] = init_key(XK_f, scale, &tmatrices[1], nv(1.0 - S_SPEED, 1.0
-				- S_SPEED, 1.0 - S_SPEED));
-	keys[9] = init_key(XK_Up, translate, &tmatrices[0], nv(0, -T_SPEED, 0));
-	keys[10] = init_key(XK_Down, translate, &tmatrices[0], nv(0, T_SPEED, 0));
-	keys[11] = init_key(XK_Left, translate, &tmatrices[0], nv(-T_SPEED, 0, 0));
-	keys[12] = init_key(XK_Right, translate, &tmatrices[0], nv(T_SPEED, 0, 0));
+	keys[0] = init_key_move(XK_Escape, &players[0], (t_dvec2){0.0, 0.0});
+	keys[1] = init_key_move(XK_w, &players[0], (t_dvec2){0.0, 1.0});
+	keys[2] = init_key_move(XK_a, &players[0], (t_dvec2){1.0, 0.0});
+	keys[3] = init_key_move(XK_s, &players[0], (t_dvec2){0.0, -1.0});
+	keys[4] = init_key_move(XK_d, &players[0], (t_dvec2){-1.0, 0.0});
+	keys[5] = init_key_look(XK_q, &players[0], (double)0.01);
+	keys[6] = init_key_look(XK_e, &players[0], (double)-0.01);
+	
+	// keys[9] = init_key(XK_Up, translate, &players[0], nv(0, -T_SPEED, 0));
+	// keys[10] = init_key(XK_Down, translate, &players[0], nv(0, T_SPEED, 0));
+	// keys[11] = init_key(XK_Left, translate, &players[0], nv(-T_SPEED, 0, 0));
+	// keys[12] = init_key(XK_Right, translate, &players[0], nv(T_SPEED, 0, 0));
 	return (0);
 }
 
@@ -62,28 +81,29 @@ int	init_mlx(t_data *data)
 	data->addr = NULL;
 	data->mlx = mlx_init();
 	if (!data->mlx)
-		return (0);
-	data->win = mlx_new_window(data->mlx, W_WIDTH, W_HEIGHT, "FdF");
+		return (1);
+	data->win = mlx_new_window(data->mlx, W_WIDTH, W_HEIGHT, "Cub3D");
 	if (!data->mlx)
-		return (0);
+		return (1);
 	data->img = mlx_new_image(data->mlx, W_WIDTH, W_HEIGHT);
 	if (!data->mlx)
-		return (0);
+		return (1);
 	data->addr = mlx_get_data_addr(data->img, &(data->bits_per_pixel),
 			&(data->line_length), &(data->endian));
 	if (!data->addr)
-		return (0);
-	return (1);
+		return (1);
+	return (0);
 }
 
-void	init_tmatrices(t_tmatrix *tmatrices, t_map *map)
+int	init_players(t_player **players, t_map *map)
 {
-	float	scale;
-
-	scale = 50;
-	tmatrices[1] = translate_m(nv(-((map->length - 1) / 2.f * scale),
-				-((map->height - 1) / 2.f * scale), 0.f));
-	tmatrices[1] = multiply_tmats(tmatrices[1], scale_m(nv(scale, scale,
-					scale)));
-	tmatrices[0] = translate_m(nv(W_WIDTH / 2, W_HEIGHT / 2, 0.f));
+	(void)map;
+	*players = (t_player *)ft_calloc(1, sizeof(t_player));
+	if (!*players)
+		return (1);
+	// hard coded for now, use map later
+	(*players)[0].orientation = (t_dvec2){0.0, -1.0}; 
+	(*players)[0].position = (t_dvec2){0.0, 0.0};
+	(*players)[0].movement_speed = (double){0.1};
+	return (0);
 }
