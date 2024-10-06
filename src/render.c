@@ -67,11 +67,51 @@
 // 		i++;
 // 	}
 // }
+void	render_rect(t_data *data, t_ivec2 p1, t_ivec2 p2)
+{
+	t_ivec2 p1_;
+	t_ivec2 p2_;
+
+	p1_.x = p1.x;
+	p1_.y = p2.y;
+	p2_.x = p2.x;
+	p2_.y = p1.y;
+
+	line_put(data, p1, p2, COLOR);
+	line_put(data, p1, p1_, COLOR);
+	line_put(data, p1, p2_, COLOR);
+	line_put(data, p2, p1_, COLOR);
+	line_put(data, p2, p2_, COLOR);
+}
+void	render_players(t_data *data)
+{
+	t_player player = data->players[0];
+	render_rect(data, (t_ivec2){player.position.x -2, player.position.y -2}, (t_ivec2){player.position.x + 2, player.position.y + 2});
+	line_put(data, (t_ivec2){round(player.position.x), round(player.position.y)}, (t_ivec2){round(player.position.x + player.orientation.x * 20), round(player.position.y + player.orientation.y * 20)}, 0xf7f70a);
+}
 
 void	render_map(t_data *data)
 {
-	(void)data;
+	t_map map = *data->map;
+	int x ,y = 0;
+	int unit = 50;
+
+	while (y < map.height)
+	{
+		while (x < map.length)
+		{
+			if (!map.arr[y][x])
+				render_rect(data, (t_ivec2){x * unit, y * unit}, (t_ivec2){(x + 1) * unit, (y + 1) * unit});
+			x++;
+		}
+		x = 0;
+		y++;
+	}
 }
+
+
+
+
 
 // void	render_map(t_data *data)
 // {

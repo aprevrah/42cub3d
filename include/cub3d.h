@@ -164,6 +164,7 @@ t_map					*parse_map(int fd);
 
 // render.c
 void					render_map(t_data *data);
+void					render_players(t_data *data);
 
 // utils.c
 t_vec4					nv(float x, float y, float z);

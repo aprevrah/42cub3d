@@ -36,7 +36,8 @@ int	loop_hook(t_data *data)
 	if (keys_pressed > 0)
 	{
 		ft_bzero(data->addr, W_HEIGHT * data->line_length);
-		render_map(data);
+		render_players(data);
+		render_map(data);	
 		mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
 	}
 	return (0);
