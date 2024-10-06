@@ -1,5 +1,5 @@
 CC = cc
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra -g
 RM = rm -f
 
 SRC_DIR = src
@@ -10,7 +10,7 @@ main.c draw.c hooks.c init.c matrix_affine.c oper.c parse.c render.c utils.c)
 
 OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
 
-NAME = fdf
+NAME = cub3d
 
 $(NAME): $(OBJ_DIR) $(OBJS)
 	make -C ./libft all
