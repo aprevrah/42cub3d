@@ -141,11 +141,15 @@ void	render_players(t_data *data)
 void	render_map(t_data *data)
 {
 	t_map map = *data->map;
-	int x ,y = 0;
+	int x;
+	int y;
+	
+	x = 0;
+	y = 0;
 
 	while (y < map.height)
 	{
-		while (x < map.length)
+		while (x < map.length )
 		{
 			if (!map.arr[y][x])
 				render_rect(data, (t_ivec2){x * SCALE, y * SCALE}, (t_ivec2){(x + 1) * SCALE, (y + 1) * SCALE});
