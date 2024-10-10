@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 17:24:17 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/10/02 16:31:07 by aprevrha         ###   ########.fr       */
-/*   Updated: 2024/10/02 16:31:07 by aprevrha         ###   ########.fr       */
+/*   Updated: 2024/10/10 19:41:29 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+
 #include "../include/cub3d.h"
+#include <math.h>
 
 // void	print_vec(t_tmatrix mat)
 // {
@@ -142,7 +143,7 @@ void	render_players(t_data *data)
 	//render_rect(data, (t_ivec2){player.position.x -2, player.position.y -2}, (t_ivec2){player.position.x + 2, player.position.y + 2});
 	line_put(data, player_pos_screen, (t_ivec2){round(player_pos_screen.x + player.orientation.x * 20), round(player_pos_screen.y + player.orientation.y * 20)}, 0xf7f70a);
 	//draw first ray 
-	ray_hit_pos = get_intersection(player.position, data->map->arr, atan(player.orientation.x / player.orientation.y));
+	ray_hit_pos = get_intersection(player.position, data->map, atan(player.orientation.x / player.orientation.y) + 3*PI/2);
 	ray_hit_pos_screen = (t_ivec2){ray_hit_pos.x * SCALE, ray_hit_pos.y * SCALE};
 	line_put(data, player_pos_screen, ray_hit_pos_screen, COLOR);
 }

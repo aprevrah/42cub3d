@@ -1,6 +1,6 @@
 #include "../include/cub3d.h"
 
-int is_wall(t_dvec2 intersection, int **map)
+int is_wall(t_dvec2 intersection, t_map *map)
 {
     double x;
     double y;
@@ -8,29 +8,24 @@ int is_wall(t_dvec2 intersection, int **map)
     x = intersection.x;
     y = intersection.y;
 
-    // if (!get_fract_part(x) && !get_fract_part(y))
-    //     check_4(intersection);
-    // else
-    //     check_2(intersection);
-
-
     if (!get_fract_part(x) && get_fract_part(y))
     {
         y = floor(y);
         //printf("x: %f, y: %f --- ", x, y);
-        if (!map[(int)y][(int)x] || !map[(int)y][(int)x-1])
+        if (!map->arr[(int)y][(int)x] || (((int)x >= 1) && !map->arr[(int)y][(int)x-1]))
             return (1);
     }
     else if (get_fract_part(x) && !get_fract_part(y))
     {
         x = floor(x);
         //printf("test");
-        if (!map[(int)y][(int)x] || !map[(int)y-1][(int)x])
+        if (!map->arr[(int)y][(int)x] || (((int)x >= 1) && !map->arr[(int)y][(int)x-1]))
             return (1);
     }
     else if (!get_fract_part(x) && !get_fract_part(y))
     {
-        if (!map[(int)y][(int)x] || !map[(int)y][(int)x-1] || !map[(int)y-1][(int)x] || !map[(int)y-1][(int)x-1])
+        if (!map->arr[(int)y][(int)x] || (((int)x >= 1) && !map->arr[(int)y][(int)x-1]) || \
+        (((int)x >= 1) && !map->arr[(int)y][(int)x-1]) || (((int)x >= 1) && ((int)y >= 1) && !map->arr[(int)y-1][(int)x-1]))
             return (1);
     }
     return (0);
@@ -134,7 +129,7 @@ t_dvec2 get_vertical_intersection(t_dvec2 position, double angle)
     return (intersection);
 }
 
-t_dvec2 get_intersection(t_dvec2 position, int **map, double angle)
+t_dvec2 get_intersection(t_dvec2 position, t_map *map, double angle)
 {
     t_dvec2 new_position;
     double c_h;
@@ -143,7 +138,7 @@ t_dvec2 get_intersection(t_dvec2 position, int **map, double angle)
     c_h = get_hi_lenght(position, angle);
     c_v = get_vi_lenght(position, angle);
 
-    if ((c_h && !c_v) && c_h < c_v)
+    if ((c_h && !c_v) || c_h < c_v)
         new_position = get_horizontal_intersection(position, angle);
     else
         new_position = get_vertical_intersection(position, angle);

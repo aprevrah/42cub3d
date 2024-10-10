@@ -190,7 +190,7 @@ t_dvec2 get_intersection(t_dvec2 position, int **map, double angle)
     c_h = get_hi_lenght(position, angle);
     c_v = get_vi_lenght(position, angle);
 
-    if ((c_h && !c_v) && c_h < c_v)
+    if ((c_h && !c_v) || c_h < c_v)
         new_position = get_horizontal_intersection(position, angle);
     else
         new_position = get_vertical_intersection(position, angle);
@@ -239,16 +239,16 @@ int main(void)
     }
 
     p1.position.x = 1.5;
-    p1.position.y = 2.5;
-    p1.angle = 45;
+    p1.position.y = 1.5;
+    p1.angle = 80;
 
     // printf("Enter angle: ");
     // scanf("%lf", &p1.angle);
 
-    if (is_wall(p1.position, map))
-        printf("WALL\n");
-    else
-        printf("NO WALL\n");
+    // if (is_wall(p1.position, map))
+    //     printf("WALL\n");
+    // else
+    //     printf("NO WALL\n");
 
     p1.angle = deg2rad(p1.angle);
 
