@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/08 13:01:15 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/10/02 18:54:12 by aprevrha         ###   ########.fr       */
+/*   Updated: 2024/10/10 15:37:46 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,10 @@
 # define R_SPEED 0.03
 # define T_SPEED 10
 # define S_SPEED 0.03
+# define PI 3.14159265359
+# define EPSILON 0.000001
+
+
 
 typedef struct s_data	t_data;
 
@@ -170,5 +174,18 @@ void					render_players(t_data *data);
 t_vec4					nv(float x, float y, float z);
 t_vec4					left_multiply(t_tmatrix mat, t_vec4 vec);
 t_tmatrix				multiply_tmats(t_tmatrix mat1, t_tmatrix mat2);
+
+// dda functions
+
+double get_fract_part(double x);
+double  get_hi_lenght(t_dvec2 position, double angle);
+double  get_vi_lenght(t_dvec2 position, double angle);
+t_dvec2 get_horizontal_intersection(t_dvec2 position, double angle);
+t_dvec2 get_vertical_intersection(t_dvec2 position, double angle);
+t_dvec2 get_intersection(t_dvec2 position, int **map, double angle);
+int is_wall(t_dvec2 intersection, int **map);
+double  deg2rad(double degrees);
+double rad2deg(double rad);
+
 
 #endif
