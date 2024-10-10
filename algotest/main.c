@@ -1,3 +1,4 @@
+
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -212,68 +213,91 @@ double rad2deg(double rad)
     return (rad * 180 / PI);
 }
 
+double  orientaion2rad(t_dvec2 orientation)
+{
+    return (atan2(orientation.y, orientation.x));
+}
+
 int main(void)
 {
-    t_player p1;
-    double c1;
-    t_dvec2 intersection;
+    t_dvec2 orientation;
+    double rad;
 
-    int rows = 4;
-    int cols = 4;
+    orientation.x = 1;
+    orientation.y = 1;
 
-    // Dynamically allocate the 2D array
-    int **map = (int **)malloc(rows * sizeof(int *));
-    for (int i = 0; i < rows; i++) {
-        map[i] = (int *)malloc(cols * sizeof(int));
-    }
+    rad = orientaion2rad(orientation);
 
-    // Fill the map with walls (1s) on the edges and floor (0s) in the middle
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-            if (i == 0 || i == rows - 1 || j == 0 || j == cols - 1) {
-                map[i][j] = 1; // Walls
-            } else {
-                map[i][j] = 0; // Floor
-            }
-        }
-    }
+    rad = rad2deg(rad);
 
-    p1.position.x = 1.5;
-    p1.position.y = 2.5;
-    p1.angle = 45;
-
-    // printf("Enter angle: ");
-    // scanf("%lf", &p1.angle);
-
-    if (is_wall(p1.position, map))
-        printf("WALL\n");
-    else
-        printf("NO WALL\n");
-
-    p1.angle = deg2rad(p1.angle);
-
-    intersection = get_intersection(p1.position, map, p1.angle);
+    printf("angle = %.15lf\n", rad);
     
-    printf("x = %lf, y = %lf\n", intersection.x, intersection.y);
 
-    
-    // c1 = get_hi_lenght(p1.position, p1.angle);
-    // if (!c1)
-    //     printf ("No intersection!  ");
-    // else
-    //     printf("c_h = %f, ", c1);
 
-    // intersection = get_horizontal_intersection(p1.position , p1.angle);
-    // printf("x_h = %lf , y_h = %lf\n", intersection.x, intersection.y);
-
-    // c1 = get_vi_lenght(p1.position, p1.angle);
-    // if (!c1)
-    //     printf ("No intersection!   ");
-    // else
-    //     printf("c_v = %f, ", c1);
-
-    // intersection = get_vertical_intersection(p1.position , p1.angle);
-    // printf("x_v = %lf , y_v = %lf\n", intersection.x, intersection.y);
 }
+
+// int main(void)
+// {
+//     t_player p1;
+//     double c1;
+//     t_dvec2 intersection;
+
+//     int rows = 4;
+//     int cols = 4;
+
+//     // Dynamically allocate the 2D array
+//     int **map = (int **)malloc(rows * sizeof(int *));
+//     for (int i = 0; i < rows; i++) {
+//         map[i] = (int *)malloc(cols * sizeof(int));
+//     }
+
+//     // Fill the map with walls (1s) on the edges and floor (0s) in the middle
+//     for (int i = 0; i < rows; i++) {
+//         for (int j = 0; j < cols; j++) {
+//             if (i == 0 || i == rows - 1 || j == 0 || j == cols - 1) {
+//                 map[i][j] = 1; // Walls
+//             } else {
+//                 map[i][j] = 0; // Floor
+//             }
+//         }
+//     }
+
+//     p1.position.x = 1.5;
+//     p1.position.y = 2.5;
+//     p1.angle = 45;
+
+//     // printf("Enter angle: ");
+//     // scanf("%lf", &p1.angle);
+
+//     if (is_wall(p1.position, map))
+//         printf("WALL\n");
+//     else
+//         printf("NO WALL\n");
+
+//     p1.angle = deg2rad(p1.angle);
+
+//     intersection = get_intersection(p1.position, map, p1.angle);
+    
+//     printf("x = %lf, y = %lf\n", intersection.x, intersection.y);
+
+    
+//     // c1 = get_hi_lenght(p1.position, p1.angle);
+//     // if (!c1)
+//     //     printf ("No intersection!  ");
+//     // else
+//     //     printf("c_h = %f, ", c1);
+
+//     // intersection = get_horizontal_intersection(p1.position , p1.angle);
+//     // printf("x_h = %lf , y_h = %lf\n", intersection.x, intersection.y);
+
+//     // c1 = get_vi_lenght(p1.position, p1.angle);
+//     // if (!c1)
+//     //     printf ("No intersection!   ");
+//     // else
+//     //     printf("c_v = %f, ", c1);
+
+//     // intersection = get_vertical_intersection(p1.position , p1.angle);
+//     // printf("x_v = %lf , y_v = %lf\n", intersection.x, intersection.y);
+// }
 
 
