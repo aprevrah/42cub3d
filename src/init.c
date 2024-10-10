@@ -32,18 +32,6 @@
 // 	return (key);
 // }
 
-static t_key	init_key_move(int keycode, t_player *player, t_dvec2 direction)
-{
-	t_key	key;
-
-	key.state = 0;
-	key.code = keycode;
-	key.func = move;
-	key.args.move_args.player = player;
-    key.args.move_args.direction = direction;
-	return (key);
-}
-
 //static t_key	init_key_look(int keycode, t_player *player, double rotation)
 // static t_key	init_key(int keycode, void	(*func)(void))
 // {
@@ -111,20 +99,14 @@ int	init_mlx(t_data *data)
 	if (!data->mlx)
 		return (1);
 	data->win = mlx_new_window(data->mlx, W_WIDTH, W_HEIGHT, "Cub3D");
-		return (1);
-	data->win = mlx_new_window(data->mlx, W_WIDTH, W_HEIGHT, "Cub3D");
 	if (!data->mlx)
-		return (1);
 		return (1);
 	data->img = mlx_new_image(data->mlx, W_WIDTH, W_HEIGHT);
 	if (!data->mlx)
 		return (1);
-		return (1);
 	data->addr = mlx_get_data_addr(data->img, &(data->bits_per_pixel),
 			&(data->line_length), &(data->endian));
 	if (!data->addr)
-		return (1);
-	return (0);
 		return (1);
 	return (0);
 }
@@ -136,8 +118,8 @@ int	init_players(t_player **players, t_map *map)
 	if (!*players)
 		return (1);
 	// hard coded for now, use map later
-	(*players)[0].orientation = (t_dvec2){0.0, -1.0}; 
-	(*players)[0].position = (t_dvec2){0.0, 0.0};
-	(*players)[0].movement_speed = (double){3};
+	(*players)[0].orientation = (t_dvec2){0.0, 1.0}; 
+	(*players)[0].position = (t_dvec2){1.5, 1.5};
+	(*players)[0].movement_speed = (double){0.01};
 	return (0);
 }

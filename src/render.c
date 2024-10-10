@@ -123,23 +123,32 @@ void	render_rect(t_data *data, t_ivec2 p1, t_ivec2 p2)
 }
 void	render_players(t_data *data)
 {
+	t_ivec2 ray_hit_pos_screen;
+	t_ivec2 player_pos_screen;
+	t_dvec2 ray_hit_pos;
 	t_player player = data->players[0];
-	render_rect(data, (t_ivec2){player.position.x -2, player.position.y -2}, (t_ivec2){player.position.x + 2, player.position.y + 2});
-	line_put(data, (t_ivec2){round(player.position.x), round(player.position.y)}, (t_ivec2){round(player.position.x + player.orientation.x * 20), round(player.position.y + player.orientation.y * 20)}, 0xf7f70a);
+
+	player_pos_screen = (t_ivec2){round(player.position.x * SCALE), round(player.position.y * SCALE)};
+	
+	//render_rect(data, (t_ivec2){player.position.x -2, player.position.y -2}, (t_ivec2){player.position.x + 2, player.position.y + 2});
+	line_put(data, player_pos_screen, (t_ivec2){round(player_pos_screen.x + player.orientation.x * 20), round(player_pos_screen.y + player.orientation.y * 20)}, 0xf7f70a);
+	//draw first ray
+	ray_hit_pos = get_intersection(player.position, data->map->arr, 0);
+	ray_hit_pos_screen = (t_ivec2){ray_hit_pos.x * SCALE, ray_hit_pos.y * SCALE};
+	line_put(data, player_pos_screen, ray_hit_pos_screen, COLOR);
 }
 
 void	render_map(t_data *data)
 {
 	t_map map = *data->map;
 	int x ,y = 0;
-	int unit = 50;
 
 	while (y < map.height)
 	{
 		while (x < map.length)
 		{
 			if (!map.arr[y][x])
-				render_rect(data, (t_ivec2){x * unit, y * unit}, (t_ivec2){(x + 1) * unit, (y + 1) * unit});
+				render_rect(data, (t_ivec2){x * SCALE, y * SCALE}, (t_ivec2){(x + 1) * SCALE, (y + 1) * SCALE});
 			x++;
 		}
 		x = 0;

@@ -28,6 +28,7 @@
 # define S_SPEED 0.03
 # define PI 3.14159265359
 # define EPSILON 0.000001
+# define SCALE 100
 
 
 
