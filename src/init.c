@@ -44,7 +44,7 @@ static t_key	init_key_move(int keycode, t_player *player, t_dvec2 direction)
 	return (key);
 }
 
-static t_key	init_key_look(int keycode, t_player *player, double rotation)
+//static t_key	init_key_look(int keycode, t_player *player, double rotation)
 // static t_key	init_key(int keycode, void	(*func)(void))
 // {
 // 	t_key	key;
@@ -129,7 +129,6 @@ int	init_mlx(t_data *data)
 	return (0);
 }
 
-int	init_players(t_player **players, t_map *map)
 int	init_players(t_player **players, t_map *map)
 {
 	(void)map;
