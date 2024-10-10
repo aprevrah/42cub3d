@@ -121,6 +121,15 @@ void	render_rect(t_data *data, t_ivec2 p1, t_ivec2 p2)
 	line_put(data, p2, p1_, COLOR);
 	line_put(data, p2, p2_, COLOR);
 }
+// t_dvec2 get_ray_hit(t_dvec2 start_pos, t_data *data, t_dvec2 orientation);
+// {
+// 	t_player player = data->players[0];
+// 	tanh(orientation)
+// 	ray_hit_pos = get_intersection(player.position, data->map->arr, 0);
+
+// 	return (ray_hit_pos);
+// }
+
 void	render_players(t_data *data)
 {
 	t_ivec2 ray_hit_pos_screen;
@@ -132,8 +141,8 @@ void	render_players(t_data *data)
 	
 	//render_rect(data, (t_ivec2){player.position.x -2, player.position.y -2}, (t_ivec2){player.position.x + 2, player.position.y + 2});
 	line_put(data, player_pos_screen, (t_ivec2){round(player_pos_screen.x + player.orientation.x * 20), round(player_pos_screen.y + player.orientation.y * 20)}, 0xf7f70a);
-	//draw first ray
-	ray_hit_pos = get_intersection(player.position, data->map->arr, 0);
+	//draw first ray 
+	ray_hit_pos = get_intersection(player.position, data->map->arr, atan(player.orientation.x / player.orientation.y));
 	ray_hit_pos_screen = (t_ivec2){ray_hit_pos.x * SCALE, ray_hit_pos.y * SCALE};
 	line_put(data, player_pos_screen, ray_hit_pos_screen, COLOR);
 }
@@ -143,7 +152,7 @@ void	render_map(t_data *data)
 	t_map map = *data->map;
 	int x;
 	int y;
-	
+
 	x = 0;
 	y = 0;
 

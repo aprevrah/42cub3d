@@ -17,12 +17,14 @@ int is_wall(t_dvec2 intersection, int **map)
     if (!get_fract_part(x) && get_fract_part(y))
     {
         y = floor(y);
+        //printf("x: %f, y: %f --- ", x, y);
         if (!map[(int)y][(int)x] || !map[(int)y][(int)x-1])
             return (1);
     }
-    else if (!get_fract_part(y) && get_fract_part(x))
+    else if (get_fract_part(x) && !get_fract_part(y))
     {
         x = floor(x);
+        //printf("test");
         if (!map[(int)y][(int)x] || !map[(int)y-1][(int)x])
             return (1);
     }
