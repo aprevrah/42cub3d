@@ -31,49 +31,6 @@ static char	*ft_str_append(char *a, char *b)
 	return (a = NULL, b = NULL, str);
 }
 
-// static unsigned int	count_tokens(char *str, char c)
-// {
-// 	unsigned int	i;
-// 	unsigned int	count;
-// 	int				in_token;
-
-// 	i = 0;
-// 	in_token = 0;
-// 	count = 0;
-// 	while (str[i])
-// 	{
-// 		if (!in_token && str[i] != c && str[i] != '\n')
-// 		{
-// 			in_token = 1;
-// 			count++;
-// 		}
-// 		else if (in_token && (str[i] == c || str[i] == '\n'))
-// 		{
-// 			in_token = 0;
-// 		}
-// 		i++;
-// 	}
-// 	return (count);
-// }
-
-// static unsigned int	count_chars(char *str, char *chars)
-// {
-// 	unsigned int	i;
-// 	unsigned int	count;
-
-// 	i = 0;
-// 	count = 0;
-// 	while (str[i])
-// 	{
-// 		if (ft_strchr(chars, str[i]))
-// 		{
-// 			count++;
-// 		}
-// 	}
-// 	return (count);
-// }
-
-
 static int	fill_map(char const *s, t_map *map)
 {
 	int	i;
@@ -101,26 +58,6 @@ static int	fill_map(char const *s, t_map *map)
 	}
 	return (1);
 }
-
-// Update this to handle edge cases
-// static int	identifier(char const *s, char c, t_map *map)
-// {
-// 	int	i;
-// 	int	index;
-
-// 	i = 0;
-// 	index = 0;
-// 	while (index < (map->height * map->length))
-// 	{
-// 		while (s[i] == c || s[i] == '\n')
-// 			i++;
-// 		map->arr[index] = ft_atoi(s + i);
-// 		index++;
-// 		while (s[i] != c && s[i] != '\n' && s[i] != '\0')
-// 			i++;
-// 	}
-// 	return (1);
-// }
 
 static char	*read_file(int fd, t_map *map)
 {
