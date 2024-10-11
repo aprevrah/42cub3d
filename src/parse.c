@@ -59,6 +59,51 @@ static int	fill_map(char const *s, t_map *map)
 	return (1);
 }
 
+int is_space(char c)
+{
+	if (c == ' ')
+		return (1);
+	return (0);
+}
+
+# define WHITESPACE " \t\n\r\v\f"
+
+void	skip_until(const char *str, unsigned int *i, const char *charset,
+		bool val)
+{
+	while ((ft_strchr(charset, str[*i]) != 0) != val && str[*i] != '\0')
+		*i += 1;
+}
+
+
+
+key_val(char *line, t_texture_data *texture_data)
+{
+	int i;
+
+	i = 0;
+	skip_until(line, &i, WHITESPACE, false);
+	if (!ft_strncmp(&line[i], "NO", 2)) 
+	{
+		i += 2;
+		if (ft_strchr(line[i], WHITESPACE))
+			return (1);
+		texture_data->path_NO = 
+	}
+		
+	if (!ft_strncmp(&line[i], "EA", 2));
+		texture_data->path_EA
+	if (!ft_strncmp(&line[i], "SO", 2));
+		texture_data->path_SO
+	if (!ft_strncmp(&line[i], "WE", 2));
+		texture_data->path_WE
+	if (!ft_strncmp(&line[i], "C", 1));
+		texture_data->col_C
+	if (!ft_strncmp(&line[i], "F", 1));
+		texture_data->col_F
+	
+}
+
 static char	*read_file(int fd, t_map *map)
 {
 	char	*line;
@@ -68,6 +113,7 @@ static char	*read_file(int fd, t_map *map)
 	while (1)
 	{
 		line = get_next_line(fd);
+		key_val(line, &map->texture_data);
 		if (!line)
 			break ;
 		//if (ft_strncmp(line, , 3))

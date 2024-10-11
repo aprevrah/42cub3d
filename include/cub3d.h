@@ -17,6 +17,7 @@
 # include <math.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <stdbool.h>
 
 # define COLOR 0x00FFFFFF
 # define MAP_SEP " "
@@ -47,7 +48,7 @@ typedef struct s_player
 	double	movement_speed;
 }						t_player;
 
-typedef struct s_map
+typedef struct s_texture_data
 {
 	char				*path_NO;
 	char				*path_SO;
@@ -55,6 +56,11 @@ typedef struct s_map
 	char				*path_EA;
 	int					col_F;
 	int					col_C;
+}						t_texture_data;
+
+typedef struct s_map
+{
+	t_texture_data		texture_data;
 	int					length;
 	int					height;
 	int					**arr;
