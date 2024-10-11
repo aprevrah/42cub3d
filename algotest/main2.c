@@ -190,7 +190,7 @@ t_dvec2 get_intersection(t_dvec2 position, int **map, double angle)
     c_h = get_hi_lenght(position, angle);
     c_v = get_vi_lenght(position, angle);
 
-    if ((c_h && !c_v) || c_h < c_v)
+    if ((c_h && !c_v) && c_h < c_v)
         new_position = get_horizontal_intersection(position, angle);
     else
         new_position = get_vertical_intersection(position, angle);
@@ -240,7 +240,7 @@ int main(void)
 
     p1.position.x = 1.5;
     p1.position.y = 2.25;
-    p1.angle = 135;
+    p1.angle = 90;
 
     // printf("Enter angle: ");
     // scanf("%lf", &p1.angle);
@@ -275,5 +275,3 @@ int main(void)
     intersection = get_vertical_intersection(p1.position , p1.angle);
     printf("x_v = %lf , y_v = %lf\n", intersection.x, intersection.y);
 }
-
-
