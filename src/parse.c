@@ -150,49 +150,64 @@ int key_val(char *line, t_texture_data *texture_data)
 		texture_data->path_SO = get_key(&i, line);
 	else if (!ft_strncmp(&line[i], "WE", 2))
 		texture_data->path_WE = get_key(&i, line);
-	else if (!ft_strncmp(&line[i], "C", 1) && !get_color(&line[i], &texture_data->col_C))
-		return (printf("Failed to parse ceiling color."), 1);
-	else if (!ft_strncmp(&line[i], "F", 1) && !get_color(&line[i], &texture_data->col_F))
-		return (printf("Failed to parse floor color."), 1);
+	else if (!ft_strncmp(&line[i], "C", 1) && get_color(&line[i], &texture_data->col_C))
+		return (printf("Failed to parse ceiling color.\n"), 100);
+	else if (!ft_strncmp(&line[i], "F", 1) && get_color(&line[i], &texture_data->col_F))
+		return (printf("Failed to parse floor color.\n"), 100);
 	else if (line[i] == '\n')
 		return (100);
 	return (1);
 }
 
-static char	*read_file(int fd, t_map *map)
+bool is_only_whitespace(char *s)
+{
+	unsigned int i;
+	i = 0;
+	skip_until(s, &i, WHITESPACE, false);
+	return (s[i] == '\0');
+}
+
+int read_texture_data(int fd, t_texture_data *texture_data)
 {
 	char	*line;
-	char	*content;
 	int		status;
 
 	status = 0;
 	while (status < 6)
 	{
 		line = get_next_line(fd);
-		status += key_val(line, &map->texture_data);
-		if (!line)
-			break;
+		status += key_val(line, texture_data);
 		free(line);
 	}
-	content = NULL;
+	return (0);
+}
 
+static char	*read_map_data(int fd, t_map *map)
+{
+	char	*line;
+	char	*content;
+	int		location;
+	
+	content = NULL;
+	location = 0;
 	while (1)
 	{
 		line = get_next_line(fd);
 		if (!line)
 			break ;
+		if (is_only_whitespace(line) && (location == 0 || location == 2))
+			continue ;
+		else if (location == 0)
+			location = 1;
+		else if (location == 1 && is_only_whitespace(line))
+			location = 2;
+		else if (location == 2 && !is_only_whitespace(line))
+			return(free(line), printf("Failed to read map.\n"), content);
 		map->height++;
 		if (map->length < (int)ft_strlen(line) - 1)
 			map->length = (int)ft_strlen(line) - 1;
 		content = ft_str_append(content, line);
 	}
-	printf("%s\n", content);
-	printf("NO: %s\n", map->texture_data.path_NO);
-	printf("EA: %s\n", map->texture_data.path_EA);
-	printf("SO: %s\n", map->texture_data.path_SO);
-	printf("WE: %s\n", map->texture_data.path_WE);
-	printf("C: %X\n", map->texture_data.col_C);
-	printf("F: %X\n", map->texture_data.col_F);
 	return (content);
 }
 
@@ -248,16 +263,24 @@ t_map	*parse_map(int fd)
 	map = (t_map *)malloc(sizeof(t_map));
 	if (!map)
 		return (NULL);
+	read_texture_data(fd, &map->texture_data);
 	map->height = 0;
 	map->length = 0;
-	content = read_file(fd, map);
+	content = read_map_data(fd, map);
 	map->arr = new_2d_int_arr(map->height, map->length);
 	if (!map->arr)
 		return (free(map), NULL);
 	fill_map(content, map);
+	printf("%s\n", content);
+	printf("NO: %s\n", map->texture_data.path_NO);
+	printf("EA: %s\n", map->texture_data.path_EA);
+	printf("SO: %s\n", map->texture_data.path_SO);
+	printf("WE: %s\n", map->texture_data.path_WE);
+	printf("C: #%06X\n", map->texture_data.col_C);
+	printf("F: #%06X\n", map->texture_data.col_F);
 	free(content);
 	printf("\nConverted map\n\n");
-	// to test if the map was correcty filled
+	// maunaly check if the map was correcty filled
 	printmap(map);
 	return (map);
 }
