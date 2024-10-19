@@ -54,8 +54,8 @@ typedef struct s_texture_data
 	char				*path_SO;
 	char				*path_WE;
 	char				*path_EA;
-	int					col_F;
-	int					col_C;
+	unsigned int		col_F;
+	unsigned int		col_C;
 }						t_texture_data;
 
 typedef struct s_map
