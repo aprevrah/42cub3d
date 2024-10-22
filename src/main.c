@@ -20,6 +20,19 @@
 #include <string.h>
 #include <unistd.h>
 
+void free_2d_arr(void **arr, int rows)
+{
+	int i;
+
+	i = 0;
+	while (i < rows)
+	{
+		free(arr[i]);
+		i++;
+	}
+	free(arr);
+}
+
 void	free_and_exit(t_data *data, int code)
 {
 	// if (data->players)
@@ -27,7 +40,11 @@ void	free_and_exit(t_data *data, int code)
 	if (data->map)
 	{
 		if (data->map->arr)
-			free(data->map->arr);
+			free_2d_arr((void **)data->map->arr, data->map->height);
+		free(data->map->texture_data.path_NO);
+		free(data->map->texture_data.path_EA);
+		free(data->map->texture_data.path_SO);
+		free(data->map->texture_data.path_WE);
 		free(data->map);
 	}
 	if (data->img)
@@ -72,17 +89,17 @@ int	main(int argc, char **argv)
 	fd = open(argv[1], O_RDONLY);
 	data.map = parse_map(fd);
 	close(fd);
-
-	if (init_players(&data.players, data.map))
-		free_and_exit(&data, 1);
-	if (init_mlx(&data))
-		free_and_exit(&data, 1);
-	render_map(&data);
-	mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
-	init_keys(data.keys, data.players);
-	mlx_hook(data.win, 2, KeyPressMask, handle_keydown, data.keys);
-	mlx_hook(data.win, 3, KeyReleaseMask, handle_keyup, data.keys);
-	mlx_hook(data.win, 17, StructureNotifyMask, win_close_button, &data);
-	mlx_loop_hook(data.mlx, loop_hook, &data);
-	mlx_loop(data.mlx);
+	free_and_exit(&data, 1);
+	// if (init_players(&data.players, data.map))
+	// 	free_and_exit(&data, 1);
+	// if (init_mlx(&data))
+	// 	free_and_exit(&data, 1);
+	// render_map(&data);
+	// mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
+	// init_keys(data.keys, data.players);
+	// mlx_hook(data.win, 2, KeyPressMask, handle_keydown, data.keys);
+	// mlx_hook(data.win, 3, KeyReleaseMask, handle_keyup, data.keys);
+	// mlx_hook(data.win, 17, StructureNotifyMask, win_close_button, &data);
+	// mlx_loop_hook(data.mlx, loop_hook, &data);
+	// mlx_loop(data.mlx);
 }

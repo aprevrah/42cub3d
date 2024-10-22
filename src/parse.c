@@ -59,13 +59,6 @@ static int	fill_map(char const *s, t_map *map)
 	return (1);
 }
 
-int is_space(char c)
-{
-	if (c == ' ')
-		return (1);
-	return (0);
-}
-
 # define WHITESPACE " \t\n\r\v\f"
 # define NUNERIC "0123456789"
 
@@ -122,41 +115,21 @@ int get_color(char *s, unsigned int *color)
 	return (0);
 }
 
-char *get_key(unsigned int *i, char *s)
+int get_key(unsigned int *i, char *s, char **path)
 {
 	unsigned int start;
 
 	skip_until(s, i, WHITESPACE, true);
 	if (!skip_until(s, i, WHITESPACE, false))
-		return (NULL);
+		return (printf("Unable to parse: %s", s), 1);
 	start = *i;
 	skip_until(s, i, "\n", true);
-	return (ft_substr(s, start, *i - start));
-}
-
-int key_val(char *line, t_texture_data *texture_data)
-{
-	unsigned int i;
-
-	i = 0;
-	skip_until(line, &i, WHITESPACE, false);
-	if (line[i] == '\0')
-		return (0);
-	else if (!ft_strncmp(&line[i], "NO", 2))
-		texture_data->path_NO = get_key(&i, line);
-	else if (!ft_strncmp(&line[i], "EA", 2))
-		texture_data->path_EA = get_key(&i, line);
-	else if (!ft_strncmp(&line[i], "SO", 2))
-		texture_data->path_SO = get_key(&i, line);
-	else if (!ft_strncmp(&line[i], "WE", 2))
-		texture_data->path_WE = get_key(&i, line);
-	else if (!ft_strncmp(&line[i], "C", 1) && get_color(&line[i], &texture_data->col_C))
-		return (printf("Failed to parse ceiling color.\n"), 100);
-	else if (!ft_strncmp(&line[i], "F", 1) && get_color(&line[i], &texture_data->col_F))
-		return (printf("Failed to parse floor color.\n"), 100);
-	else if (line[i] == '\n')
-		return (100);
-	return (1);
+	if (*path)
+		return (printf("Duplicate config: %s", s), 1);
+	*path = ft_substr(s, start, *i - start);
+	if (!path)
+		return (printf("Malloc failed."), 1);
+	return (0);
 }
 
 bool is_only_whitespace(char *s)
@@ -167,17 +140,50 @@ bool is_only_whitespace(char *s)
 	return (s[i] == '\0');
 }
 
+int key_val(char *line, t_texture_data *texture_data)
+{
+	unsigned int i;
+
+	i = 0;
+	skip_until(line, &i, WHITESPACE, false);
+	if (line[i] == '\0')
+		return (2);
+	else if (!ft_strncmp(&line[i], "NO", 2))
+		return (get_key(&i, line, &texture_data->path_NO));
+	else if (!ft_strncmp(&line[i], "EA", 2))
+		return (get_key(&i, line, &texture_data->path_EA));
+	else if (!ft_strncmp(&line[i], "SO", 2))
+		return (get_key(&i, line, &texture_data->path_SO));
+	else if (!ft_strncmp(&line[i], "WE", 2))
+		return (get_key(&i, line, &texture_data->path_WE));
+	else if (!ft_strncmp(&line[i], "C", 1))
+		return (get_color(&line[i], &texture_data->col_C));
+	else if (!ft_strncmp(&line[i], "F", 1))
+		return (get_color(&line[i], &texture_data->col_F));
+	printf("Unable to parse: %s", line);
+	return (1);
+}
+
 int read_texture_data(int fd, t_texture_data *texture_data)
 {
 	char	*line;
 	int		status;
+	int		configs;
 
-	status = 0;
-	while (status < 6)
+	texture_data->path_NO = NULL;
+	texture_data->path_EA = NULL;
+	texture_data->path_SO = NULL;
+	texture_data->path_WE = NULL;
+	configs = 0;
+	while (configs < 6)
 	{
 		line = get_next_line(fd);
-		status += key_val(line, texture_data);
+		status = key_val(line, texture_data);
 		free(line);
+		if (status == 0)
+			configs++;
+		else if (status == 1)
+			return (1);
 	}
 	return (0);
 }
@@ -196,7 +202,10 @@ static char	*read_map_data(int fd, t_map *map)
 		if (!line)
 			break ;
 		if (is_only_whitespace(line) && (location == 0 || location == 2))
+		{
+			free(line);
 			continue ;
+		}
 		else if (location == 0)
 			location = 1;
 		else if (location == 1 && is_only_whitespace(line))
@@ -255,6 +264,21 @@ int **new_2d_int_arr(int rows, int cols)
 	return (arr);
 }
 
+//This is some BS
+void gnl_clear_buffer(fd)
+{
+	char *line;
+
+	line = NULL;
+	while (1)
+	{
+		get_next_line(fd);
+		free(line);
+		if (!line)
+			return ;
+	}
+}
+
 t_map	*parse_map(int fd)
 {
 	t_map	*map;
@@ -263,7 +287,8 @@ t_map	*parse_map(int fd)
 	map = (t_map *)malloc(sizeof(t_map));
 	if (!map)
 		return (NULL);
-	read_texture_data(fd, &map->texture_data);
+	if (read_texture_data(fd, &map->texture_data))
+		return (gnl_clear_buffer(fd), free(map), NULL);
 	map->height = 0;
 	map->length = 0;
 	content = read_map_data(fd, map);
