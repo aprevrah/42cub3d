@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define PI 3.14159265359
+#define PI 3.14159265358979323
 #define EPSILON 0.000001
 
 typedef struct s_dvec2
@@ -10,6 +10,13 @@ typedef struct s_dvec2
 	double					x;
 	double					y;
 }						t_dvec2;
+
+typedef struct s_map
+{
+	int					length;
+	int					height;
+	int					**arr;
+}						t_map;
 
 typedef struct s_player
 {
@@ -24,39 +31,58 @@ double  get_hi_lenght(t_dvec2 position, double angle);
 double  get_vi_lenght(t_dvec2 position, double angle);
 t_dvec2 get_horizontal_intersection(t_dvec2 position, double angle);
 t_dvec2 get_vertical_intersection(t_dvec2 position, double angle);
-t_dvec2 get_intersection(t_dvec2 position, int **map, double angle);
+t_dvec2 get_intersection(t_dvec2 position, t_map *map, double angle);
+double  deg2rad(double degrees);
 
+double squared_distance(t_dvec2 p1, t_dvec2 p2)
+{
+    return (p2.x - p1.x) * (p2.x - p1.x) + (p2.y - p1.y) * (p2.y - p1.y);
+}
 
-// # function works only if at least on coordinate is and integer
-int is_wall(t_dvec2 intersection, int **map)
+t_dvec2 closer_to_p1(t_dvec2 p1, t_dvec2 p2, t_dvec2 p3)
+{
+    double dist_p2 = squared_distance(p1, p2);
+    double dist_p3 = squared_distance(p1, p3);
+
+    if (dist_p2 < dist_p3)
+        return (p2);
+    else
+        return (p3);
+}
+
+int is_wall(t_dvec2 intersection, t_map *map)
 {
     double x;
     double y;
     
+    int x_max = map->length;
+    int y_max = map->height;
+    
     x = intersection.x;
     y = intersection.y;
 
-    // if (!get_fract_part(x) && !get_fract_part(y))
-    //     check_4(intersection);
-    // else
-    //     check_2(intersection);
-
+    if (x < 0 || y < 0 || x >= x_max || y >= y_max)
+        return (0);
 
     if (!get_fract_part(x) && get_fract_part(y))
-    {
+    {   
         y = floor(y);
-        if (map[(int)y][(int)x] || map[(int)y][(int)x-1])
+
+        if (map->arr[(int)y][(int)x] || ((x-1) >= 0 && map->arr[(int)y][(int)x-1]))
             return (1);
     }
     else if (!get_fract_part(y) && get_fract_part(x))
     {
         x = floor(x);
-        if (map[(int)y][(int)x] || map[(int)y-1][(int)x])
+        if (map->arr[(int)y][(int)x] || ((y-1) >= 0 && map->arr[(int)y-1][(int)x]))
             return (1);
     }
     else if (!get_fract_part(x) && !get_fract_part(y))
     {
-        if (map[(int)y][(int)x] || map[(int)y][(int)x-1] || map[(int)y-1][(int)x] || map[(int)y-1][(int)x-1])
+        if (map->arr[(int)y][(int)x] \
+        || ((x-1) >= 0 && map->arr[(int)y][(int)x-1]) \
+        || ((y-1) >= 0 && map->arr[(int)y-1][(int)x]) \
+        ||  ((y-1) >= 0 && (x-1) >= 0 && map->arr[(int)y-1][(int)x-1]))
             return (1);
     }
     return (0);
@@ -181,25 +207,89 @@ t_dvec2 get_vertical_intersection(t_dvec2 position, double angle)
 //     return new_position;
 // }
 
-t_dvec2 get_intersection(t_dvec2 position, int **map, double angle)
+double  get_dx(double angle)
 {
-    t_dvec2 new_position;
-    double c_h;
-    double c_v;
+    // # if anlge == 90 || 270 return (1);
+    // # if angle == 0 || 180 return (0);
+    return (1 / tan(angle)); 
+}
 
-    c_h = get_hi_lenght(position, angle);
-    c_v = get_vi_lenght(position, angle);
+double get_dy(double angle)
+{
+    // # if angle == 90 || 270 return (0)
+    // # if angle == 0 || 180 return (1);
+    return (tan(0));
+}
 
-    if ((c_h && !c_v) || c_h < c_v)
-        new_position = get_horizontal_intersection(position, angle);
+t_dvec2 get_intersection(t_dvec2 position, t_map *map, double angle)
+{
+    t_dvec2 vertical_intersection;
+    t_dvec2 horizontal_intersection;
+    double d_x;
+    double d_y;
+    double x_i;
+    double y_i;
+
+    angle = deg2rad(angle);
+
+    d_x = get_dx(angle);
+    d_y = get_dy(angle);
+
+    if (angle < PI/2 && angle > 3*PI/2)
+        x_i = -1;
     else
-        new_position = get_vertical_intersection(position, angle);
+        x_i = 1;
+
+    if (angle > 0 && angle < PI)
+        y_i = -1;
+    else
+        y_i = 1;
     
-    if (is_wall(new_position, map))
-        return (new_position);
-    else
-        return (get_intersection(new_position, map, angle));
-    return new_position;
+
+    // # if angle is 90 || 270 then only horizontal
+
+    // if (fabs(angle - PI/2) < EPSILON || fabs(angle - 3*PI/2) < EPSILON)
+    // {   
+    //     horizontal_intersection = get_horizontal_intersection(position, angle);
+    //     while (1)
+    //     {
+    //         if (is_wall(horizontal_intersection, map))
+    //             return (horizontal_intersection);
+    //         //position
+    //     }
+    // }
+
+    // # if angle is 0 || 180 then only vertical
+
+    // # 1. get nearest vertical and horizontal intersection
+    vertical_intersection = get_vertical_intersection(position, angle);
+    horizontal_intersection = get_horizontal_intersection(position, angle);
+
+    // # 2. check if these intersections are in a wall
+    // if (is_wall(vertical_intersection, map) && is_wall(horizontal_intersection, map))
+    //     return (closer_to_p1(position, vertical_intersection, horizontal_intersection));
+    // if (is_wall(vertical_intersection, map))
+    //     return (vertical_intersection);
+    // if (is_wall(horizontal_intersection, map))
+    //     return (horizontal_intersection);
+
+    // # add dx to horzontal and dy to vertical intersection
+    // # check if one of them hits a wall 
+    // # if both of them hit a wall use return the shorter one 
+    while (1)
+    {
+        if (is_wall(vertical_intersection, map) && is_wall(horizontal_intersection, map))
+            return (closer_to_p1(position, vertical_intersection, horizontal_intersection));
+        if (is_wall(vertical_intersection, map))
+            return (vertical_intersection);
+        if (is_wall(horizontal_intersection, map))
+            return (horizontal_intersection);
+ 
+        vertical_intersection.x += x_i;
+        vertical_intersection.y += d_y;
+        horizontal_intersection.x += d_x;
+        horizontal_intersection.y += y_i;
+    }
 }
 
 double  deg2rad(double degrees)
@@ -212,12 +302,8 @@ double rad2deg(double rad)
     return (rad * 180 / PI);
 }
 
-int main(void)
+int **make_map(void)
 {
-    t_player p1;
-    double c1;
-    t_dvec2 intersection;
-
     int rows = 4;
     int cols = 4;
 
@@ -237,27 +323,68 @@ int main(void)
             }
         }
     }
+    return (map);
+}
+
+t_player enter_position(void)
+{
+    t_player p1;
+
+    printf("Enter x: ");
+    scanf("%lf", &p1.position.x);
+    printf("Enter y: ");
+    scanf("%lf", &p1.position.y);
+
+    return (p1);
+}
+
+double enter_angle(void)
+{
+    double angle;
+
+    printf("Enter angle: ");
+    scanf("%lf", &angle);
+
+    angle = deg2rad(angle);
+    return (angle);
+}
+
+int main(void)
+{
+    t_player p1;
+    double c1;
+    t_dvec2 intersection;
+    t_map map;
+
+    map.arr = make_map();
+    map.length = 4;
+    map.height = 4;
+
+    
 
     p1.position.x = 1.5;
-    p1.position.y = 2.25;
-    p1.angle = 135;
+    p1.position.y = 2.5;
+    p1.angle = 0;
 
-    // printf("Enter angle: ");
-    // scanf("%lf", &p1.angle);
+    p1 = enter_position();
+    // p1.angle = enter_angle();
 
-    // if (is_wall(p1.position, map))
-    //     printf("WALL\n");
-    // else
-    //     printf("NO WALL\n");
+    //intersection = get_intersection(p1.position, map, p1.angle);
+    //printf("x = %lf, y = %lf\n", intersection.x, intersection.y);
 
-    p1.angle = deg2rad(p1.angle);
+    /* if (map.arr[1][-1] == 1)
+        printf ("test\n"); */
 
-    // intersection = get_intersection(p1.position, map, p1.angle);
-    
-    // printf("x = %lf, y = %lf\n", intersection.x, intersection.y);
+    if (is_wall(p1.position, &map))
+        printf ("WALL\n");
+    else
+        printf("NO WALL\n");
+}
 
-    
-    c1 = get_hi_lenght(p1.position, p1.angle);
+
+
+
+/*     c1 = get_hi_lenght(p1.position, p1.angle);
     if (!c1)
         printf ("No intersection!  ");
     else
@@ -273,7 +400,4 @@ int main(void)
         printf("c_v = %f, ", c1);
 
     intersection = get_vertical_intersection(p1.position , p1.angle);
-    printf("x_v = %lf , y_v = %lf\n", intersection.x, intersection.y);
-}
-
-
+    printf("x_v = %lf , y_v = %lf\n", intersection.x, intersection.y); */
