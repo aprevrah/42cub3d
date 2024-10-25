@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 17:24:17 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/10/10 19:41:29 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/10/25 16:44:46 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,9 +133,14 @@ void	render_rect(t_data *data, t_ivec2 p1, t_ivec2 p2)
 
 void	render_players(t_data *data)
 {
-	t_ivec2 ray_hit_pos_screen;
+	t_ivec2 ray_hit_pos_screen1;
+	t_ivec2 ray_hit_pos_screen2;
+	t_ivec2 ray_hit_pos_screen3;
 	t_ivec2 player_pos_screen;
-	t_dvec2 ray_hit_pos;
+	t_dvec2 ray_hit_pos1;
+	t_dvec2 ray_hit_pos2;
+	t_dvec2 ray_hit_pos3;
+
 	t_player player = data->players[0];
 
 	player_pos_screen = (t_ivec2){round(player.position.x * SCALE), round(player.position.y * SCALE)};
@@ -143,9 +148,23 @@ void	render_players(t_data *data)
 	//render_rect(data, (t_ivec2){player.position.x -2, player.position.y -2}, (t_ivec2){player.position.x + 2, player.position.y + 2});
 	line_put(data, player_pos_screen, (t_ivec2){round(player_pos_screen.x + player.orientation.x * 20), round(player_pos_screen.y + player.orientation.y * 20)}, 0xf7f70a);
 	//draw first ray 
-	ray_hit_pos = get_intersection(player.position, data->map, atan(player.orientation.x / player.orientation.y) + 3*PI/2);
-	ray_hit_pos_screen = (t_ivec2){ray_hit_pos.x * SCALE, ray_hit_pos.y * SCALE};
-	line_put(data, player_pos_screen, ray_hit_pos_screen, COLOR);
+
+	
+	
+	ray_hit_pos1 = get_intersection(player, data->map, vec2angle(player.orientation));
+	ray_hit_pos2 = get_intersection(player, data->map, vec2angle(player.orientation) + PI/6);
+	ray_hit_pos3 = get_intersection(player, data->map, vec2angle(player.orientation) - PI/6);
+
+	
+
+	ray_hit_pos_screen1 = (t_ivec2){ray_hit_pos1.x * SCALE, ray_hit_pos1.y * SCALE};
+	line_put(data, player_pos_screen, ray_hit_pos_screen1, COLOR);
+
+	ray_hit_pos_screen2 = (t_ivec2){ray_hit_pos2.x * SCALE, ray_hit_pos2.y * SCALE};
+	line_put(data, player_pos_screen, ray_hit_pos_screen2, COLOR);
+
+	ray_hit_pos_screen3 = (t_ivec2){ray_hit_pos3.x * SCALE, ray_hit_pos3.y * SCALE};
+	line_put(data, player_pos_screen, ray_hit_pos_screen3, COLOR);
 }
 
 void	render_map(t_data *data)

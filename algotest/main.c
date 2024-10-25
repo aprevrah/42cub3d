@@ -128,6 +128,8 @@ t_dvec2 get_horizontal_intersection(t_dvec2 position, double angle)
     t_dvec2 intersection;
     int     x_multiple;
     int     y_multiple;
+    double  d_y;
+    double  d_x ;
 
     if (angle > PI/2 && angle < 3*PI/2)
         x_multiple = -1;
@@ -137,6 +139,17 @@ t_dvec2 get_horizontal_intersection(t_dvec2 position, double angle)
         y_multiple = -1;
     else
         y_multiple = 1;
+
+    if (angle > 0 && angle < PI)
+        d_x = get_fract_part(position.y) / fabs(tan(angle));
+    else
+        d_x = ((1 - get_fract_part(position.y)) / fabs(tan(angle)));
+
+    if (angle > 0 && angle < PI)
+        d_y = get_fract_part(position.y);
+    else
+        d_y = 1 - get_fract_part(position.y);
+
  
     if (fabs(angle - 0) < EPSILON || fabs(angle - PI) < EPSILON)
     {
@@ -148,8 +161,8 @@ t_dvec2 get_horizontal_intersection(t_dvec2 position, double angle)
     if (angle == PI/2 || angle == 3*PI/2)
         intersection.x = position.x;
     else
-        intersection.x = position.x + x_multiple * ((1 - get_fract_part(position.y)) / fabs(tan(angle)));
-    intersection.y = position.y + y_multiple * (1 - get_fract_part(position.y));
+        intersection.x = position.x + x_multiple * d_x;
+    intersection.y = position.y + y_multiple * d_y;
 
     return (intersection);
 }

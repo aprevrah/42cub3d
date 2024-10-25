@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 22:34:46 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/10/02 16:37:50 by aprevrha         ###   ########.fr       */
+/*   Updated: 2024/10/25 16:24:05 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,21 @@ int	main(int argc, char **argv)
 
 	if (init_players(&data.players, data.map))
 		free_and_exit(&data, 1);
+
+	// t_dvec2 intersection;
+	
+	// intersection = get_intersection(data.players[0], data.map);
+	// printf("x = %lf, y = %lf\n", intersection.x, intersection.y);
+	
+	// double y1;
+	// double y2;
+
+	// y1 = get_fract_part(data.players[0].position.y);
+	// y2 = data.players[0].position.y + -1 * (1 - y1);
+	
+	// printf("y2 = %.10lf\n", y2);
+	//printf("y = %.10lf\n", y);
+
 	if (init_mlx(&data))
 		free_and_exit(&data, 1);
 	render_map(&data);
