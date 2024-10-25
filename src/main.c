@@ -20,33 +20,13 @@
 #include <string.h>
 #include <unistd.h>
 
-void free_2d_arr(void **arr, int rows)
-{
-	int i;
-
-	i = 0;
-	while (i < rows)
-	{
-		free(arr[i]);
-		i++;
-	}
-	free(arr);
-}
-
 void	free_and_exit(t_data *data, int code)
 {
 	// if (data->players)
 	// 	free(data->players);
-	if (data->map)
-	{
-		if (data->map->arr)
-			free_2d_arr((void **)data->map->arr, data->map->height);
-		free(data->map->texture_data.path_NO);
-		free(data->map->texture_data.path_EA);
-		free(data->map->texture_data.path_SO);
-		free(data->map->texture_data.path_WE);
-		free(data->map);
-	}
+	
+	free_texture_data(data->map->texture_data);
+	free_map(data->map);
 	if (data->img)
 		mlx_destroy_image(data->mlx, data->img);
 	if (data->win)

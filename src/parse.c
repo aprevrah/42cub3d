@@ -164,6 +164,8 @@ int key_val(char *line, t_texture_data *texture_data)
 	return (1);
 }
 
+
+
 int read_texture_data(int fd, t_texture_data *texture_data)
 {
 	char	*line;
@@ -238,6 +240,7 @@ void printmap(t_map *map)
 		x = 0;
 		y++;
 	}
+	printf ("height: %i length: %i\n", map->height, map->length);
 }
 
 int **new_2d_int_arr(int rows, int cols)
@@ -279,30 +282,40 @@ void gnl_clear_buffer(fd)
 	}
 }
 
+void printtexture_data(t_texture_data texture_data)
+{
+	printf("NO: %s\n", texture_data.path_NO);
+	printf("EA: %s\n", texture_data.path_EA);
+	printf("SO: %s\n", texture_data.path_SO);
+	printf("WE: %s\n", texture_data.path_WE);
+	printf("C: #%06X\n", texture_data.col_C);
+	printf("F: #%06X\n", texture_data.col_F);
+}
+
 t_map	*parse_map(int fd)
 {
-	t_map	*map;
-	char	*content;
+	t_map			*map;
+	t_texture_data	*texture_data;
+	char			*content;
 
+	texture_data = (t_texture_data *)malloc(sizeof(t_texture_data));
+	if (!texture_data)
+		return (NULL);
+	if (read_texture_data(fd, texture_data))
+		return (gnl_clear_buffer(fd), free_texture_data(texture_data), NULL);
+	printtexture_data(*texture_data);
 	map = (t_map *)malloc(sizeof(t_map));
 	if (!map)
-		return (NULL);
-	if (read_texture_data(fd, &map->texture_data))
-		return (gnl_clear_buffer(fd), free(map), NULL);
+		return (free_texture_data(texture_data), NULL);
+	map->texture_data = texture_data;
 	map->height = 0;
 	map->length = 0;
 	content = read_map_data(fd, map);
 	map->arr = new_2d_int_arr(map->height, map->length);
 	if (!map->arr)
-		return (free(map), NULL);
+		return (free(content), free(texture_data), free_map(map), NULL);
 	fill_map(content, map);
 	printf("%s\n", content);
-	printf("NO: %s\n", map->texture_data.path_NO);
-	printf("EA: %s\n", map->texture_data.path_EA);
-	printf("SO: %s\n", map->texture_data.path_SO);
-	printf("WE: %s\n", map->texture_data.path_WE);
-	printf("C: #%06X\n", map->texture_data.col_C);
-	printf("F: #%06X\n", map->texture_data.col_F);
 	free(content);
 	printf("\nConverted map\n\n");
 	// maunaly check if the map was correcty filled

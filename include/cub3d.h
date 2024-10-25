@@ -60,7 +60,7 @@ typedef struct s_texture_data
 
 typedef struct s_map
 {
-	t_texture_data		texture_data;
+	t_texture_data		*texture_data;
 	int					length;
 	int					height;
 	int					**arr;
@@ -181,6 +181,11 @@ void					render_players(t_data *data);
 t_vec4					nv(float x, float y, float z);
 t_vec4					left_multiply(t_tmatrix mat, t_vec4 vec);
 t_tmatrix				multiply_tmats(t_tmatrix mat1, t_tmatrix mat2);
+
+//free.c
+void					free_2d_arr(void **arr, int rows);
+void					free_map(t_map *map);
+void					free_texture_data(t_texture_data *td);
 
 // dda functions
 
