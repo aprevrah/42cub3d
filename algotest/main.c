@@ -177,7 +177,7 @@ t_dvec2 get_vertical_intersection(t_dvec2 position, double angle)
     else
         y_multiple = 1;
 
-    if (!tan(angle))
+    if (angle == 0 || angle == PI)
         intersection.y = position.y;
     else
         intersection.y = position.y + y_multiple * ((1 - get_fract_part(position.x)) * fabs(tan(angle)));
@@ -209,16 +209,20 @@ t_dvec2 get_vertical_intersection(t_dvec2 position, double angle)
 
 double  get_dx(double angle)
 {
-    // # if anlge == 90 || 270 return (1);
-    // # if angle == 0 || 180 return (0);
+    if (angle == PI/2 || angle == 3*PI/2)
+        return (1);
+    if (angle == 0 || angle == PI)
+        return (0);
     return (1 / tan(angle)); 
 }
 
 double get_dy(double angle)
 {
-    // # if angle == 90 || 270 return (0)
-    // # if angle == 0 || 180 return (1);
-    return (tan(0));
+    if (angle == PI/2 || angle == 3*PI/2)
+        return (0);
+    if (angle == 0 || angle == PI)
+        return (1);
+    return (tan(angle));
 }
 
 t_dvec2 get_intersection(t_dvec2 position, t_map *map, double angle)
@@ -230,12 +234,12 @@ t_dvec2 get_intersection(t_dvec2 position, t_map *map, double angle)
     double x_i;
     double y_i;
 
-    angle = deg2rad(angle);
+    //angle = deg2rad(angle);
 
     d_x = get_dx(angle);
     d_y = get_dy(angle);
 
-    if (angle < PI/2 && angle > 3*PI/2)
+    if (angle > PI/2 && angle < 3*PI/2)
         x_i = -1;
     else
         x_i = 1;
@@ -245,6 +249,28 @@ t_dvec2 get_intersection(t_dvec2 position, t_map *map, double angle)
     else
         y_i = 1;
     
+    if (angle == PI/2 || angle == 3*PI/2)
+    {
+        horizontal_intersection = get_horizontal_intersection(position, angle);
+        while (1)
+        {
+            if (is_wall(horizontal_intersection, map))
+                return (horizontal_intersection);
+            horizontal_intersection.y += y_i;
+        }
+    }
+
+    if (angle == 0 || angle == PI)
+    {
+        vertical_intersection = get_vertical_intersection(position, angle);
+        while (1)
+        {
+            
+            if (is_wall(vertical_intersection, map))
+                return (vertical_intersection);
+            vertical_intersection.x += x_i;
+        }
+    }
 
     // # if angle is 90 || 270 then only horizontal
 
@@ -286,8 +312,8 @@ t_dvec2 get_intersection(t_dvec2 position, t_map *map, double angle)
             return (horizontal_intersection);
  
         vertical_intersection.x += x_i;
-        vertical_intersection.y += d_y;
-        horizontal_intersection.x += d_x;
+        vertical_intersection.y += fabs(d_y) * y_i;
+        horizontal_intersection.x += fabs(d_x) * x_i;
         horizontal_intersection.y += y_i;
     }
 }
@@ -367,37 +393,37 @@ int main(void)
     p1.angle = 0;
 
     p1 = enter_position();
-    // p1.angle = enter_angle();
+    p1.angle = enter_angle();
 
-    //intersection = get_intersection(p1.position, map, p1.angle);
-    //printf("x = %lf, y = %lf\n", intersection.x, intersection.y);
+
+    // c1 = get_hi_lenght(p1.position, p1.angle);
+    // if (!c1)
+    //     printf ("No intersection!  ");
+    // else
+    //     printf("c_h = %f, ", c1);
+
+    // intersection = get_horizontal_intersection(p1.position , p1.angle);
+    // printf("x_h = %lf , y_h = %lf\n", intersection.x, intersection.y);
+
+    // c1 = get_vi_lenght(p1.position, p1.angle);
+    // if (!c1)
+    //     printf ("No intersection!   ");
+    // else
+    //     printf("c_v = %f, ", c1);
+
+    // intersection = get_vertical_intersection(p1.position , p1.angle);
+    // printf("x_v = %lf , y_v = %lf\n", intersection.x, intersection.y);
+
+    intersection = get_intersection(p1.position, &map, p1.angle);
+    printf("x = %lf, y = %lf\n", intersection.x, intersection.y);
 
     /* if (map.arr[1][-1] == 1)
         printf ("test\n"); */
 
-    if (is_wall(p1.position, &map))
-        printf ("WALL\n");
-    else
-        printf("NO WALL\n");
+    // if (is_wall(p1.position, &map))
+    //     printf ("WALL\n");
+    // else
+    //     printf("NO WALL\n");
 }
 
 
-
-
-/*     c1 = get_hi_lenght(p1.position, p1.angle);
-    if (!c1)
-        printf ("No intersection!  ");
-    else
-        printf("c_h = %f, ", c1);
-
-    intersection = get_horizontal_intersection(p1.position , p1.angle);
-    printf("x_h = %lf , y_h = %lf\n", intersection.x, intersection.y);
-
-    c1 = get_vi_lenght(p1.position, p1.angle);
-    if (!c1)
-        printf ("No intersection!   ");
-    else
-        printf("c_v = %f, ", c1);
-
-    intersection = get_vertical_intersection(p1.position , p1.angle);
-    printf("x_v = %lf , y_v = %lf\n", intersection.x, intersection.y); */
