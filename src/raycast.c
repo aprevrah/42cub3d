@@ -141,7 +141,7 @@ t_dvec2 get_vertical_intersection(t_dvec2 position, double angle)
     double  d_x;
     double  d_y;
 
-    // Use fabs to check if the difference is within a small range (epsilon)
+    // Use fabs to check if the difference is within a small range (epsilon) // ! change
     if (fabs(angle - PI/2) < EPSILON || fabs(angle - 3*PI/2) < EPSILON)
     {
         intersection.x = -1;
@@ -179,27 +179,6 @@ t_dvec2 get_vertical_intersection(t_dvec2 position, double angle)
 
     return (intersection);
 }
-
-// t_dvec2 get_intersection(t_dvec2 position, int **map, double angle)
-// {
-//     t_dvec2 new_position;
-//     double c_h;
-//     double c_v;
-
-//     c_h = get_hi_lenght(position, angle);
-//     c_v = get_vi_lenght(position, angle);
-
-//     if (c_h < c_v || !c_h)
-//         new_position = get_horizontal_intersection(position, angle);
-//     else
-//         new_position = get_vertical_intersection(position, angle);
-    
-//     if (is_wall(new_position, map))
-//         return (new_position);
-//     else
-//         return (get_intersection(new_position, map, angle));
-//     return new_position;
-// }
 
 double  get_dx(double angle)
 {
@@ -245,11 +224,6 @@ t_dvec2 get_intersection(t_player player, t_map *map, double angle)
     
     
     position = player.position;
-    //angle = vec2angle(player.orientation);
-    // printf("angle = %lf\n", angle);
-
-    // angle = deg2rad(315);
-    // printf("angle = %lf\n", angle);
 
     d_x = get_dx(angle);
     d_y = get_dy(angle);
@@ -288,22 +262,6 @@ t_dvec2 get_intersection(t_player player, t_map *map, double angle)
         }
     }
 
-    // # if angle is 90 || 270 then only horizontal
-
-    // if (fabs(angle - PI/2) < EPSILON || fabs(angle - 3*PI/2) < EPSILON)
-    // {   
-    //     horizontal_intersection = get_horizontal_intersection(position, angle);
-    //     while (1)
-    //     {
-    //         if (is_wall(horizontal_intersection, map))
-    //             return (horizontal_intersection);
-    //         //position
-    //     }
-    // }
-
-    // # if angle is 0 || 180 then only vertical
-
-    // # 1. get nearest vertical and horizontal intersection
     vertical_intersection = get_vertical_intersection(position, angle);
     horizontal_intersection = get_horizontal_intersection(position, angle);
 
