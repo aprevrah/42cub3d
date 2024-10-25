@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hooks.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 23:22:56 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/10/02 16:29:35 by aprevrha         ###   ########.fr       */
+/*   Updated: 2024/10/25 15:23:18 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ int	loop_hook(t_data *data)
 		}
 		i++;
 	}
-	if (keys_pressed > 0)
+	
+	if (1)
 	{
 		ft_bzero(data->addr, W_HEIGHT * data->line_length);
 		

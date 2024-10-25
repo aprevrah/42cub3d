@@ -3,13 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 23:25:37 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/10/02 20:36:51 by aprevrha         ###   ########.fr       */
-/*   Updated: 2024/10/02 20:36:51 by aprevrha         ###   ########.fr       */
+/*   Updated: 2024/10/25 17:35:02 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../include/cub3d.h"
 #include "mlx.h"
@@ -118,8 +118,8 @@ int	init_players(t_player **players, t_map *map)
 	if (!*players)
 		return (1);
 	// hard coded for now, use map later
-	(*players)[0].orientation = (t_dvec2){0.0, 1.0}; 
-	(*players)[0].position = (t_dvec2){1.5, 1.5};
+	(*players)[0].position = (t_dvec2){2.773499, 2.118085}; 
+	(*players)[0].orientation = (t_dvec2){-0.90881, 0.338737};
 	(*players)[0].movement_speed = (double){0.01};
 	return (0);
 }

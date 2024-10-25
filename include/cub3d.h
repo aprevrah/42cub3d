@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/08 13:01:15 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/10/10 15:37:46 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/10/25 16:31:30 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 # define R_SPEED 0.03
 # define T_SPEED 10
 # define S_SPEED 0.03
-# define PI 3.14159265359
+#define PI 3.14159265358979323
 # define EPSILON 0.000001
 # define SCALE 70
 
@@ -194,10 +194,12 @@ double  get_hi_lenght(t_dvec2 position, double angle);
 double  get_vi_lenght(t_dvec2 position, double angle);
 t_dvec2 get_horizontal_intersection(t_dvec2 position, double angle);
 t_dvec2 get_vertical_intersection(t_dvec2 position, double angle);
-t_dvec2 get_intersection(t_dvec2 position, int **map, double angle);
-int is_wall(t_dvec2 intersection, int **map);
+t_dvec2 get_intersection(t_player player, t_map *map, double angle);
+int is_wall(t_dvec2 intersection, t_map *map);
 double  deg2rad(double degrees);
 double rad2deg(double rad);
+double vec2angle(t_dvec2 vec);
+
 
 
 #endif
