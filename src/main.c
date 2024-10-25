@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 22:34:46 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/10/02 16:37:50 by aprevrha         ###   ########.fr       */
+/*   Updated: 2024/10/25 19:30:27 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <X11/keysym.h>
 #include <fcntl.h>
 #include <mlx.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -75,6 +76,7 @@ int	main(int argc, char **argv)
 
 	if (init_players(&data.players, data.map))
 		free_and_exit(&data, 1);
+
 	if (init_mlx(&data))
 		free_and_exit(&data, 1);
 	render_map(&data);

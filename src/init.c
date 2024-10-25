@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 23:25:37 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/10/02 20:36:51 by aprevrha         ###   ########.fr       */
+/*   Updated: 2024/10/25 17:35:02 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../include/cub3d.h"
 #include "mlx.h"
@@ -20,6 +21,18 @@
 #include <string.h>
 #include <unistd.h>
 
+// static t_key	init_key(int keycode, void	(*func)(void))
+// {
+// 	t_key	key;
+
+// 	key.state = 0;
+// 	key.code = keycode;
+// 	key.func = func;
+// 	key.args = 0;
+// 	return (key);
+// }
+
+//static t_key	init_key_look(int keycode, t_player *player, double rotation)
 // static t_key	init_key(int keycode, void	(*func)(void))
 // {
 // 	t_key	key;
@@ -52,6 +65,9 @@ static t_key	init_key_look(int keycode, t_player *player, double rotation)
 	key.func = look;
 	key.args.look_args.player = player;
     key.args.look_args.rotation = rotation;
+	key.func = look;
+	key.args.look_args.player = player;
+    key.args.look_args.rotation = rotation;
 	return (key);
 }
 
@@ -63,8 +79,8 @@ int	init_keys(t_key *keys, t_player *players)
 	keys[2] = init_key_move(XK_a, &players[0], (t_dvec2){1.0, 0.0});
 	keys[3] = init_key_move(XK_s, &players[0], (t_dvec2){0.0, -1.0});
 	keys[4] = init_key_move(XK_d, &players[0], (t_dvec2){-1.0, 0.0});
-	keys[5] = init_key_look(XK_q, &players[0], (double)0.01);
-	keys[6] = init_key_look(XK_e, &players[0], (double)-0.01);
+	keys[5] = init_key_look(XK_e, &players[0], (double)0.05);
+	keys[6] = init_key_look(XK_q, &players[0], (double)-0.05);
 	
 	// keys[9] = init_key(XK_Up, translate, &players[0], nv(0, -T_SPEED, 0));
 	// keys[10] = init_key(XK_Down, translate, &players[0], nv(0, T_SPEED, 0));
@@ -102,8 +118,8 @@ int	init_players(t_player **players, t_map *map)
 	if (!*players)
 		return (1);
 	// hard coded for now, use map later
-	(*players)[0].orientation = (t_dvec2){0.0, -1.0}; 
-	(*players)[0].position = (t_dvec2){0.0, 0.0};
-	(*players)[0].movement_speed = (double){0.1};
+	(*players)[0].position = (t_dvec2){2.773499, 2.118085}; 
+	(*players)[0].orientation = (t_dvec2){-0.90881, 0.338737};
+	(*players)[0].movement_speed = (double){0.01};
 	return (0);
 }
