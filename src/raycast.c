@@ -268,15 +268,12 @@ t_dvec2 get_intersection(t_player player, t_map *map, double angle)
     {
         horizontal_intersection = get_horizontal_intersection(position, angle);
         return (horizontal_intersection);
-        // while (1)
-        // {
-        //     if (is_wall(horizontal_intersection, map))
-        //         return (horizontal_intersection);
-        //     printf("x = %lf, y = %lf\n", horizontal_intersection.x, horizontal_intersection.y);
-        //     horizontal_intersection.y += y_i;
-        //     //printf("test3\n");
-
-        // }
+        while (1)
+        {
+            if (is_wall(horizontal_intersection, map))
+                return (horizontal_intersection);
+            horizontal_intersection.y += y_i;
+        }
     }
 
     if (angle == 0 || angle == PI)
@@ -288,8 +285,6 @@ t_dvec2 get_intersection(t_player player, t_map *map, double angle)
             if (is_wall(vertical_intersection, map))
                 return (vertical_intersection);
             vertical_intersection.x += x_i;
-            printf("test2\n");
-
         }
     }
 
@@ -312,37 +307,31 @@ t_dvec2 get_intersection(t_player player, t_map *map, double angle)
     vertical_intersection = get_vertical_intersection(position, angle);
     horizontal_intersection = get_horizontal_intersection(position, angle);
 
-    // # 2. check if these intersections are in a wall
-    // if (is_wall(vertical_intersection, map) && is_wall(horizontal_intersection, map))
-    //     return (closer_to_p1(position, vertical_intersection, horizontal_intersection));
-    // if (is_wall(vertical_intersection, map))
-    //     return (vertical_intersection);
-    // if (is_wall(horizontal_intersection, map))
-    //     return (horizontal_intersection);
-
-    // # add dx to horzontal and dy to vertical intersection
-    // # check if one of them hits a wall 
-    // # if both of them hit a wall use return the shorter one 
-
     int i = 0;
 
-    while (i < 10)
+    while (i < 20)
     {
-        if (is_wall(vertical_intersection, map) && is_wall(horizontal_intersection, map))
-            return (closer_to_p1(position, vertical_intersection, horizontal_intersection));
         if (is_wall(vertical_intersection, map))
-            return (vertical_intersection);
-        if (is_wall(horizontal_intersection, map))
-            return (horizontal_intersection);
- 
+            break;
         vertical_intersection.x += x_i;
         vertical_intersection.y += fabs(d_y) * y_i;
-        horizontal_intersection.x += fabs(d_x) * x_i;
-        horizontal_intersection.y += y_i;
-        printf("test1\n");
         i++;
     }
-    return (vertical_intersection);
+
+    i = 0;
+    while (i < 20)
+    {
+        if (is_wall(horizontal_intersection, map))
+            break;
+        horizontal_intersection.x += fabs(d_x) * x_i;
+        horizontal_intersection.y += y_i;
+        i++;
+    }
+
+    printf ("x_v = %lf , y_v = %lf\n", vertical_intersection.x, vertical_intersection.y);
+    printf ("x_h = %lf , y_h = %lf\n", horizontal_intersection.x, horizontal_intersection.y);
+
+    return (closer_to_p1(position, vertical_intersection, horizontal_intersection));
 }
 
 double  deg2rad(double degrees)

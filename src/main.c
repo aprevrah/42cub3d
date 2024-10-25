@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 22:34:46 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/10/25 16:24:05 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/10/25 19:07:57 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <X11/keysym.h>
 #include <fcntl.h>
 #include <mlx.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -75,29 +76,35 @@ int	main(int argc, char **argv)
 
 	if (init_players(&data.players, data.map))
 		free_and_exit(&data, 1);
-
-	// t_dvec2 intersection;
 	
-	// intersection = get_intersection(data.players[0], data.map);
-	// printf("x = %lf, y = %lf\n", intersection.x, intersection.y);
-	
-	// double y1;
-	// double y2;
+	t_dvec2 intersection;
+	// t_dvec2 v_i;
+	// t_dvec2 h_i;
 
-	// y1 = get_fract_part(data.players[0].position.y);
-	// y2 = data.players[0].position.y + -1 * (1 - y1);
+	//intersection = get_intersection(data.players[0], data.map, vec2angle(data.players[0].orientation));
+	//printf("x = %lf, y = %lf\n", intersection.x, intersection.y);
 	
-	// printf("y2 = %.10lf\n", y2);
-	//printf("y = %.10lf\n", y);
+	// v_i = get_vertical_intersection(data.players[0].position, vec2angle(data.players[0].orientation));
+	// h_i = get_horizontal_intersection(data.players[0].position, vec2angle(data.players[0].orientation));
+	
+	// printf("x_v = %lf , y_v = %lf\n", v_i.x, v_i.y);
+	// printf("x_h = %lf , y_h = %lf\n", h_i.x, h_i.y);
+	intersection.x = 0.5;
+	intersection.y = 0.5;
+	
+	if (is_wall(intersection, data.map))
+		printf("wall");
+	else
+	 	printf("no wall");
 
-	if (init_mlx(&data))
-		free_and_exit(&data, 1);
-	render_map(&data);
-	mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
-	init_keys(data.keys, data.players);
-	mlx_hook(data.win, 2, KeyPressMask, handle_keydown, data.keys);
-	mlx_hook(data.win, 3, KeyReleaseMask, handle_keyup, data.keys);
-	mlx_hook(data.win, 17, StructureNotifyMask, win_close_button, &data);
-	mlx_loop_hook(data.mlx, loop_hook, &data);
-	mlx_loop(data.mlx);
+	// if (init_mlx(&data))
+	// 	free_and_exit(&data, 1);
+	// render_map(&data);
+	// mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
+	// init_keys(data.keys, data.players);
+	// mlx_hook(data.win, 2, KeyPressMask, handle_keydown, data.keys);
+	// mlx_hook(data.win, 3, KeyReleaseMask, handle_keyup, data.keys);
+	// mlx_hook(data.win, 17, StructureNotifyMask, win_close_button, &data);
+	// mlx_loop_hook(data.mlx, loop_hook, &data);
+	// mlx_loop(data.mlx);
 }
