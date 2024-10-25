@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 22:34:46 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/10/25 19:07:57 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/10/25 19:24:18 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int	main(int argc, char **argv)
 	intersection.x = 0.5;
 	intersection.y = 0.5;
 	
-	if (is_wall(intersection, data.map))
+	if (is_wall(intersection, data.map) )
 		printf("wall");
 	else
 	 	printf("no wall");
