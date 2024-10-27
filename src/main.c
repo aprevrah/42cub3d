@@ -25,12 +25,9 @@ void	free_and_exit(t_data *data, int code)
 {
 	// if (data->players)
 	// 	free(data->players);
-	if (data->map)
-	{
-		if (data->map->arr)
-			free(data->map->arr);
-		free(data->map);
-	}
+	
+	free_texture_data(data->map->texture_data);
+	free_map(data->map);
 	if (data->img)
 		mlx_destroy_image(data->mlx, data->img);
 	if (data->win)
@@ -73,7 +70,6 @@ int	main(int argc, char **argv)
 	fd = open(argv[1], O_RDONLY);
 	data.map = parse_map(fd);
 	close(fd);
-
 	if (init_players(&data.players, data.map))
 		free_and_exit(&data, 1);
 

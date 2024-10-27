@@ -17,6 +17,7 @@
 # include <math.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <stdbool.h>
 
 # define COLOR 0x00FFFFFF
 # define MAP_SEP " "
@@ -28,7 +29,7 @@
 # define S_SPEED 0.03
 #define PI 3.14159265358979323
 # define EPSILON 0.000001
-# define SCALE 100
+# define SCALE 70
 
 
 
@@ -47,14 +48,19 @@ typedef struct s_player
 	double	movement_speed;
 }						t_player;
 
-typedef struct s_map
+typedef struct s_texture_data
 {
 	char				*path_NO;
 	char				*path_SO;
 	char				*path_WE;
 	char				*path_EA;
-	int					col_F;
-	int					col_C;
+	unsigned int		col_F;
+	unsigned int		col_C;
+}						t_texture_data;
+
+typedef struct s_map
+{
+	t_texture_data		*texture_data;
 	int					length;
 	int					height;
 	int					**arr;
@@ -175,6 +181,11 @@ void					render_players(t_data *data);
 t_vec4					nv(float x, float y, float z);
 t_vec4					left_multiply(t_tmatrix mat, t_vec4 vec);
 t_tmatrix				multiply_tmats(t_tmatrix mat1, t_tmatrix mat2);
+
+//free.c
+void					free_2d_arr(void **arr, int rows);
+void					free_map(t_map *map);
+void					free_texture_data(t_texture_data *td);
 
 // dda functions
 
