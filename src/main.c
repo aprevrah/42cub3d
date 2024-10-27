@@ -46,16 +46,29 @@ int	win_close_button(t_data *data)
 	return (0);
 }
 
-int	file_type_matches(char *filename)
+int	is_file_extension(char *filename, char *extension)
 {
 	int	len;
+	int extension_len;
 
 	len = ft_strlen(filename);
-	if (len < 4)
+	extension_len = ft_strlen(extension);
+	if (len < extension_len)
 		return (0);
-	if (ft_strncmp(filename + len - 4, ".cub", 4))
+	if (ft_strncmp(filename + len - extension_len, extension, extension_len))
 		return (0);
 	return (1);
+}
+
+int load_texture(char *path, t_data *data, t_texture *texture)
+{
+	texture->img = mlx_xpm_file_to_image(data->mlx, path, &texture->img_width, &texture->img_height);
+	if (!texture->img)
+		return (1);
+	texture->addr = mlx_get_data_addr(texture->img, &texture->bits_per_pixel, &texture->line_length, &texture->endian);
+	if (!texture->addr)
+		return (1);
+	return (0);
 }
 
 int	main(int argc, char **argv)
@@ -65,14 +78,13 @@ int	main(int argc, char **argv)
 
 	if (argc != 2)
 		return (ft_printf("(Only) one argument needed.\n"), 1);
-	if (!file_type_matches(argv[1]))
+	if (!is_file_extension(argv[1], ".cub"))
 		return (ft_printf("Wrong filetype, \".cub\" needed.\n"), 1);
 	fd = open(argv[1], O_RDONLY);
 	data.map = parse_map(fd);
 	close(fd);
 	if (init_players(&data.players, data.map))
 		free_and_exit(&data, 1);
-
 	if (init_mlx(&data))
 		free_and_exit(&data, 1);
 	render_map(&data);
@@ -81,6 +93,10 @@ int	main(int argc, char **argv)
 	mlx_hook(data.win, 2, KeyPressMask, handle_keydown, data.keys);
 	mlx_hook(data.win, 3, KeyReleaseMask, handle_keyup, data.keys);
 	mlx_hook(data.win, 17, StructureNotifyMask, win_close_button, &data);
+	// test texture
+	// printtexture_data(*data.map->texture_data);
+	// load_texture(data.map->texture_data->path_NO, &data, &data.map->texture_data->textures[0]);
+	// mlx_put_image_to_window(data.mlx, data.win, data.map->texture_data->textures[0].img, 0, 0);
 	mlx_loop_hook(data.mlx, loop_hook, &data);
 	mlx_loop(data.mlx);
 }

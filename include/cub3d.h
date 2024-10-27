@@ -48,6 +48,18 @@ typedef struct s_player
 	double	movement_speed;
 }						t_player;
 
+typedef struct s_texture
+{
+	char				*path;
+	void				*img;
+	void				*addr;
+	int					bits_per_pixel;
+	int					line_length;
+	int					endian;
+	int					img_width;
+	int					img_height;
+}						t_texture;
+
 typedef struct s_texture_data
 {
 	char				*path_NO;
@@ -56,6 +68,7 @@ typedef struct s_texture_data
 	char				*path_EA;
 	unsigned int		col_F;
 	unsigned int		col_C;
+	t_texture			textures[4];
 }						t_texture_data;
 
 typedef struct s_map
@@ -65,42 +78,6 @@ typedef struct s_map
 	int					height;
 	int					**arr;
 }						t_map;
-
-typedef union u_vec4
-{
-	struct				s_vec4_f
-	{
-		float			x;
-		float			y;
-		float			z;
-		float			w;
-	} f;
-	float				arr[4];
-}						t_vec4;
-
-typedef union u_tmatrix
-{
-	struct				s_tmatrix_f
-	{
-		float			x1;
-		float			y1;
-		float			z1;
-		float			w1;
-		float			x2;
-		float			y2;
-		float			z2;
-		float			w2;
-		float			x3;
-		float			y3;
-		float			z3;
-		float			w3;
-		float			x4;
-		float			y4;
-		float			z4;
-		float			w4;
-	} f;
-	float				arr[16];
-}						t_tmatrix;
 
 // Move function arguments
 typedef struct s_move_args {
@@ -149,9 +126,14 @@ typedef struct s_ivec2
 	int					y;
 }						t_ivec2;
 
+//debug.c
+void 					printmap(t_map *map);
+void					printtexture_data(t_texture_data texture_data);
+
 // draw.c
 void					my_mlx_pixel_put(t_data *data, int x, int y, int color);
 void					line_put(t_data *data, t_ivec2 a, t_ivec2 b, int color);
+int						get_pixel_color(t_texture texture, int x, int y);
 
 // init.c
 int						init_keys(t_key *keys, t_player *players);
@@ -178,9 +160,6 @@ void					render_map(t_data *data);
 void					render_players(t_data *data);
 
 // utils.c
-t_vec4					nv(float x, float y, float z);
-t_vec4					left_multiply(t_tmatrix mat, t_vec4 vec);
-t_tmatrix				multiply_tmats(t_tmatrix mat1, t_tmatrix mat2);
 
 //free.c
 void					free_2d_arr(void **arr, int rows);
