@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 17:24:17 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/10/27 18:33:23 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/10/27 19:05:32 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,8 +130,8 @@ void	render_walls(t_data *data)
 	while (w_offset <= W_WIDTH/2)
 	{
 		a_offset = atan((double)w_offset / (W_WIDTH / 2)) * half_fov;
-		render_vertical_line(data, vec2angle(data->players[0].orientation) + a_offset, W_WIDTH/2 + w_offset);
-		render_vertical_line(data, vec2angle(data->players[0].orientation) - a_offset, W_WIDTH/2 - w_offset);
+		render_vertical_line(data, vec2angle(data->players[0].orientation) - a_offset, W_WIDTH/2 + w_offset);
+		render_vertical_line(data, vec2angle(data->players[0].orientation) + a_offset, W_WIDTH/2 - w_offset);
 		//a_offset += 1.0472/960;
 		w_offset++;
 	}	
