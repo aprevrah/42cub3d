@@ -17,6 +17,36 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+int get_color_normalized(t_texture texture, double x, double y) 
+{
+	int x_pixel;
+	int y_pixel;
+
+	x = x - floor(x);
+	y = y - floor(y);
+
+	x_pixel = x * texture.img_width;
+	y_pixel = y * texture.img_height;
+
+	return(get_pixel_color(texture, x_pixel, y_pixel));
+}
+
+int get_pixel_color(t_texture texture, int x, int y) 
+{
+	if (x < 0 || y < 0 || x >= texture.img_width || y >= texture.img_height)
+	{
+    	printf("Pixel coordinates out of bounds\n");
+    	return -1; // Or some other error handling
+	}
+	// Calculate the pixel's memory offset
+	int offset = (y * texture.line_length) + (x * (texture.bits_per_pixel / 8));
+
+	// Read the color directly from the data buffer
+	int color = *(int *)(texture.addr + offset);
+
+	return color;
+}
+
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {
 	char	*dst;
