@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/08 13:01:15 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/10/25 16:31:30 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/10/27 13:15:16 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,6 +188,9 @@ int is_wall(t_dvec2 intersection, t_map *map);
 double  deg2rad(double degrees);
 double rad2deg(double rad);
 double vec2angle(t_dvec2 vec);
+
+void	render_half_screen(t_data *data);
+void	render_wall(t_data *data);
 
 
 

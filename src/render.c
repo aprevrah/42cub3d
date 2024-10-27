@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 17:24:17 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/10/25 19:01:41 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/10/27 14:25:41 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,87 @@ void	render_rect(t_data *data, t_ivec2 p1, t_ivec2 p2)
 
 // 	return (ray_hit_pos);
 // }
+
+
+
+// void	render_floor_ceiling(t_data *data)
+// {
+		
+// }
+
+void render_half_screen(t_data *data)
+{
+    int x;
+	int y;
+
+	x = 0;
+	y = 0;
+	while(y < W_HEIGHT / 2)
+	{
+		x = 0;
+		while (x < W_WIDTH)
+		{
+			my_mlx_pixel_put(data, x, y, 0x011f4b);
+			x++;
+		}
+		y++;
+	}
+	while (y < W_HEIGHT)
+	{
+		x = 0;
+		while (x < W_WIDTH)
+		{
+			my_mlx_pixel_put(data, x, y, 0x355e3b);
+			x++;
+		}
+		y++;
+	}
+}
+
+double line_length(t_dvec2 a, t_dvec2 b)
+{
+    return sqrt((b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y));
+}
+
+void	render_wall(t_data *data)
+{
+	t_dvec2		ray_hit_pos;
+	t_player	player = data->players[0];
+	double		distance;
+	t_dvec2		a;
+	t_dvec2		b;
+	t_ivec2		a_screen;
+	t_ivec2		b_screen;
+	double		offset;
+	int i;
+
+	i = 0;
+	double angle_offset = 0.0007;
+	while (i < W_WIDTH) 
+	{
+	ray_hit_pos = get_intersection(player, data->map,  fmod(vec2angle(player.orientation) - PI/6.5  + i * angle_offset  , 2*PI));
+	distance = line_length(player.position, ray_hit_pos);
+
+	offset = (double)W_HEIGHT / (distance * 2);
+	
+	//offset = (double)W_HEIGHT/4;
+	
+	a.x = (double)i;
+	a.y = (double)W_HEIGHT/2 - offset;
+	printf("a.x = %lf a.y = %lf\n", a.x, a.y);
+	a_screen = (t_ivec2){a.x, a.y};
+
+	b.x = (double)i;
+	b.y = (double)W_HEIGHT/2 + offset;
+	printf("b.x = %lf b.y = %lf\n", b.x, b.y);
+	b_screen = (t_ivec2){b.x, b.y};
+	
+	printf("a = %i %i b = %i %i\n", a_screen.x, a_screen.y, b_screen.x, b_screen.y);
+	line_put(data, a_screen, b_screen, 0xFF0000);
+	i++;
+	}
+}
+
 
 void	render_players(t_data *data)
 {
