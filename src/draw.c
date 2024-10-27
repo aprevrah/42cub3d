@@ -120,3 +120,21 @@ void	line_put(t_data *data, t_ivec2 a, t_ivec2 b, int color)
 	}
 	draw_straight(data, a, b, color);
 }
+
+void	slice_put(t_data *data, int x, double size, double d_x, t_texture texture)
+{
+	int color;
+	int i;
+	int y;
+	i = 0;
+	while(i < W_HEIGHT * size)
+	{
+		y = i + W_HEIGHT*0.5 - W_HEIGHT*0.5 * size;
+		if (y >= 0 && y < W_HEIGHT)
+		{
+			color = get_color_normalized(texture, d_x, i/(W_HEIGHT * size));
+			my_mlx_pixel_put(data, x, i + W_HEIGHT*0.5 - W_HEIGHT*0.5 * size, color);
+		}
+		i++;
+	}
+}

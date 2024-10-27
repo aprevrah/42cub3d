@@ -95,8 +95,10 @@ int	main(int argc, char **argv)
 	mlx_hook(data.win, 17, StructureNotifyMask, win_close_button, &data);
 	// test texture
 	// printtexture_data(*data.map->texture_data);
-	// load_texture(data.map->texture_data->path_NO, &data, &data.map->texture_data->textures[0]);
-	// mlx_put_image_to_window(data.mlx, data.win, data.map->texture_data->textures[0].img, 0, 0);
+	load_texture(data.map->texture_data->path_NO, &data, &data.map->texture_data->textures[0]);
+	load_texture(data.map->texture_data->path_EA, &data, &data.map->texture_data->textures[1]);
+	load_texture(data.map->texture_data->path_SO, &data, &data.map->texture_data->textures[2]);
+	load_texture(data.map->texture_data->path_WE, &data, &data.map->texture_data->textures[3]);
 	mlx_loop_hook(data.mlx, loop_hook, &data);
 	mlx_loop(data.mlx);
 }
