@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 17:24:17 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/10/27 19:05:32 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/10/27 21:36:50 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ void	render_rect(t_data *data, t_ivec2 p1, t_ivec2 p2)
 		
 // }
 
+
+
 void render_half_screen(t_data *data)
 {
     int x;
@@ -82,7 +84,7 @@ double line_length(t_dvec2 a, t_dvec2 b)
     return sqrt((b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y));
 }
 
-void	render_vertical_line(t_data *data , double angle, int width)
+void	render_vertical_line(t_data *data , double angle, int width, double angle2)
 {
 	t_dvec2		ray_hit_pos;
 	double		distance;
@@ -91,9 +93,12 @@ void	render_vertical_line(t_data *data , double angle, int width)
 	t_ivec2		a_screen;
 	t_ivec2		b_screen;
 	double		offset;
+	
+
 
 	ray_hit_pos = get_intersection(data->players[0], data->map, fmod(angle,2*PI));
 	distance = line_length(data->players[0].position, ray_hit_pos);
+	distance = cos(angle2) * distance;
 	// if (distance < 1)
 		// distance = 1;
 	offset = (double)W_HEIGHT / (distance * 2);
@@ -122,16 +127,18 @@ void	render_walls(t_data *data)
 	w_offset = 0;
 	a_offset = 0; 
 
-	double half_fov = 1.0472 / 2;
+	//double half_fov = 1.0472 / 2;
 
-	render_vertical_line(data, vec2angle(data->players[0].orientation) + a_offset, W_WIDTH/2 + w_offset);
+	render_vertical_line(data, vec2angle(data->players[0].orientation) + a_offset, W_WIDTH/2 + w_offset, a_offset);
 	
 	
 	while (w_offset <= W_WIDTH/2)
 	{
-		a_offset = atan((double)w_offset / (W_WIDTH / 2)) * half_fov;
-		render_vertical_line(data, vec2angle(data->players[0].orientation) - a_offset, W_WIDTH/2 + w_offset);
-		render_vertical_line(data, vec2angle(data->players[0].orientation) + a_offset, W_WIDTH/2 - w_offset);
+		// a_offset = atan((double)w_offset / (W_WIDTH / 2)) * half_fov;
+		a_offset = atan(tan(PI/4) * w_offset / (W_WIDTH / 2));
+
+		render_vertical_line(data, vec2angle(data->players[0].orientation) - a_offset, W_WIDTH/2 + w_offset, a_offset);
+		render_vertical_line(data, vec2angle(data->players[0].orientation) + a_offset, W_WIDTH/2 - w_offset, a_offset);
 		//a_offset += 1.0472/960;
 		w_offset++;
 	}	
