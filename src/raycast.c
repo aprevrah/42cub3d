@@ -286,8 +286,8 @@ t_dvec2 get_intersection(t_player player, t_map *map, double angle)
         i++;
     }
 
-    printf ("x_v = %lf , y_v = %lf\n", vertical_intersection.x, vertical_intersection.y);
-    printf ("x_h = %lf , y_h = %lf\n", horizontal_intersection.x, horizontal_intersection.y);
+    // printf("x_v = %lf , y_v = %lf\n", vertical_intersection.x, vertical_intersection.y);
+    // printf("x_h = %lf , y_h = %lf\n", horizontal_intersection.x, horizontal_intersection.y);
 
     return (closer_to_p1(position, vertical_intersection, horizontal_intersection));
 }
