@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   oper.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 17:23:53 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/10/02 20:34:27 by aprevrha         ###   ########.fr       */
+/*   Updated: 2024/10/28 13:47:17 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ void move(void *args) {
     move_vec = vec_dir(player->orientation, direction);
     player->position.x += move_vec.x * player->movement_speed; 
     player->position.y += move_vec.y * player->movement_speed; 
-    printf("Moved player to position: (%f, %f)\n", 
-        	player->position.x, player->position.y);
+    //printf("Moved player to position: (%f, %f)\n", 
+        	// player->position.x, player->position.y);
 }
 
 double vec_length(t_dvec2 vec)
@@ -60,6 +60,6 @@ void look(void *args) {
     double rotation = a->rotation;
     
     player->orientation = vec_rotate(rotation, player->orientation);
-    printf("Rotated player to: (%f, %f) len: %f\n", 
-           player->orientation.x, player->orientation.y, vec_length(player->orientation));
+    // printf("Rotated player to: (%f, %f) len: %f\n", 
+    // player->orientation.x, player->orientation.y, vec_length(player->orientation));
 }

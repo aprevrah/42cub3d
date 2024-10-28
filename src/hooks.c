@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 23:22:56 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/10/27 20:20:26 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/10/28 13:49:02 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,12 @@ int	loop_hook(t_data *data)
 		ft_bzero(data->addr, W_HEIGHT * data->line_length);
 		
 		
-		render_half_screen(data);
+		//render_half_screen(data);
 		render_walls(data);
 		render_map(data);
-		render_players(data);
+		// render_players(data);
+		render_minimap_rays(data);
+		
 		mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
 	}
 	return (0);

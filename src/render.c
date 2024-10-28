@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 17:24:17 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/10/27 21:36:50 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/10/28 13:51:50 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,8 +113,11 @@ void	render_vertical_line(t_data *data , double angle, int width, double angle2)
 	b.y = (double)W_HEIGHT/2 + offset;
 	b_screen = (t_ivec2){b.x, b.y};
 	
-	// if (a.y < 0 || a.y > W_HEIGHT || b.y < 0 || b.y > W_HEIGHT)
-	// 	return ;
+	if (a.y < 0 || a.y > W_HEIGHT || b.y < 0 || b.y > W_HEIGHT)
+	{
+		printf("aaaaaaaaaaaaaaaaaaaa\n");	
+		return ;
+	}
 	line_put(data, a_screen, b_screen, 0xd7c6cf);
 }
 
@@ -181,6 +184,38 @@ void	render_wall(t_data *data)
 	line_put(data, a_screen, b_screen, 0xd7c6cf);
 	i++;
 	}
+}
+
+void	render_minimap_ray(t_data *data, double angle)
+{
+	t_dvec2 ray_hit_pos;
+	t_ivec2 ray_hit_pos_screen;
+	t_ivec2 player_pos_screen;
+	
+	t_player player = data->players[0];
+	ray_hit_pos = get_intersection(player, data->map, fmod(angle, 2*PI));
+	ray_hit_pos_screen = (t_ivec2){ray_hit_pos.x * SCALE, ray_hit_pos.y * SCALE};
+	player_pos_screen = (t_ivec2){round(player.position.x * SCALE), round(player.position.y * SCALE)};
+
+	line_put(data, player_pos_screen, ray_hit_pos_screen, 0xff6289);
+}
+
+
+void	render_minimap_rays(t_data *data)
+{
+	int w_offset;
+	double a_offset;
+	
+	w_offset = 0;
+	a_offset = 0; 
+		
+	while (w_offset <= W_WIDTH/2)
+	{
+		a_offset = atan(tan(PI/4) * w_offset / ((double)W_WIDTH / 2));
+		render_minimap_ray(data, vec2angle(data->players[0].orientation) + a_offset);
+		render_minimap_ray(data, vec2angle(data->players[0].orientation) - a_offset);
+		w_offset++;
+	}	
 }
 
 

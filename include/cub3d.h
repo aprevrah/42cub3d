@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/08 13:01:15 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/10/27 17:31:26 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/10/28 13:21:50 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,6 +203,8 @@ double vec2angle(t_dvec2 vec);
 void	render_half_screen(t_data *data);
 void	render_wall(t_data *data);
 void	render_walls(t_data *data);
+void	render_minimap_rays(t_data *data);
+
 
 
 
