@@ -98,11 +98,19 @@ void	render_vertical_line(t_data *data , double angle, int width)
 	// 	offset = (double)W_HEIGHT/2;
 	
 
-	d_x = ray_hit_pos.x;
+	
 	// if (a.y < 0 || a.y > W_HEIGHT || b.y < 0 || b.y > W_HEIGHT)
 	// 	return ;
 	//line_put(data, a_screen, b_screen, 0xd7c6cf);
-	slice_put(data, width, offset, d_x, data->map->texture_data->textures[0]);
+	if (floor(ray_hit_pos.y) == ray_hit_pos.y)
+	{
+		d_x = ray_hit_pos.x;
+		slice_put(data, width, offset, d_x, data->map->texture_data->textures[0]);
+	}
+	else {
+		d_x = ray_hit_pos.y;
+		slice_put(data, width, offset, d_x, data->map->texture_data->textures[1]);
+	}
 }
 
 void	render_walls(t_data *data)
