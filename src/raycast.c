@@ -266,7 +266,7 @@ t_dvec2 get_intersection(t_player player, t_map *map, double angle)
 
     int i = 0;
 
-    while (i < 20)
+    while (i < MAX_RAY)
     {
         if (is_wall(vertical_intersection, map))
             break;
@@ -276,7 +276,7 @@ t_dvec2 get_intersection(t_player player, t_map *map, double angle)
     }
 
     i = 0;
-    while (i < 20)
+    while (i < MAX_RAY)
     {
         if (is_wall(horizontal_intersection, map))
             break;
