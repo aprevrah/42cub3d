@@ -31,8 +31,8 @@ void move(void *args) {
     move_vec = vec_dir(player->orientation, direction);
     player->position.x += move_vec.x * player->movement_speed; 
     player->position.y += move_vec.y * player->movement_speed; 
-    printf("Moved player to position: (%f, %f)\n", 
-        	player->position.x, player->position.y);
+    // printf("Moved player to position: (%f, %f)\n", 
+    //     	player->position.x, player->position.y);
 }
 
 double vec_length(t_dvec2 vec)
@@ -60,6 +60,6 @@ void look(void *args) {
     double rotation = a->rotation;
     
     player->orientation = vec_rotate(rotation, player->orientation);
-    printf("Rotated player to: (%f, %f) len: %f\n", 
-           player->orientation.x, player->orientation.y, vec_length(player->orientation));
+    // printf("Rotated player to: (%f, %f) len: %f\n", 
+    //        player->orientation.x, player->orientation.y, vec_length(player->orientation));
 }

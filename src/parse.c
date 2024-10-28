@@ -247,7 +247,7 @@ int **new_2d_int_arr(int rows, int cols)
 }
 
 //This is some BS
-void gnl_clear_buffer(fd)
+void gnl_clear_buffer(int fd)
 {
 	char *line;
 

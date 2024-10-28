@@ -134,6 +134,7 @@ void					printtexture_data(t_texture_data texture_data);
 void					my_mlx_pixel_put(t_data *data, int x, int y, int color);
 void					line_put(t_data *data, t_ivec2 a, t_ivec2 b, int color);
 int						get_pixel_color(t_texture texture, int x, int y);
+void	slice_put(t_data *data, int x, double size, double d_x, t_texture texture);
 
 // init.c
 int						init_keys(t_key *keys, t_player *players);
