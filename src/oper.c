@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 17:23:53 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/10/28 15:27:26 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/10/28 15:47:19 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,25 +65,25 @@ void move(void *args) {
     t_dvec2 direction = a->direction;
     t_dvec2 move_vec;
     
-    int **map;
-    map = createMap();
-    t_dvec2 temp;
+    // int **map;
+    // map = createMap();
+    // t_dvec2 temp;
 
     
     
     move_vec = vec_dir(player->orientation, direction);
-    // player->position.x += move_vec.x * player->movement_speed; 
-    // player->position.y += move_vec.y * player->movement_speed; 
+    player->position.x += move_vec.x * player->movement_speed; 
+    player->position.y += move_vec.y * player->movement_speed; 
 
     //printf("Moved player to position: (%f, %f)\n", 
         	// player->position.x, player->position.y);
 
-    temp.x += move_vec.x * player->movement_speed; 
-    temp.y += move_vec.y * player->movement_speed;
-    if (is_wall_tile(temp, map))
-        return ;
-    player->position.x += move_vec.x * player->movement_speed; 
-    player->position.y += move_vec.y * player->movement_speed; 
+    // temp.x += move_vec.x * player->movement_speed; 
+    // temp.y += move_vec.y * player->movement_speed;
+    // if (is_wall_tile(temp, map))
+    //     return ;
+    // player->position.x += move_vec.x * player->movement_speed; 
+    // player->position.y += move_vec.y * player->movement_speed; 
     
 }
 
