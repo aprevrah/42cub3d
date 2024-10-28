@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 23:25:37 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/10/28 14:04:35 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/10/28 14:19:30 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,8 @@
 static t_key	init_key_move(int keycode, t_player *player, t_dvec2 direction)
 {
 	t_key	key;
-
+	
+	
 	key.state = 0;
 	key.code = keycode;
 	key.func = move;
