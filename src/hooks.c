@@ -15,6 +15,7 @@
 #include <X11/keysym.h>
 #include <mlx.h>
 
+
 int	loop_hook(t_data *data)
 {
 	int	i;
@@ -33,7 +34,6 @@ int	loop_hook(t_data *data)
 		}
 		i++;
 	}
-	
 	if (1)
 	{
 		//ft_bzero(data->addr, W_HEIGHT * data->line_length);

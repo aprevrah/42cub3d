@@ -24,10 +24,8 @@ int get_color_normalized(t_texture texture, double x, double y)
 
 	x = x - floor(x);
 	y = y - floor(y);
-
 	x_pixel = x * texture.img_width;
 	y_pixel = y * texture.img_height;
-
 	return(get_pixel_color(texture, x_pixel, y_pixel));
 }
 
@@ -120,7 +118,6 @@ void	line_put(t_data *data, t_ivec2 a, t_ivec2 b, int color)
 	}
 	draw_straight(data, a, b, color);
 }
-
 void	slice_put(t_data *data, int x, double size, double d_x, t_texture texture)
 {
 	bool	got_color;
@@ -135,7 +132,6 @@ void	slice_put(t_data *data, int x, double size, double d_x, t_texture texture)
 
 	//Pre-compute the divisor
 	//int divisor = (W_HEIGHT * size) / texture.img_height;
-
 	while(y < W_HEIGHT)
 	{
 		if (y < W_HEIGHT*0.5 - W_HEIGHT*0.5 * size){
