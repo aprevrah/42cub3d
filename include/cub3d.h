@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/08 13:01:15 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/10/27 17:31:26 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/10/28 15:34:47 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@
 
 
 typedef struct s_data	t_data;
+typedef struct s_map	t_map;
+
 
 typedef struct s_dvec2
 {
@@ -46,6 +48,7 @@ typedef struct s_player
 	t_dvec2 position;
 	t_dvec2	orientation;
 	double	movement_speed;
+	t_map	*map;
 }						t_player;
 
 typedef struct s_texture
@@ -183,6 +186,8 @@ double vec2angle(t_dvec2 vec);
 void	render_half_screen(t_data *data);
 void	render_wall(t_data *data);
 void	render_walls(t_data *data);
+void	render_minimap_rays(t_data *data);
+
 
 
 
