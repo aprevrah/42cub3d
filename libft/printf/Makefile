@@ -9,6 +9,11 @@ OBJS = $(SRCS:.c=.o)
 
 NAME = libftprintf.a
 
+
+NUM_PROC = $(shell nproc)
+MAKEFLAGS = --jobs$(NUM_PROC)
+
+
 all: $(NAME)
 
 %.o: %.c
@@ -23,6 +28,7 @@ clean:
 fclean: clean
 	$(RM) $(NAME)
 
-re: fclean all
+re: fclean
+	+make all
 
 .PHONY: all clean fclean re

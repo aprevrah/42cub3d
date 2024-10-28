@@ -123,18 +123,42 @@ void	line_put(t_data *data, t_ivec2 a, t_ivec2 b, int color)
 
 void	slice_put(t_data *data, int x, double size, double d_x, t_texture texture)
 {
+	bool	got_color;
 	int color;
 	int i;
 	int y;
 	i = 0;
-	while(i < W_HEIGHT * size)
+	if (size > 1)
+		i = -(W_HEIGHT*0.5 - W_HEIGHT*0.5 *size);
+	got_color = false;
+	y = 0;
+
+	//Pre-compute the divisor
+	//int divisor = (W_HEIGHT * size) / texture.img_height;
+
+	while(y < W_HEIGHT)
 	{
-		y = i + W_HEIGHT*0.5 - W_HEIGHT*0.5 * size;
-		if (y >= 0 && y < W_HEIGHT)
+		if (y < W_HEIGHT*0.5 - W_HEIGHT*0.5 * size){
+			my_mlx_pixel_put(data, x, y, data->map->texture_data->col_C);
+			}
+		else if (y > W_HEIGHT*0.5 + W_HEIGHT*0.5 * size){
+			my_mlx_pixel_put(data, x, y, data->map->texture_data->col_F);
+			}
+		else
 		{
-			color = get_color_normalized(texture, d_x, i/(W_HEIGHT * size));
-			my_mlx_pixel_put(data, x, i + W_HEIGHT*0.5 - W_HEIGHT*0.5 * size, color);
+			//we only want to get the new color if there is a new pixel in the texture
+			if (fmod(i, ((W_HEIGHT * size)/texture.img_height)) < 1 || !got_color)
+			{
+				color = get_color_normalized(texture, d_x, i/(W_HEIGHT * size));
+				got_color = true;
+			}
+			my_mlx_pixel_put(data, x, y, color);
+			// if (fmod(i, ((W_HEIGHT * size)/texture.img_height)) < 1)
+			// 	my_mlx_pixel_put(data, x, y, 0x00FF60);
+			// if ((divisor > 0 && i % divisor == 0))
+			// 	my_mlx_pixel_put(data, x, y, 0xFF8000);
+			i++;
 		}
-		i++;
+		y++;
 	}
 }

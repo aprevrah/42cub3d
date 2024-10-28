@@ -5,3 +5,4 @@ cub3d
 libft.a
 algotest
 test
+*.out
