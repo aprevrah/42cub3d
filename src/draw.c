@@ -24,10 +24,8 @@ int get_color_normalized(t_texture texture, double x, double y)
 
 	x = x - floor(x);
 	y = y - floor(y);
-
 	x_pixel = x * texture.img_width;
 	y_pixel = y * texture.img_height;
-
 	return(get_pixel_color(texture, x_pixel, y_pixel));
 }
 
@@ -120,20 +118,28 @@ void	line_put(t_data *data, t_ivec2 a, t_ivec2 b, int color)
 	}
 	draw_straight(data, a, b, color);
 }
-
+//TODO: sky and floor in slice function
 void	slice_put(t_data *data, int x, double size, double d_x, t_texture texture)
 {
 	int color;
 	int i;
 	int y;
 	i = 0;
+	color = 0;
+	if (size > 1)
+		i = -(W_HEIGHT*0.5 - W_HEIGHT*0.5 * size);
 	while(i < W_HEIGHT * size)
 	{
+	
 		y = i + W_HEIGHT*0.5 - W_HEIGHT*0.5 * size;
-		if (y >= 0 && y < W_HEIGHT)
+		if (y > W_HEIGHT)
+			return;
+		if (y >= 0)
 		{
-			color = get_color_normalized(texture, d_x, i/(W_HEIGHT * size));
-			my_mlx_pixel_put(data, x, i + W_HEIGHT*0.5 - W_HEIGHT*0.5 * size, color);
+			//we only want to get the new color if there is a new pixel in the texture
+			if ((int)(i/size) % texture.img_height == 0)
+				color = get_color_normalized(texture, d_x, i/(W_HEIGHT * size));
+			my_mlx_pixel_put(data, x, y, color);
 		}
 		i++;
 	}

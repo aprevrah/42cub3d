@@ -255,7 +255,6 @@ t_dvec2 get_intersection(t_player player, t_map *map, double angle)
         vertical_intersection = get_vertical_intersection(position, angle);
         while (1)
         {
-            
             if (is_wall(vertical_intersection, map))
                 return (vertical_intersection);
             vertical_intersection.x += x_i;

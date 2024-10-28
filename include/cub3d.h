@@ -18,6 +18,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <stdbool.h>
+#include <sys/time.h> // gettimeofday()
 
 # define COLOR 0x00FFFFFF
 # define MAP_SEP " "
@@ -118,6 +119,7 @@ typedef struct s_data
 	int					bits_per_pixel;
 	int					line_length;
 	int					endian;
+	struct timeval		lastframe;
 	t_map				*map;
 	t_player			*players;
 	t_key				keys[NUM_OF_KEYS];
