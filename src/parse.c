@@ -222,27 +222,6 @@ static char	*read_map_data(int fd, t_map *map)
 	return (content);
 }
 
-void printmap(t_map *map)
-{
-	int x;
-	int y;
-
-	x = 0;
-	y = 0;
-	while (y < map->height)
-	{
-		while (x < map->length)
-		{
-			printf("%i", map->arr[y][x]);
-			x++;
-		}
-		printf("\n");
-		x = 0;
-		y++;
-	}
-	printf ("height: %i length: %i\n", map->height, map->length);
-}
-
 int **new_2d_int_arr(int rows, int cols)
 {
 	int **arr;
@@ -268,7 +247,7 @@ int **new_2d_int_arr(int rows, int cols)
 }
 
 //This is some BS
-void gnl_clear_buffer(fd)
+void gnl_clear_buffer(int fd)
 {
 	char *line;
 
@@ -280,16 +259,6 @@ void gnl_clear_buffer(fd)
 		if (!line)
 			return ;
 	}
-}
-
-void printtexture_data(t_texture_data texture_data)
-{
-	printf("NO: %s\n", texture_data.path_NO);
-	printf("EA: %s\n", texture_data.path_EA);
-	printf("SO: %s\n", texture_data.path_SO);
-	printf("WE: %s\n", texture_data.path_WE);
-	printf("C: #%06X\n", texture_data.col_C);
-	printf("F: #%06X\n", texture_data.col_F);
 }
 
 t_map	*parse_map(int fd)

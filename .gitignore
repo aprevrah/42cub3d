@@ -2,6 +2,6 @@
 obj
 *.o
 cub3d
-*.cub
 libft.a
 algotest
+test

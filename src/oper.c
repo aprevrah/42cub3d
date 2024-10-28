@@ -75,6 +75,7 @@ void move(void *args) {
     player->position.x += move_vec.x * player->movement_speed; 
     player->position.y += move_vec.y * player->movement_speed; 
 
+
     //printf("Moved player to position: (%f, %f)\n", 
         	// player->position.x, player->position.y);
 
@@ -84,7 +85,6 @@ void move(void *args) {
     //     return ;
     // player->position.x += move_vec.x * player->movement_speed; 
     // player->position.y += move_vec.y * player->movement_speed; 
-    
 }
 
 double vec_length(t_dvec2 vec)
