@@ -34,22 +34,20 @@ int	loop_hook(t_data *data)
 		}
 		i++;
 	}
-	
 	if (1)
 	{
+		//ft_bzero(data->addr, W_HEIGHT * data->line_length);
 		struct timeval	tv_now;
-		long int		frametime;
-
-		ft_bzero(data->addr, W_HEIGHT * data->line_length);
+		long int frametime;
 		
-		//render_half_screen(data);
+		render_half_screen(data);
 		render_walls(data);
-		render_map(data);
+		//render_map(data);
 		//render_players(data);
-		render_minimap_rays(data);
+		//render_minimap_rays(data);
 		
 		mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
-		mlx_put_image_to_window(data->mlx, data->win, data->map->texture_data->textures[0].img, 0, 0);
+		//mlx_put_image_to_window(data->mlx, data->win, data->map->texture_data->textures[0].img, 0, 0);
 		if (gettimeofday(&tv_now, NULL))
 			printf("gettimeofday failed");
 		frametime = (tv_now.tv_sec * 1000 + tv_now.tv_usec/1000) - (data->lastframe.tv_sec * 1000 + data->lastframe.tv_usec/1000);

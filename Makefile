@@ -12,8 +12,11 @@ OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
 
 NAME = cub3d
 
+NUM_PROC = $(shell nproc)
+MAKEFLAGS = -j$(NUM_PROC)
+
 $(NAME): $(OBJ_DIR) $(OBJS)
-	make -C ./libft all
+	+make -C ./libft all
 	$(CC) $(CFLAGS) $(OBJS) -L./libft -lft -lmlx -L/lib -Imlx -lXext -lX11 -lm -o $(NAME)
 
 all: $(OBJ_DIR) $(NAME)
@@ -27,12 +30,13 @@ $(OBJ_DIR):
 
 clean:
 	$(RM) -r $(OBJ_DIR)
-	make -C ./libft clean
+	+make -C ./libft clean
 
 fclean: clean
 	$(RM) $(NAME)
-	make -C ./libft fclean
+	+make -C ./libft fclean
 
-re: fclean all
+re: fclean
+	+make all
 
 .PHONY: all clean fclean re

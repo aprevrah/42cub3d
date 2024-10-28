@@ -18,17 +18,17 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <stdbool.h>
-#include <sys/time.h> // gettimeofday()
+# include <sys/time.h>
 
 # define COLOR 0x00FFFFFF
 # define MAP_SEP " "
-# define W_WIDTH 1920
-# define W_HEIGHT 1080
+# define W_WIDTH 1280
+# define W_HEIGHT 720
 # define NUM_OF_KEYS 7 // Change to number of keys added
 # define R_SPEED 0.03
 # define T_SPEED 10
 # define S_SPEED 0.03
-#define PI 3.14159265358979323
+# define PI 3.14159265358979323
 # define EPSILON 0.000001
 # define SCALE 70
 
