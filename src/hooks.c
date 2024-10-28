@@ -42,7 +42,7 @@ int	loop_hook(t_data *data)
 
 		ft_bzero(data->addr, W_HEIGHT * data->line_length);
 		
-		render_half_screen(data);
+		//render_half_screen(data);
 		render_walls(data);
 		render_map(data);
 		//render_players(data);
