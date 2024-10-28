@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 17:24:17 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/10/28 13:51:50 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/10/28 14:54:57 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,10 +114,7 @@ void	render_vertical_line(t_data *data , double angle, int width, double angle2)
 	b_screen = (t_ivec2){b.x, b.y};
 	
 	if (a.y < 0 || a.y > W_HEIGHT || b.y < 0 || b.y > W_HEIGHT)
-	{
-		printf("aaaaaaaaaaaaaaaaaaaa\n");	
 		return ;
-	}
 	line_put(data, a_screen, b_screen, 0xd7c6cf);
 }
 

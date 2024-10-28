@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 17:23:53 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/10/28 14:44:31 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/10/28 15:27:26 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,15 @@ int** createMap() {
 
 int is_wall_tile(t_dvec2 pos, int **map)
 {
-    pos.x = floor(pos.x);
-    pos.y = floor(pos.y);
+    double x;
+    double y;
+    
+    x = floor(pos.x);
+    y = floor(pos.y);
 
-    if (pos.x < 0 || pos.x  > 9 || pos.y < 0 || pos.y  > 9)
+    if (x < 0 || x  > 9 || y < 0 || y  > 9)
         return (1);
-    if (!map[(int)pos.y][(int)pos.x]) 
+    if (map[(int)y][(int)x]) 
         return (1);
     return (0);
 }
