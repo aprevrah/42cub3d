@@ -15,6 +15,11 @@ NAME = cub3d
 NUM_PROC = $(shell nproc)
 MAKEFLAGS = -j$(NUM_PROC)
 
+# Set colors
+GREEN=\033[0;32m
+CYAN=\033[0;36m
+NC=\033[0m # No Color
+
 $(NAME): $(OBJ_DIR) $(OBJS)
 	+make -C ./libft all
 	$(CC) $(CFLAGS) $(OBJS) -L./libft -lft -lmlx -L/lib -Imlx -lXext -lX11 -lm -o $(NAME)
@@ -39,4 +44,25 @@ fclean: clean
 re: fclean
 	+make all
 
-.PHONY: all clean fclean re
+# Map to be use for profiling
+MAP_PATH = assets/map.cub
+
+# Get the current Git commit hash
+COMMIT_HASH := $(shell git rev-parse --short HEAD)
+
+# Get the current date and time
+DATE_TIME := $(shell date +"%Y-%m-%d_%H-%M-%S")
+
+# Define the directory for storing profiling data
+PROFILE_DIR = "profiling/${DATE_TIME}_${COMMIT_HASH}"
+
+prof: fclean
+	$(MAKE) CFLAGS="$(CFLAGS) -pg" all
+	mkdir -p "$(PROFILE_DIR)"
+	./$(NAME) "$(MAP_PATH)"
+	mv gmon.out $(PROFILE_DIR)/gmon.out
+	cp $(NAME) "$(PROFILE_DIR)/$(NAME)"
+	gprof -p -b $(PROFILE_DIR)/$(NAME) $(PROFILE_DIR)/gmon.out
+	@echo "${GREEN}For more stats, use this command:${NC}"
+	@echo "${CYAN}gprof $(PROFILE_DIR)/$(NAME) $(PROFILE_DIR)/gmon.out${NC}"
+.PHONY: all clean fclean re gprof
