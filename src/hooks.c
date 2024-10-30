@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 23:22:56 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/10/28 14:55:18 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/10/30 21:36:53 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@ int	loop_hook(t_data *data)
 		if (gettimeofday(&tv_now, NULL))
 			printf("gettimeofday failed");
 		frametime = (tv_now.tv_sec * 1000 + tv_now.tv_usec/1000) - (data->lastframe.tv_sec * 1000 + data->lastframe.tv_usec/1000);
-		printf("frametime: %ldms	fps: %ld\n", frametime, 1000/frametime);
+		(void)frametime;
+		// printf("frametime: %ldms	fps: %ld\n", frametime, 1000/frametime);
 		data->lastframe = tv_now;
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 17:24:17 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/10/28 14:54:57 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/10/30 21:33:52 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,11 +84,43 @@ double line_length(t_dvec2 a, t_dvec2 b)
     return sqrt((b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y));
 }
 
+// void	render_vertical_line(t_data *data , double angle, int width, double angle2)
+// {
+// 	t_dvec2		ray_hit_pos;
+// 	double		distance;
+// 	double		d_x;
+// 	double		offset;
+	
+
+
+// 	ray_hit_pos = get_intersection(data->players[0], data->map, fmod(angle,2*PI));
+// 	distance = line_length(data->players[0].position, ray_hit_pos);
+// 	distance = cos(angle2) * distance;
+// 	// if (distance < 1)
+// 		// distance = 1;
+// 	offset = (double) 1/distance;
+// 	// if (offset > (double)W_HEIGHT/2)
+// 	// 	offset = (double)W_HEIGHT/2;
+	
+// 	if (floor(ray_hit_pos.y) == ray_hit_pos.y)
+// 	{
+// 		d_x = ray_hit_pos.x;
+// 		slice_put(data, width, offset, d_x, data->map->texture_data->textures[0]);
+// 	}
+// 	else {
+// 		d_x = ray_hit_pos.y;
+// 		slice_put(data, width, offset, d_x, data->map->texture_data->textures[1]);
+// 	}
+// }
+
 void	render_vertical_line(t_data *data , double angle, int width, double angle2)
 {
 	t_dvec2		ray_hit_pos;
 	double		distance;
-	double		d_x;
+	t_dvec2		a;
+	t_dvec2		b;
+	t_ivec2		a_screen;
+	t_ivec2		b_screen;
 	double		offset;
 	
 
@@ -98,19 +130,23 @@ void	render_vertical_line(t_data *data , double angle, int width, double angle2)
 	distance = cos(angle2) * distance;
 	// if (distance < 1)
 		// distance = 1;
-	offset = (double) 1/distance;
-	// if (offset > (double)W_HEIGHT/2)
-	// 	offset = (double)W_HEIGHT/2;
+	offset = (double)W_HEIGHT / (distance * 2);
+	if (offset > (double)W_HEIGHT/2)
+		offset = (double)W_HEIGHT/2;
 	
-	if (floor(ray_hit_pos.y) == ray_hit_pos.y)
-	{
-		d_x = ray_hit_pos.x;
-		slice_put(data, width, offset, d_x, data->map->texture_data->textures[0]);
+	a.x = (double)width;
+	a.y = (double)W_HEIGHT/2 - offset;
+	a_screen = (t_ivec2){a.x, a.y};
+
+	b.x = (double)width;
+	b.y = (double)W_HEIGHT/2 + offset;
+	b_screen = (t_ivec2){b.x, b.y};
+	
+	if (a.y < 0 || a.y > W_HEIGHT || b.y < 0 || b.y > W_HEIGHT)
+	{	
+		return ;
 	}
-	else {
-		d_x = ray_hit_pos.y;
-		slice_put(data, width, offset, d_x, data->map->texture_data->textures[1]);
-	}
+	line_put(data, a_screen, b_screen, 0xd7c6cf);
 }
 
 void	render_walls(t_data *data)

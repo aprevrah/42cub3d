@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/08 13:01:15 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/10/28 15:34:47 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/10/30 20:31:56 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,7 @@ typedef struct s_data
 	t_map				*map;
 	t_player			*players;
 	t_key				keys[NUM_OF_KEYS];
+	int					fd;
 }						t_data;
 
 typedef struct s_ivec2
@@ -184,6 +185,8 @@ int is_wall(t_dvec2 intersection, t_map *map);
 double  deg2rad(double degrees);
 double rad2deg(double rad);
 double vec2angle(t_dvec2 vec);
+
+void gnl_clear_buffer(int fd);
 
 void	render_half_screen(t_data *data);
 void	render_wall(t_data *data);
