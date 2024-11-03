@@ -221,7 +221,7 @@ t_dvec2 get_intersection(t_player player, t_map *map, double angle)
     double d_y;
     double x_i;
     double y_i;
-    
+    int i;
     
     position = player.position;
 
@@ -242,31 +242,37 @@ t_dvec2 get_intersection(t_player player, t_map *map, double angle)
     {
         horizontal_intersection = get_horizontal_intersection(position, angle);
         return (horizontal_intersection);
-        while (1)
+        //TODO: this is an end less loop when angle is PI/2 or ... having the max ray is a temp fix -> rething iswall()
+        i = 0;
+        while (i < MAX_RAY)
         {
             if (is_wall(horizontal_intersection, map))
                 return (horizontal_intersection);
             horizontal_intersection.y += y_i;
+            i++;
         }
     }
 
     if (angle == 0 || angle == PI)
     {
         vertical_intersection = get_vertical_intersection(position, angle);
-        while (1)
+        //TODO: this is an end less loop when angle is PI or 0 having the max ray is a temp fix -> rething iswall()
+        i = 0;
+        while (i < MAX_RAY)
         {
             if (is_wall(vertical_intersection, map))
                 return (vertical_intersection);
             vertical_intersection.x += x_i;
+            i++;
         }
     }
 
     vertical_intersection = get_vertical_intersection(position, angle);
     horizontal_intersection = get_horizontal_intersection(position, angle);
 
-    int i = 0;
+    i = 0;
 
-    while (i < 20)
+    while (i < MAX_RAY)
     {
         if (is_wall(vertical_intersection, map))
             break;
@@ -276,7 +282,7 @@ t_dvec2 get_intersection(t_player player, t_map *map, double angle)
     }
 
     i = 0;
-    while (i < 20)
+    while (i < MAX_RAY)
     {
         if (is_wall(horizontal_intersection, map))
             break;
