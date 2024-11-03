@@ -212,6 +212,71 @@ double vec2angle(t_dvec2 vec)
     return (angle);
 }
 
+// bool smart_is_wall_x(t_map *map, int x, int y, int x_i)
+// {
+    
+//         if (x < 0 || y < 0 || x >= map->length || y >= map->height)
+//             return (false);
+//         if (x_i == -1 && !map->arr[y][x-1])
+//             return (true);
+//         if (y_i == -1 && !map->arr[y-1][x])
+//             return (true);
+//         if (!map->arr[y][x])
+//             return (true);
+//         return false;
+// }
+
+// bool smart_is_wall(t_map *map, int x, int y, int x_i, int y_i)
+// {
+    
+//         if (x < 0 || y < 0 || x >= map->length || y >= map->height)
+//             return (false);
+//         if (x_i == -1 && !map->arr[y][x-1])
+//             return (true);
+//         if (y_i == -1 && !map->arr[y-1][x])
+//             return (true);
+//         if (!map->arr[y][x])
+//             return (true);
+//         return false;
+// }
+// bool is_vertical_wall()
+// {
+    
+// }
+
+int smart_is_wall(t_map *map, t_dvec2 intersection, int x_i, int y_i, bool horizontal)
+{
+    double x;
+    double y;
+    x = intersection.x;
+    y = intersection.y;
+    (void)x_i;
+    (void)y_i;
+
+    if (x < 0 || y < 0 || x >= map->length || y >= map->height)
+        return (0);
+
+    if (!horizontal)//!get_fract_part(x) && get_fract_part(y))
+    {   
+        //y = floor(y);
+        if (!map->arr[(int)y][(int)x] || ((x-1) >= 0 && !map->arr[(int)y][(int)x-1]))
+            return (1);
+    }
+    else if (horizontal)//!get_fract_part(y) && get_fract_part(x))
+    {
+        //x = floor(x);
+        if (!map->arr[(int)y][(int)x] || ((y-1) >= 0 && !map->arr[(int)y-1][(int)x]))
+            return (1);
+    }
+    // else if (!get_fract_part(x) && !get_fract_part(y))
+    // {
+    //      if (!map->arr[(int)y][(int)x] || ((x-1) >= 0 && !map->arr[(int)y][(int)x-1]) || ((y-1) >= 0 && !map->arr[(int)y-1][(int)x]) 
+    //      ||  ((y-1) >= 0 && (x-1) >= 0 && !map->arr[(int)y-1][(int)x-1]))
+    //          return (1);
+    // }
+    return (0);
+}
+
 t_dvec2 get_intersection(t_player player, t_map *map, double angle)
 {
     t_dvec2 position;
@@ -242,25 +307,24 @@ t_dvec2 get_intersection(t_player player, t_map *map, double angle)
     {
         horizontal_intersection = get_horizontal_intersection(position, angle);
         return (horizontal_intersection);
-        //TODO: this is an end less loop when angle is PI/2 or ... having the max ray is a temp fix -> rething iswall()
+        //TODO: this is an end less loop when angle is PI/2 or ... having the max ray is a temp fix -> rethink iswall()
         i = 0;
         while (i < MAX_RAY)
         {
-            if (is_wall(horizontal_intersection, map))
+            if (smart_is_wall(map, horizontal_intersection, x_i, y_i, true))
                 return (horizontal_intersection);
             horizontal_intersection.y += y_i;
             i++;
         }
     }
-
     if (angle == 0 || angle == PI)
     {
         vertical_intersection = get_vertical_intersection(position, angle);
-        //TODO: this is an end less loop when angle is PI or 0 having the max ray is a temp fix -> rething iswall()
+        //TODO: this is an end less loop when angle is PI or 0 having the max ray is a temp fix -> rethink iswall()
         i = 0;
         while (i < MAX_RAY)
         {
-            if (is_wall(vertical_intersection, map))
+            if (smart_is_wall(map, vertical_intersection, x_i, y_i, false)) //horizotal and vertical mix up here fixed
                 return (vertical_intersection);
             vertical_intersection.x += x_i;
             i++;
@@ -274,7 +338,7 @@ t_dvec2 get_intersection(t_player player, t_map *map, double angle)
 
     while (i < MAX_RAY)
     {
-        if (is_wall(vertical_intersection, map))
+        if (smart_is_wall(map, vertical_intersection, x_i, y_i, false))
             break;
         vertical_intersection.x += x_i;
         vertical_intersection.y += fabs(d_y) * y_i;
@@ -284,7 +348,7 @@ t_dvec2 get_intersection(t_player player, t_map *map, double angle)
     i = 0;
     while (i < MAX_RAY)
     {
-        if (is_wall(horizontal_intersection, map))
+        if (smart_is_wall(map, horizontal_intersection, x_i, y_i, true))
             break;
         horizontal_intersection.x += fabs(d_x) * x_i;
         horizontal_intersection.y += y_i;
