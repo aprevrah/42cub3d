@@ -14,7 +14,7 @@
 #include <X11/X.h>
 #include <X11/keysym.h>
 #include <mlx.h>
-
+int long loops;
 
 int	loop_hook(t_data *data)
 {
@@ -40,19 +40,20 @@ int	loop_hook(t_data *data)
 		struct timeval	tv_now;
 		long int frametime;
 		
-		render_half_screen(data);
+		//render_half_screen(data);
 		render_walls(data);
-		//render_map(data);
+		render_map(data);
 		//render_players(data);
-		//render_minimap_rays(data);
+		render_minimap_rays(data);
 		
 		mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
 		//mlx_put_image_to_window(data->mlx, data->win, data->map->texture_data->textures[0].img, 0, 0);
 		if (gettimeofday(&tv_now, NULL))
 			printf("gettimeofday failed");
 		frametime = (tv_now.tv_sec * 1000 + tv_now.tv_usec/1000) - (data->lastframe.tv_sec * 1000 + data->lastframe.tv_usec/1000);
-		printf("frametime: %ldms	fps: %ld\n", frametime, 1000/frametime);
+		printf("frametime: %ldms	fps: %ld loop: %li\n", frametime, 1000/frametime, loops);
 		data->lastframe = tv_now;
+		loops++;
 	}
 	return (0);
 }
