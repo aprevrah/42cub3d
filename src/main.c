@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 22:34:46 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/10/30 21:22:08 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/05 17:13:05 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ void	init2null(t_data *data)
 	data->img = NULL;
 	data->addr = NULL;
 	data->map = NULL;
+	data->players = NULL;
 	// data->map->texture_data = NULL;
 	// data->map->texture_data->path_NO = NULL;
 	// data->map->texture_data->path_SO = NULL;
@@ -103,27 +104,33 @@ int	main(int argc, char **argv)
 	data.fd = fd;
 	data.map = parse_map(fd);	
 	close(fd);
+	
 	if (!data.map)
 		free_and_exit(&data, 1);
-
+	
+		
 	if (init_players(&data.players, data.map))
 		free_and_exit(&data, 1);
-	if (init_mlx(&data))
-		free_and_exit(&data, 1);
-	
 	//free_and_exit(&data, 1);
-	render_map(&data);
-	mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
-	init_keys(data.keys, data.players);
-	mlx_hook(data.win, 2, KeyPressMask, handle_keydown, data.keys);
-	mlx_hook(data.win, 3, KeyReleaseMask, handle_keyup, data.keys);
-	mlx_hook(data.win, 17, StructureNotifyMask, win_close_button, &data);
-	// test texture
-	// printtexture_data(*data.map->texture_data);
-	load_texture(data.map->texture_data->path_NO, &data, &data.map->texture_data->textures[0]);
-	load_texture(data.map->texture_data->path_EA, &data, &data.map->texture_data->textures[1]);
-	load_texture(data.map->texture_data->path_SO, &data, &data.map->texture_data->textures[2]);
-	load_texture(data.map->texture_data->path_WE, &data, &data.map->texture_data->textures[3]);
-	mlx_loop_hook(data.mlx, loop_hook, &data);
-	mlx_loop(data.mlx);
+	
+	
+	// if (init_mlx(&data))
+	// 	free_and_exit(&data, 1);
+	
+	
+	// //free_and_exit(&data, 1);
+	// render_map(&data);
+	// mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
+	// init_keys(data.keys, data.players);
+	// mlx_hook(data.win, 2, KeyPressMask, handle_keydown, data.keys);
+	// mlx_hook(data.win, 3, KeyReleaseMask, handle_keyup, data.keys);
+	// mlx_hook(data.win, 17, StructureNotifyMask, win_close_button, &data);
+	// // test texture
+	// // printtexture_data(*data.map->texture_data);
+	// load_texture(data.map->texture_data->path_NO, &data, &data.map->texture_data->textures[0]);
+	// load_texture(data.map->texture_data->path_EA, &data, &data.map->texture_data->textures[1]);
+	// load_texture(data.map->texture_data->path_SO, &data, &data.map->texture_data->textures[2]);
+	// load_texture(data.map->texture_data->path_WE, &data, &data.map->texture_data->textures[3]);
+	// mlx_loop_hook(data.mlx, loop_hook, &data);
+	// mlx_loop(data.mlx);
 }

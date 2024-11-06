@@ -6,11 +6,19 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 17:24:06 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/10/30 21:18:38 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/05 17:14:47 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
+
+
+// int	is_map_enclosed(t_map *map)
+// {
+
+
+	
+// }
 
 static char	*ft_str_append(char *a, char *b)
 {
@@ -31,9 +39,11 @@ static char	*ft_str_append(char *a, char *b)
 	return (a = NULL, b = NULL, str);
 }
 
+
 int	is_valid_char(char const s)
 {
-	if (s != '0' && s != '1' && s != 'N' && s != 'O' && s != 'S' && s != 'W')
+	if (s != '0' && s != '1' && s != 'N' && s != 'O' && s != 'S' && s != 'W' && \
+	s != ' ' && s != '\t' && s != '\n' && s != '\r' && s != '\v'&& s != '\f')
 		return (0);
 	return (1);
 }	
@@ -50,8 +60,10 @@ int	get_dir(char c)
 		return (6);
 }
 
+// # also check that there is as least one direction in the map
 static int	fill_map(char const *s, t_map *map)
 {
+	(void) map;
 	int	i;
 	int	x;
 	int	y;
@@ -61,11 +73,12 @@ static int	fill_map(char const *s, t_map *map)
 	x = 0;
 	y = 0;
 	j = 0;
+
 	while (y < map->height)
 	{
 		while (s[i] && s[i] != '\n')
 		{
-			if (!is_valid_char(s[i]) && j <= 1)
+			if (!is_valid_char(s[i]) || j > 1)
 				return (printf("unvalid char in map\n"), 1);
 			if (s[i] == '0')
 				map->arr[y][x] = 1;
@@ -312,11 +325,12 @@ t_map	*parse_map(int fd)
 	map->arr = new_2d_int_arr(map->height, map->length);
 	if (!map->arr)
 		return (get_next_line(fd, 1), free_texture_data(texture_data), free(map), free(content), NULL);
-	if (!fill_map(content, map))
+	if (fill_map(content, map))
 		return (get_next_line(fd, 1), free_texture_data(texture_data), free(content), free_map(map), NULL);
 	printf("%s\n", content);
 	free(content);
 	printf("\nConverted map\n\n");
+	
 	// maunaly check if the map was correcty filled
 	printmap(map);
 	return (map);
