@@ -277,47 +277,47 @@ int smart_is_wall(t_map *map, t_dvec2 intersection, int x_i, int y_i, bool horiz
     return (0);
 }
 
-t_ray get_intersection(t_player player, t_map *map, double angle)
+void set_sign(t_ray *ray)
+{
+    if (ray->angle > PI/2 && ray->angle < 3*PI/2)
+        ray->sign.x = -1;
+    else
+        ray->sign.x = 1;
+
+    if (ray->angle > 0 && ray->angle < PI)
+        ray->sign.y = -1;
+    else
+        ray->sign.y = 1;
+}
+
+t_ray raycast(t_player player, t_map *map, double angle)
 {
     t_ray   ray;
     //put this in ray where it makes sense
-    t_dvec2 position;
     t_dvec2 vertical_intersection;
     t_dvec2 horizontal_intersection;
     double d_x;
     double d_y;
-    double x_i;
-    double y_i;
     int i;
     
-    position = player.position;
+    ray.start_pos = player.position;
+    ray.angle = angle;
+    set_sign(&ray);
 
     d_x = get_dx(angle);
     d_y = get_dy(angle);
 
-    if (angle > PI/2 && angle < 3*PI/2)
-        x_i = -1;
-    else
-        x_i = 1;
-
-    if (angle > 0 && angle < PI)
-        y_i = -1;
-    else
-        y_i = 1;
-    ray.face.x = x_i;
-    ray.face.y = y_i;
-
-    //TODO: Do we even need this?
+    //TODO: We do need this but it could be in the loops below?
 
     // if (angle == PI/2 || angle == 3*PI/2)
     // {
-    //     horizontal_intersection = get_horizontal_intersection(position, angle);
+    //     horizontal_intersection = get_horizontal_intersection(ray.start_pos, angle);
     //     return (horizontal_intersection);
     //     //TODO: this is an end less loop when angle is PI/2 or ... having the max ray is a temp fix -> rethink iswall()
     //     i = 0;
     //     while (i < MAX_RAY)
     //     {
-    //         if (smart_is_wall(map, horizontal_intersection, x_i, y_i, true))
+    //         if (smart_is_wall(map, horizontal_intersection, ray.sign.x, y_i, true))
     //             return (horizontal_intersection);
     //         horizontal_intersection.y += y_i;
     //         i++;
@@ -325,49 +325,49 @@ t_ray get_intersection(t_player player, t_map *map, double angle)
     // }
     // if (angle == 0 || angle == PI)
     // {
-    //     vertical_intersection = get_vertical_intersection(position, angle);
+    //     vertical_intersection = get_vertical_intersection(ray.start_pos, angle);
     //     //TODO: this is an end less loop when angle is PI or 0 having the max ray is a temp fix -> rethink iswall()
     //     i = 0;
     //     while (i < MAX_RAY)
     //     {
-    //         if (smart_is_wall(map, vertical_intersection, x_i, y_i, false)) //horizotal and vertical mix up here fixed
+    //         if (smart_is_wall(map, vertical_intersection, ray.sign.x, y_i, false)) //horizotal and vertical mix up here fixed
     //             return (vertical_intersection);
-    //         vertical_intersection.x += x_i;
+    //         vertical_intersection.x += ray.sign.x;
     //         i++;
     //     }
     // }
 
-    vertical_intersection = get_vertical_intersection(position, angle);
-    horizontal_intersection = get_horizontal_intersection(position, angle);
+    vertical_intersection = get_vertical_intersection(ray.start_pos, angle);
+    horizontal_intersection = get_horizontal_intersection(ray.start_pos, angle);
 
     //TODO: can we do with one loop?
     i = 0;
     while (i < MAX_RAY)
     {
-        if (smart_is_wall(map, vertical_intersection, x_i, y_i, false))
+        if (smart_is_wall(map, vertical_intersection, ray.sign.x, ray.sign.y, false))
             break;
-        vertical_intersection.x += x_i;
-        vertical_intersection.y += fabs(d_y) * y_i;
+        vertical_intersection.x += ray.sign.x;
+        vertical_intersection.y += fabs(d_y) * ray.sign.y;
         i++;
     }
 
     i = 0;
     while (i < MAX_RAY)
     {
-        if (smart_is_wall(map, horizontal_intersection, x_i, y_i, true))
+        if (smart_is_wall(map, horizontal_intersection, ray.sign.x, ray.sign.y, true))
             break;
-        horizontal_intersection.x += fabs(d_x) * x_i;
-        horizontal_intersection.y += y_i;
+        horizontal_intersection.x += fabs(d_x) * ray.sign.x;
+        horizontal_intersection.y += ray.sign.y;
         i++;
     }
 
     // printf("x_v = %lf , y_v = %lf\n", vertical_intersection.x, vertical_intersection.y);
     // printf("x_h = %lf , y_h = %lf\n", horizontal_intersection.x, horizontal_intersection.y);
-    // ray.hit_pos = closer_to_p1(position, vertical_intersection, horizontal_intersection);
-    if (squared_distance(position, vertical_intersection) < squared_distance(position, horizontal_intersection))
+    // ray.hit_pos = closer_to_p1(ray.start_pos, vertical_intersection, horizontal_intersection);
+    if (squared_distance(ray.start_pos, vertical_intersection) < squared_distance(ray.start_pos, horizontal_intersection))
     {
         ray.hit_pos = vertical_intersection;
-        if (x_i == 1)
+        if (ray.sign.x == 1)
             ray.facing = NORTH;
         else
             ray.facing = SOUTH;
@@ -375,7 +375,7 @@ t_ray get_intersection(t_player player, t_map *map, double angle)
     else
     {
          ray.hit_pos = horizontal_intersection;
-         if (y_i == 1)
+         if (ray.sign.y == 1)
             ray.facing = WEST;
         else
             ray.facing = EAST;

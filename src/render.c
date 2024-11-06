@@ -36,7 +36,7 @@ void	render_rect(t_data *data, t_ivec2 p1, t_ivec2 p2)
 // {
 // 	t_player player = data->players[0];
 // 	tanh(orientation)
-// 	ray_hit_pos = get_intersection(player.position, data->map->arr, 0);
+// 	ray_hit_pos = raycast(player.position, data->map->arr, 0);
 
 // 	return (ray_hit_pos);
 // }
@@ -91,9 +91,7 @@ void	render_vertical_line(t_data *data , double angle, int width, double angle2)
 	double		d_x;
 	double		offset;
 	
-
-
-	ray = get_intersection(data->players[0], data->map, fmod(angle,2*PI));
+	ray = raycast(data->players[0], data->map, fmod(angle,2*PI));
 	distance = line_length(data->players[0].position, ray.hit_pos);
 	distance = cos(angle2) * distance;
 	// if (distance < 1)
@@ -101,9 +99,16 @@ void	render_vertical_line(t_data *data , double angle, int width, double angle2)
 	offset = (double) 1/distance;
 	// if (offset > (double)W_HEIGHT/2)
 	// 	offset = (double)W_HEIGHT/2;
-	d_x = ray.hit_pos.x;
-	if (ray.facing == SOUTH || ray.facing == NORTH)
+
+	//make sure orientation of texture is correct
+	if (ray.facing == NORTH)
 		d_x = ray.hit_pos.y;
+	if (ray.facing == EAST)
+		d_x = ray.hit_pos.x;
+	if (ray.facing == SOUTH)
+		d_x = 1 - ray.hit_pos.y;
+	if (ray.facing == WEST)
+		d_x = 1 - ray.hit_pos.x;
 	slice_put(data, width, offset, d_x, data->map->texture_data->textures[ray.facing]);
 }
 
@@ -149,7 +154,7 @@ void	render_walls(t_data *data)
 	double angle_offset = 0.0007;
 	while (i < W_WIDTH) 
 	{
-	ray_hit_pos = get_intersection(player, data->map,  fmod(vec2angle(player.orientation) - PI/6.5  + i * angle_offset  , 2*PI)).hit_pos;
+	ray_hit_pos = raycast(player, data->map,  fmod(vec2angle(player.orientation) - PI/6.5  + i * angle_offset  , 2*PI)).hit_pos;
 	distance = line_length(player.position, ray_hit_pos);
 
 	offset = (double)W_HEIGHT / (distance * 2);
@@ -179,7 +184,7 @@ void	render_minimap_ray(t_data *data, double angle)
 	t_ivec2 player_pos_screen;
 	
 	t_player player = data->players[0];
-	ray_hit_pos = get_intersection(player, data->map, fmod(angle, 2*PI)).hit_pos;
+	ray_hit_pos = raycast(player, data->map, fmod(angle, 2*PI)).hit_pos;
 	ray_hit_pos_screen = (t_ivec2){ray_hit_pos.x * SCALE, ray_hit_pos.y * SCALE};
 	player_pos_screen = (t_ivec2){round(player.position.x * SCALE), round(player.position.y * SCALE)};
 
@@ -223,9 +228,9 @@ void	render_players(t_data *data)
 	//render_rect(data, (t_ivec2){player.position.x -2, player.position.y -2}, (t_ivec2){player.position.x + 2, player.position.y + 2});
 	line_put(data, player_pos_screen, (t_ivec2){round(player_pos_screen.x + player.orientation.x * 20), round(player_pos_screen.y + player.orientation.y * 20)}, 0xf7f70a);
 	//draw rays 
-	ray_hit_pos1 = get_intersection(player, data->map, fmod(vec2angle(player.orientation), 2*PI)).hit_pos;
-	ray_hit_pos2 = get_intersection(player, data->map, fmod(vec2angle(player.orientation) + PI/8, 2*PI)).hit_pos;
-	ray_hit_pos3 = get_intersection(player, data->map, fmod(vec2angle(player.orientation) - PI/8, 2*PI)).hit_pos;
+	ray_hit_pos1 = raycast(player, data->map, fmod(vec2angle(player.orientation), 2*PI)).hit_pos;
+	ray_hit_pos2 = raycast(player, data->map, fmod(vec2angle(player.orientation) + PI/8, 2*PI)).hit_pos;
+	ray_hit_pos3 = raycast(player, data->map, fmod(vec2angle(player.orientation) - PI/8, 2*PI)).hit_pos;
 	
 	// printf("p_x = %lf, p_y = %lf\n", player.position.x, player.position.y);
 	// printf("orientation.x = %lf, orientation.y = %lf\n", player.orientation.x, player.orientation.y);

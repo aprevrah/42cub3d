@@ -120,7 +120,7 @@ int	init_players(t_player **players, t_map *map)
 		return (1);
 	// hard coded for now, use map later
 	(*players)[0].position = (t_dvec2){1.5, 1.5}; 
-	(*players)[0].orientation = (t_dvec2){-1, -1};
+	(*players)[0].orientation = (t_dvec2){0, -1};
 	(*players)[0].movement_speed = (double){0.1};
 	return (0);
 }

@@ -143,8 +143,10 @@ typedef enum {
 
 typedef struct s_ray
 {
+	t_dvec2				start_pos;
 	t_dvec2				hit_pos;
-	t_ivec2				face;
+	double				angle;
+	t_ivec2				sign;
 	t_direction			facing;
 }						t_ray;
 
@@ -196,7 +198,7 @@ double  get_hi_lenght(t_dvec2 position, double angle);
 double  get_vi_lenght(t_dvec2 position, double angle);
 t_dvec2 get_horizontal_intersection(t_dvec2 position, double angle);
 t_dvec2 get_vertical_intersection(t_dvec2 position, double angle);
-t_ray	get_intersection(t_player player, t_map *map, double angle);
+t_ray	raycast(t_player player, t_map *map, double angle);
 int is_wall(t_dvec2 intersection, t_map *map);
 double  deg2rad(double degrees);
 double rad2deg(double rad);
