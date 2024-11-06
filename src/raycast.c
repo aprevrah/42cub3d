@@ -277,8 +277,10 @@ int smart_is_wall(t_map *map, t_dvec2 intersection, int x_i, int y_i, bool horiz
     return (0);
 }
 
-t_dvec2 get_intersection(t_player player, t_map *map, double angle)
+t_ray get_intersection(t_player player, t_map *map, double angle)
 {
+    t_ray   ray;
+    //put this in ray where it makes sense
     t_dvec2 position;
     t_dvec2 vertical_intersection;
     t_dvec2 horizontal_intersection;
@@ -302,40 +304,44 @@ t_dvec2 get_intersection(t_player player, t_map *map, double angle)
         y_i = -1;
     else
         y_i = 1;
-    
-    if (angle == PI/2 || angle == 3*PI/2)
-    {
-        horizontal_intersection = get_horizontal_intersection(position, angle);
-        return (horizontal_intersection);
-        //TODO: this is an end less loop when angle is PI/2 or ... having the max ray is a temp fix -> rethink iswall()
-        i = 0;
-        while (i < MAX_RAY)
-        {
-            if (smart_is_wall(map, horizontal_intersection, x_i, y_i, true))
-                return (horizontal_intersection);
-            horizontal_intersection.y += y_i;
-            i++;
-        }
-    }
-    if (angle == 0 || angle == PI)
-    {
-        vertical_intersection = get_vertical_intersection(position, angle);
-        //TODO: this is an end less loop when angle is PI or 0 having the max ray is a temp fix -> rethink iswall()
-        i = 0;
-        while (i < MAX_RAY)
-        {
-            if (smart_is_wall(map, vertical_intersection, x_i, y_i, false)) //horizotal and vertical mix up here fixed
-                return (vertical_intersection);
-            vertical_intersection.x += x_i;
-            i++;
-        }
-    }
+    ray.face.x = x_i;
+    ray.face.y = y_i;
+
+    //TODO: Do we even need this?
+
+    // if (angle == PI/2 || angle == 3*PI/2)
+    // {
+    //     horizontal_intersection = get_horizontal_intersection(position, angle);
+    //     return (horizontal_intersection);
+    //     //TODO: this is an end less loop when angle is PI/2 or ... having the max ray is a temp fix -> rethink iswall()
+    //     i = 0;
+    //     while (i < MAX_RAY)
+    //     {
+    //         if (smart_is_wall(map, horizontal_intersection, x_i, y_i, true))
+    //             return (horizontal_intersection);
+    //         horizontal_intersection.y += y_i;
+    //         i++;
+    //     }
+    // }
+    // if (angle == 0 || angle == PI)
+    // {
+    //     vertical_intersection = get_vertical_intersection(position, angle);
+    //     //TODO: this is an end less loop when angle is PI or 0 having the max ray is a temp fix -> rethink iswall()
+    //     i = 0;
+    //     while (i < MAX_RAY)
+    //     {
+    //         if (smart_is_wall(map, vertical_intersection, x_i, y_i, false)) //horizotal and vertical mix up here fixed
+    //             return (vertical_intersection);
+    //         vertical_intersection.x += x_i;
+    //         i++;
+    //     }
+    // }
 
     vertical_intersection = get_vertical_intersection(position, angle);
     horizontal_intersection = get_horizontal_intersection(position, angle);
 
+    //TODO: can we do with one loop?
     i = 0;
-
     while (i < MAX_RAY)
     {
         if (smart_is_wall(map, vertical_intersection, x_i, y_i, false))
@@ -357,8 +363,24 @@ t_dvec2 get_intersection(t_player player, t_map *map, double angle)
 
     // printf("x_v = %lf , y_v = %lf\n", vertical_intersection.x, vertical_intersection.y);
     // printf("x_h = %lf , y_h = %lf\n", horizontal_intersection.x, horizontal_intersection.y);
-
-    return (closer_to_p1(position, vertical_intersection, horizontal_intersection));
+    // ray.hit_pos = closer_to_p1(position, vertical_intersection, horizontal_intersection);
+    if (squared_distance(position, vertical_intersection) < squared_distance(position, horizontal_intersection))
+    {
+        ray.hit_pos = vertical_intersection;
+        if (x_i == 1)
+            ray.facing = NORTH;
+        else
+            ray.facing = SOUTH;
+    }
+    else
+    {
+         ray.hit_pos = horizontal_intersection;
+         if (y_i == 1)
+            ray.facing = WEST;
+        else
+            ray.facing = EAST;
+    }
+    return (ray);
 }
 
 double  deg2rad(double degrees)

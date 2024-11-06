@@ -1,7 +1,7 @@
-WE assets/cobblestone.xpm
-NO assets/cobblestone.xpm
-EA assets/cobblestone.xpm
-SO assets/cobblestone.xpm
+WE assets/West.xpm
+NO assets/North.xpm
+EA assets/East.xpm
+SO assets/South.xpm
 C 60,60,240
 F 50,50,50
 

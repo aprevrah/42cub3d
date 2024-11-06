@@ -143,7 +143,7 @@ void	slice_put(t_data *data, int x, double size, double d_x, t_texture texture)
 		else
 		{
 			//we only want to get the new color if there is a new pixel in the texture
-			if (fmod(i, ((W_HEIGHT * size)/texture.img_height)) < 1 || !got_color)
+			if (1 || fmod(i, ((W_HEIGHT * size)/texture.img_height)) < 1 || !got_color)
 			{
 				color = get_color_normalized(texture, d_x, i/(W_HEIGHT * size));
 				got_color = true;

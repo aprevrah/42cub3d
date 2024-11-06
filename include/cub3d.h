@@ -132,6 +132,22 @@ typedef struct s_ivec2
 	int					y;
 }						t_ivec2;
 
+
+//check if this is norm
+typedef enum {
+    NORTH,
+    EAST,
+    SOUTH,
+    WEST
+} t_direction;
+
+typedef struct s_ray
+{
+	t_dvec2				hit_pos;
+	t_ivec2				face;
+	t_direction			facing;
+}						t_ray;
+
 //debug.c
 void 					printmap(t_map *map);
 void					printtexture_data(t_texture_data texture_data);
@@ -180,7 +196,7 @@ double  get_hi_lenght(t_dvec2 position, double angle);
 double  get_vi_lenght(t_dvec2 position, double angle);
 t_dvec2 get_horizontal_intersection(t_dvec2 position, double angle);
 t_dvec2 get_vertical_intersection(t_dvec2 position, double angle);
-t_dvec2 get_intersection(t_player player, t_map *map, double angle);
+t_ray	get_intersection(t_player player, t_map *map, double angle);
 int is_wall(t_dvec2 intersection, t_map *map);
 double  deg2rad(double degrees);
 double rad2deg(double rad);

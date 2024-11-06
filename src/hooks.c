@@ -42,9 +42,9 @@ int	loop_hook(t_data *data)
 		
 		//render_half_screen(data);
 		render_walls(data);
-		render_map(data);
+		//render_map(data);
 		//render_players(data);
-		render_minimap_rays(data);
+		//render_minimap_rays(data);
 		
 		mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
 		//mlx_put_image_to_window(data->mlx, data->win, data->map->texture_data->textures[0].img, 0, 0);
