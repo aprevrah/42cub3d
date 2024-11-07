@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 17:24:06 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/05 17:14:47 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/07 19:34:54 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static char	*ft_str_append(char *a, char *b)
 }
 
 
-int	is_valid_char(char const s)
+int	is_valid_char(char const s) //! only accept spaces and newline, no tab
 {
 	if (s != '0' && s != '1' && s != 'N' && s != 'O' && s != 'S' && s != 'W' && \
 	s != ' ' && s != '\t' && s != '\n' && s != '\r' && s != '\v'&& s != '\f')
@@ -59,6 +59,8 @@ int	get_dir(char c)
 	else
 		return (6);
 }
+
+
 
 // # also check that there is as least one direction in the map
 static int	fill_map(char const *s, t_map *map)
@@ -300,6 +302,141 @@ void gnl_clear_buffer(int fd)
 	}
 }
 
+// # also check that there is as least one direction in the map
+static int	fill_map2(char const *s, t_map *map, int **arr)
+{
+	(void) map;
+	int	i;
+	int	x;
+	int	y;
+
+	i = 0;
+	x = 0;
+	y = 0;
+
+	while (y < map->height)
+	{
+		while (s[i] && s[i] != '\n')
+		{
+			if (s[i] == '0' || s[i] == 'N' || s[i] == 'O' || s[i] == 'S' || s[i] == 'W')
+				arr[y][x] = 1;
+			if (s[i] == ' ')
+				arr[y][x] = 8;
+			i++;
+			x++;
+		}
+		while (x < map->length)
+		{
+			arr[y][x] = 8;
+			x++;
+		}
+		x = 0;
+		y++;
+		if (s[i] != '\0')
+			i++;
+		else
+			break ;
+	}
+	return (0);
+}
+
+
+//! check minimum a least 3 row and collums;
+
+int	check_sides(int **arr, int height, int length)
+{
+	int x;
+	int y;
+
+	x = 0;
+	y = 0;
+
+	while (x < length)
+	{
+		if (arr[0][x] == 1 || arr[height-1][x] == 1)
+			return (0);
+		x++;
+	}
+	
+	while (y < height)
+	{
+		if (arr[y][0] == 1 || arr[y][length-1] == 1)
+			return (0);
+		y++;
+	}
+	
+	return (1);
+}
+
+int check_middle(int **arr, int height, int length)
+{
+	int x;
+	int y;
+
+	x = 1;
+	y = 1;
+	
+	while (y < height-1)
+	{
+		x = 1;
+		while (x < length-1)
+		{
+			if (arr[y][x] == 1)
+			{
+				if ((arr[y-1][x] != 0 && arr[y-1][x] != 1) || \
+					(arr[y][x+1] != 0 && arr[y][x+1] != 1) || \
+					(arr[y+1][x] != 0 && arr[y+1][x] != 1) || \
+					(arr[y][x-1] != 0 && arr[y][x-1] != 1))
+				{
+					return (0);
+				}
+			}			
+			x++;
+		}
+		y++; 		
+	}
+	return (1);
+}
+
+int	is_wall_enclosed(char *content , t_map *map)
+{
+	int **array;
+	
+	array = new_2d_int_arr(map->height, map->length);
+	if (!array)
+		return (0);
+	
+	fill_map2(content, map,array);
+	
+	int x;
+	int y;
+
+
+	x = 0;
+	y = 0;
+	printf("\nis_wall_enclosed()\n\n");
+	while (y < map->height)
+	{
+		while (x < map->length)
+		{
+			printf("%i", array[y][x]);
+			x++;
+		}
+		printf("\n");
+		x = 0;
+		y++;
+	}
+
+	if (!check_sides(array, map->height, map->length))
+		return (printf("sides\n"), free_2d_arr((void **)array, map->height), 0);
+	
+	if (!check_middle(array, map->height, map->length))
+		return (printf("middle\n"), free_2d_arr((void **)array, map->height), 0);
+
+	free_2d_arr((void **)array, map->height);
+	return (1);
+}
+
 // # function protected and tested with valgrind
 t_map	*parse_map(int fd)
 {
@@ -325,13 +462,19 @@ t_map	*parse_map(int fd)
 	map->arr = new_2d_int_arr(map->height, map->length);
 	if (!map->arr)
 		return (get_next_line(fd, 1), free_texture_data(texture_data), free(map), free(content), NULL);
+	
 	if (fill_map(content, map))
 		return (get_next_line(fd, 1), free_texture_data(texture_data), free(content), free_map(map), NULL);
-	printf("%s\n", content);
-	free(content);
+	
+	if (!is_wall_enclosed(content, map))
+		return (get_next_line(fd, 1), free_texture_data(texture_data), free(content), free_map(map), NULL);
+			
+	
+	printf("\nINPUT\n%s\n", content);
 	printf("\nConverted map\n\n");
+	printmap(map);
 	
 	// maunaly check if the map was correcty filled
-	printmap(map);
+	free(content);
 	return (map);
 }
