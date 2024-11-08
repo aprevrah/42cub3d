@@ -147,6 +147,7 @@ typedef struct s_ray
 	t_dvec2				hit_pos;
 	double				angle;
 	t_ivec2				sign;
+	t_dvec2				delta;
 	t_direction			facing;
 }						t_ray;
 
@@ -196,8 +197,8 @@ void					free_texture_data(t_texture_data *td);
 double get_fract_part(double x);
 double  get_hi_lenght(t_dvec2 position, double angle);
 double  get_vi_lenght(t_dvec2 position, double angle);
-t_dvec2 get_horizontal_intersection(t_dvec2 position, double angle);
-t_dvec2 get_vertical_intersection(t_dvec2 position, double angle);
+t_dvec2 get_horizontal_intersection(t_ray ray);
+t_dvec2 get_vertical_intersection(t_ray ray);
 t_ray	raycast(t_player player, t_map *map, double angle);
 int is_wall(t_dvec2 intersection, t_map *map);
 double  deg2rad(double degrees);
