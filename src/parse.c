@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 17:24:06 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/07 19:34:54 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/07 21:43:16 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,8 @@ static int	fill_map(char const *s, t_map *map)
 		else
 			break ;
 	}
+	if (j == 0)
+		return (printf("missing player position\n"), 1);
 	return (0);
 }
 
@@ -230,6 +232,29 @@ int read_texture_data(int fd, t_texture_data *texture_data)
 	}
 	return (0);
 }
+
+// static char	*read_map_data(int fd, t_map *map)
+// {
+// 	char	*line;
+// 	char	*content;
+	
+// 	content = NULL;
+// 	line = get_next_line(fd, 0);
+// 	while(is_only_whitespace(line))
+// 	{
+// 		free(line);
+// 		line = get_next_line(fd, 0);
+// 	}
+// 	while (line)
+// 	{
+// 		map->height++;
+// 		if (map->length < (int)ft_strlen(line) - 1)
+// 			map->length = (int)ft_strlen(line) - 1;
+// 		content = ft_str_append(content, line);
+// 		line = get_next_line(fd, 0);
+// 	}
+// 	return (content);
+// }
 
 static char	*read_map_data(int fd, t_map *map)
 {

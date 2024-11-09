@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 22:34:46 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/05 17:13:05 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/07 21:51:10 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ int	main(int argc, char **argv)
 		
 	if (init_players(&data.players, data.map))
 		free_and_exit(&data, 1);
-	//free_and_exit(&data, 1);
+	free_and_exit(&data, 1);
 	
 	
 	// if (init_mlx(&data))
