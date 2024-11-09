@@ -59,7 +59,9 @@ int is_wall_tile(t_dvec2 pos, int **map)
     return (0);
 }
 
-void move(void *args) {
+void move(t_data *data, void *args) 
+{
+    (void)data;
     t_move_args *a = (t_move_args *)args;
     t_player *player = a->player;
     t_dvec2 direction = a->direction;
@@ -106,7 +108,9 @@ t_dvec2 vec_rotate(double angle, t_dvec2 vec)
     return (rotated_vec);
 }
 
-void look(void *args) {
+void look(t_data *data, void *args) 
+{
+    (void)data;
     t_look_args *a = (t_look_args *)args;
     t_player *player = a->player;
     double rotation = a->rotation;

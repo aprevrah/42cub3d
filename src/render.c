@@ -84,7 +84,7 @@ double line_length(t_dvec2 a, t_dvec2 b)
     return sqrt((b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y));
 }
 
-void	render_vertical_line(t_data *data , double angle, int width, double angle2)
+void	render_vertical_line(t_data *data , double angle, int x, double angle2)
 {
 	t_ray		ray;
 	double		distance;
@@ -109,7 +109,7 @@ void	render_vertical_line(t_data *data , double angle, int width, double angle2)
 		d_x = ray.hit_pos.x;
 	if (ray.texture == WEST)
 		d_x = ray.hit_pos.y;
-	slice_put(data, width, offset, d_x, data->map->texture_data->textures[ray.texture]);
+	slice_put(data, x, offset, d_x, data->map->texture_data->textures[ray.texture]);
 }
 
 void	render_walls(t_data *data)
@@ -135,7 +135,17 @@ void	render_walls(t_data *data)
 		render_vertical_line(data, vec2angle(data->players[0].orientation) + a_offset, W_WIDTH/2 - w_offset, a_offset);
 		//a_offset += 1.0472/960;
 		w_offset++;
-	}	
+	}
+
+	// int col;
+	// col = 0;
+	// while (col <= W_WIDTH)
+	// {
+	// 	a_offset = atan(tan(PI/4) * w_offset / (W_WIDTH / 2));
+	// 	render_vertical_line(data, col);
+	// 	w_offset++;
+	// 	col++;
+	// }	
 }
 
 /* void	render_wall(t_data *data)

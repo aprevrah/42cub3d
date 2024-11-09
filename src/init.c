@@ -52,6 +52,7 @@ static t_key	init_key_move(int keycode, t_player *player, t_dvec2 direction)
 	key.state = 0;
 	key.code = keycode;
 	key.func = move;
+
 	key.args.move_args.player = player;
     key.args.move_args.direction = direction;
 	return (key);
@@ -64,9 +65,7 @@ static t_key	init_key_look(int keycode, t_player *player, double rotation)
 	key.state = 0;
 	key.code = keycode;
 	key.func = look;
-	key.args.look_args.player = player;
-    key.args.look_args.rotation = rotation;
-	key.func = look;
+
 	key.args.look_args.player = player;
     key.args.look_args.rotation = rotation;
 	return (key);
@@ -120,7 +119,7 @@ int	init_players(t_player **players, t_map *map)
 		return (1);
 	// hard coded for now, use map later
 	(*players)[0].position = (t_dvec2){1.5, 1.5}; 
-	(*players)[0].orientation = (t_dvec2){0, -1};
+	(*players)[0].orientation = (t_dvec2){-1, -1};
 	(*players)[0].movement_speed = (double){0.1};
 	return (0);
 }

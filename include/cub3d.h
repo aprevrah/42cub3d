@@ -107,7 +107,7 @@ typedef union u_args {
 typedef struct s_key {
     int        code;
     int        state;
-    void       (*func)(void *); // Function pointer to different actions
+    void       (*func)(t_data *data, void *); // Function pointer to different actions
     u_args     args;            // Union to hold function-specific arguments
 } t_key;
 
@@ -175,8 +175,8 @@ int						handle_keyup(int keycode, t_key *keys);
 void					free_and_exit(t_data *data, int code);
 
 // oper.c
-void					move(void *args);
-void					look(void *args);
+void					move(t_data *data, void *args);
+void					look(t_data *data, void *args);
 
 // parse.c
 t_map					*parse_map(int fd);

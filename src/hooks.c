@@ -16,6 +16,15 @@
 #include <mlx.h>
 int long loops;
 
+long int delta_time(t_data *data)
+{
+	struct timeval	tv_now;
+
+	if (gettimeofday(&tv_now, NULL))
+		return(printf("gettimeofday failed"), 10);
+	return ((tv_now.tv_sec * 1000 + tv_now.tv_usec/1000) - (data->lastframe.tv_sec * 1000 + data->lastframe.tv_usec/1000));
+}
+
 int	loop_hook(t_data *data)
 {
 	int	i;
@@ -29,7 +38,7 @@ int	loop_hook(t_data *data)
 	{
 		if (data->keys[i].state == 1)
 		{
-			(data->keys[i].func)(&data->keys[i].args);
+			(data->keys[i].func)(data, &data->keys[i].args);
 			keys_pressed++;
 		}
 		i++;
@@ -40,6 +49,7 @@ int	loop_hook(t_data *data)
 		struct timeval	tv_now;
 		long int frametime;
 		
+		//render toggles
 		//render_half_screen(data);
 		render_walls(data);
 		//render_map(data);
