@@ -61,7 +61,6 @@ int is_wall_tile(t_dvec2 pos, int **map)
 
 void move(t_data *data, void *args) 
 {
-    (void)data;
     t_move_args *a = (t_move_args *)args;
     t_player *player = a->player;
     t_dvec2 direction = a->direction;
@@ -74,8 +73,8 @@ void move(t_data *data, void *args)
     
     
     move_vec = vec_dir(player->orientation, direction);
-    player->position.x += move_vec.x * player->movement_speed; 
-    player->position.y += move_vec.y * player->movement_speed; 
+    player->position.x += move_vec.x * player->movement_speed * data->delta_time;
+    player->position.y += move_vec.y * player->movement_speed * data->delta_time;
 
 
     //printf("Moved player to position: (%f, %f)\n", 
@@ -110,12 +109,11 @@ t_dvec2 vec_rotate(double angle, t_dvec2 vec)
 
 void look(t_data *data, void *args) 
 {
-    (void)data;
     t_look_args *a = (t_look_args *)args;
     t_player *player = a->player;
     double rotation = a->rotation;
     
-    player->orientation = vec_rotate(rotation, player->orientation);
+    player->orientation = vec_rotate(rotation * player->look_speed * data->delta_time, player->orientation);
     // printf("Rotated player to: (%f, %f) len: %f\n", 
     // player->orientation.x, player->orientation.y, vec_length(player->orientation));
 }

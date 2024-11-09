@@ -50,6 +50,7 @@ typedef struct s_player
 	t_dvec2 position;
 	t_dvec2	orientation;
 	double	movement_speed;
+	double	look_speed;
 	t_map	*map;
 }						t_player;
 
@@ -121,6 +122,7 @@ typedef struct s_data
 	int					line_length;
 	int					endian;
 	struct timeval		lastframe;
+	unsigned int		delta_time;
 	t_map				*map;
 	t_player			*players;
 	t_key				keys[NUM_OF_KEYS];
@@ -170,6 +172,8 @@ int						init_players(t_player **players, t_map *map);
 int						loop_hook(t_data *data);
 int						handle_keydown(int keycode, t_key *keys);
 int						handle_keyup(int keycode, t_key *keys);
+void					delta_time(t_data *data);
+
 
 // main.c
 void					free_and_exit(t_data *data, int code);

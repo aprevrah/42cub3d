@@ -16,13 +16,16 @@
 #include <mlx.h>
 int long loops;
 
-long int delta_time(t_data *data)
+void delta_time(t_data *data)
 {
 	struct timeval	tv_now;
 
 	if (gettimeofday(&tv_now, NULL))
-		return(printf("gettimeofday failed"), 10);
-	return ((tv_now.tv_sec * 1000 + tv_now.tv_usec/1000) - (data->lastframe.tv_sec * 1000 + data->lastframe.tv_usec/1000));
+		printf("gettimeofday failed");
+	data->delta_time = (tv_now.tv_sec * 1000 + tv_now.tv_usec/1000) - (data->lastframe.tv_sec * 1000 + data->lastframe.tv_usec/1000);
+	printf("frametime: %dms	fps: %d loop: %ld\n", data->delta_time, 1000/data->delta_time, loops);
+	data->lastframe = tv_now;
+	loops++;
 }
 
 int	loop_hook(t_data *data)
@@ -46,8 +49,6 @@ int	loop_hook(t_data *data)
 	if (1)
 	{
 		//ft_bzero(data->addr, W_HEIGHT * data->line_length);
-		struct timeval	tv_now;
-		long int frametime;
 		
 		//render toggles
 		//render_half_screen(data);
@@ -58,12 +59,8 @@ int	loop_hook(t_data *data)
 		
 		mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
 		//mlx_put_image_to_window(data->mlx, data->win, data->map->texture_data->textures[0].img, 0, 0);
-		if (gettimeofday(&tv_now, NULL))
-			printf("gettimeofday failed");
-		frametime = (tv_now.tv_sec * 1000 + tv_now.tv_usec/1000) - (data->lastframe.tv_sec * 1000 + data->lastframe.tv_usec/1000);
-		printf("frametime: %ldms	fps: %ld loop: %li\n", frametime, 1000/frametime, loops);
-		data->lastframe = tv_now;
-		loops++;
+		delta_time(data);
+		
 	}
 	return (0);
 }

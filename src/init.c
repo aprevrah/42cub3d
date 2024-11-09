@@ -48,7 +48,6 @@ static t_key	init_key_move(int keycode, t_player *player, t_dvec2 direction)
 {
 	t_key	key;
 	
-	
 	key.state = 0;
 	key.code = keycode;
 	key.func = move;
@@ -79,8 +78,8 @@ int	init_keys(t_key *keys, t_player *players)
 	keys[2] = init_key_move(XK_a, &players[0], (t_dvec2){1.0, 0.0});
 	keys[3] = init_key_move(XK_s, &players[0], (t_dvec2){0.0, -1.0});
 	keys[4] = init_key_move(XK_d, &players[0], (t_dvec2){-1.0, 0.0});
-	keys[5] = init_key_look(XK_Right, &players[0], (double)0.05);
-	keys[6] = init_key_look(XK_Left, &players[0], (double)-0.05);
+	keys[5] = init_key_look(XK_Right, &players[0], (double)1.0);
+	keys[6] = init_key_look(XK_Left, &players[0], (double)-1.0);
 	
 	// keys[9] = init_key(XK_Up, translate, &players[0], nv(0, -T_SPEED, 0));
 	// keys[10] = init_key(XK_Down, translate, &players[0], nv(0, T_SPEED, 0));
@@ -119,7 +118,8 @@ int	init_players(t_player **players, t_map *map)
 		return (1);
 	// hard coded for now, use map later
 	(*players)[0].position = (t_dvec2){1.5, 1.5}; 
-	(*players)[0].orientation = (t_dvec2){-1, -1};
-	(*players)[0].movement_speed = (double){0.1};
+	(*players)[0].orientation = (t_dvec2){1, 1};
+	(*players)[0].movement_speed = (double){0.003};
+	(*players)[0].look_speed = (double){0.003};
 	return (0);
 }
