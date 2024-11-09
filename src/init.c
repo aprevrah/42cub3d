@@ -21,29 +21,6 @@
 #include <string.h>
 #include <unistd.h>
 
-// static t_key	init_key(int keycode, void	(*func)(void))
-// {
-// 	t_key	key;
-
-// 	key.state = 0;
-// 	key.code = keycode;
-// 	key.func = func;
-// 	key.args = 0;
-// 	return (key);
-// }
-
-//static t_key	init_key_look(int keycode, t_player *player, double rotation)
-// static t_key	init_key(int keycode, void	(*func)(void))
-// {
-// 	t_key	key;
-
-// 	key.state = 0;
-// 	key.code = keycode;
-// 	key.func = func;
-// 	key.args = 0;
-// 	return (key);
-// }
-
 static t_key	init_key_move(int keycode, t_player *player, t_dvec2 direction)
 {
 	t_key	key;
@@ -116,7 +93,7 @@ int	init_players(t_player **players, t_map *map)
 	*players = (t_player *)ft_calloc(1, sizeof(t_player));
 	if (!*players)
 		return (1);
-	// hard coded for now, use map later
+	// defaults hard coded for now, use map later
 	(*players)[0].position = (t_dvec2){1.5, 1.5}; 
 	(*players)[0].orientation = (t_dvec2){1, 1};
 	(*players)[0].movement_speed = (double){0.003};

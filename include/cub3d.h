@@ -154,6 +154,7 @@ typedef struct s_ray
 }						t_ray;
 
 //debug.c
+void					debug_render_textures(t_data *data, unsigned int count);
 void 					printmap(t_map *map);
 void					printtexture_data(t_texture_data texture_data);
 
