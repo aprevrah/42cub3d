@@ -101,15 +101,15 @@ void	render_vertical_line(t_data *data , double angle, int width, double angle2)
 	// 	offset = (double)W_HEIGHT/2;
 
 	//make sure orientation of texture is correct
-	if (ray.facing == NORTH)
-		d_x = ray.hit_pos.y;
-	if (ray.facing == EAST)
-		d_x = ray.hit_pos.x;
-	if (ray.facing == SOUTH)
-		d_x = 1 - ray.hit_pos.y;
-	if (ray.facing == WEST)
+	if (ray.texture == NORTH)
 		d_x = 1 - ray.hit_pos.x;
-	slice_put(data, width, offset, d_x, data->map->texture_data->textures[ray.facing]);
+	if (ray.texture == EAST)
+		d_x = 1 - ray.hit_pos.y;
+	if (ray.texture == SOUTH)
+		d_x = ray.hit_pos.x;
+	if (ray.texture == WEST)
+		d_x = ray.hit_pos.y;
+	slice_put(data, width, offset, d_x, data->map->texture_data->textures[ray.texture]);
 }
 
 void	render_walls(t_data *data)

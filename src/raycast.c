@@ -117,6 +117,13 @@ t_dvec2 get_horizontal_intersection(t_ray ray)
     //else
     //    d_y = 1 - get_fract_part(position.y);
 
+    // Use fabs to check if the difference is within a small range (epsilon) // ! change
+    if (fabs(ray.angle - 0) < EPSILON || fabs(ray.angle - PI) < EPSILON)
+    {
+        intersection.x = position.x;
+        intersection.y = floor(position.y) + (ray.sign.y  - 1) / 2;
+        return (intersection);
+    }
 
     if (ray.sign.y == -1)
     {
@@ -127,13 +134,6 @@ t_dvec2 get_horizontal_intersection(t_ray ray)
     {
         d_x = ((1 - get_fract_part(position.y)) / fabs(tan(ray.angle)));
         d_y = 1 - get_fract_part(position.y);
-    }
- 
-    if (fabs(ray.angle - 0) < EPSILON || fabs(ray.angle - PI) < EPSILON)
-    {
-        intersection.x = -1;
-        intersection.y = -1;
-        return (intersection);
     }
 
     if (ray.angle == PI/2 || ray.angle == 3*PI/2)
@@ -158,8 +158,8 @@ t_dvec2 get_vertical_intersection(t_ray ray)
     // Use fabs to check if the difference is within a small range (epsilon) // ! change
     if (fabs(ray.angle - PI/2) < EPSILON || fabs(ray.angle - 3*PI/2) < EPSILON)
     {
-        intersection.x = -1;
-        intersection.y = -1;
+        intersection.x = floor(position.x) + (ray.sign.x  - 1) / 2;
+        intersection.y = position.y;
         return (intersection);
     }
 
@@ -392,17 +392,17 @@ t_ray raycast(t_player player, t_map *map, double angle)
     {
         ray.hit_pos = vertical_intersection;
         if (ray.sign.x == 1)
-            ray.facing = NORTH;
+            ray.texture = WEST;
         else
-            ray.facing = SOUTH;
+            ray.texture = EAST;
     }
     else
     {
          ray.hit_pos = horizontal_intersection;
          if (ray.sign.y == 1)
-            ray.facing = WEST;
+            ray.texture = NORTH;
         else
-            ray.facing = EAST;
+            ray.texture = SOUTH;
     }
     return (ray);
 }

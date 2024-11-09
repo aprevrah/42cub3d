@@ -148,7 +148,7 @@ typedef struct s_ray
 	double				angle;
 	t_ivec2				sign;
 	t_dvec2				delta;
-	t_direction			facing;
+	t_direction			texture;
 }						t_ray;
 
 //debug.c
@@ -209,8 +209,5 @@ void	render_half_screen(t_data *data);
 void	render_wall(t_data *data);
 void	render_walls(t_data *data);
 void	render_minimap_rays(t_data *data);
-
-
-
 
 #endif
