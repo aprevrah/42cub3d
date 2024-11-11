@@ -1,17 +1,20 @@
 /* XPM */
 static const char *west_8x8_xpm[] = {
-"8 8 3 1",
+"8 8 6 1",
 "  c #FFFFFF",
 ": c #000000",
-". c #FF5900",  /* Light blue color */
+"N c #0045AD",
+"E c #B90000",
+"S c #009B48",
+"W c #FF5900",
 
 /* Pixel data */
-"........",
-".:....:.",
-".:....:.",
-".:..:.:.",
-".:.::.:.",
-".::..::.",
-".:....:.",
-"....... "
+"WWWWWWWW",
+"W:WWWW:W",
+"W:WWWW:W",
+"W:WW:W:W",
+"W:W::W:W",
+"W::WW::W",
+"W:WWWW:W",
+"WWWWWWW "
 };

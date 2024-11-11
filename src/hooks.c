@@ -46,22 +46,18 @@ int	loop_hook(t_data *data)
 		}
 		i++;
 	}
-	if (1)
-	{
-		//ft_bzero(data->addr, W_HEIGHT * data->line_length);
-		
-		//render toggles
-		//render_half_screen(data);
-		render_walls(data);
-		//render_map(data);
-		//render_players(data);
-		//render_minimap_rays(data);
-		
-		mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
-		debug_render_textures(data, 4);
-		delta_time(data);
-		
-	}
+	//ft_bzero(data->addr, W_HEIGHT * data->line_length);
+	
+	//render toggles
+	//render_half_screen(data);
+	render_walls(data);
+	//render_map(data);
+	//render_players(data);
+	//render_minimap_rays(data);
+	
+	mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
+	debug_render_textures(data, 4);
+	delta_time(data);
 	return (0);
 }
 

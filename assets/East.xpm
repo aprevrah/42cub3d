@@ -1,17 +1,20 @@
 /* XPM */
 static const char *east_8x8_xpm[] = {
-"8 8 3 1",
+"8 8 6 1",
 "  c #FFFFFF",
 ": c #000000",
-". c #B90000",  /* Light blue color */
+"N c #0045AD",
+"E c #B90000",
+"S c #009B48",
+"W c #FF5900",
 
 /* Pixel data */
-"........",
-".::::::.",
-".:......",
-".:......",
-".:::::..",
-".:......",
-".::::::.",
-"....... "
+"EEEEEEEE",
+"E::::::E",
+"E:EEEEEE",
+"E:EEEEEE",
+"E:::::EE",
+"E:EEEEEE",
+"E::::::E",
+"EEEEEEE "
 };
