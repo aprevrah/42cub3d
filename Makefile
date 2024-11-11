@@ -65,4 +65,4 @@ prof: fclean
 	gprof -p -b $(PROFILE_DIR)/$(NAME) $(PROFILE_DIR)/gmon.out
 	@echo "${GREEN}For more stats, use this command:${NC}"
 	@echo "${CYAN}gprof $(PROFILE_DIR)/$(NAME) $(PROFILE_DIR)/gmon.out${NC}"
-.PHONY: all clean fclean re gprof
+.PHONY: all clean fclean re prof
