@@ -31,7 +31,7 @@
 # define PI 3.14159265358979323
 # define EPSILON 0.000001
 # define SCALE 70
-# define MAX_RAY 100
+# define MAX_RAY 50
 
 
 

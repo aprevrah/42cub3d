@@ -95,7 +95,7 @@ int	init_players(t_player **players, t_map *map)
 		return (1);
 	// defaults hard coded for now, use map later
 	(*players)[0].position = (t_dvec2){1.5, 1.5}; 
-	(*players)[0].orientation = (t_dvec2){1, 1};
+	(*players)[0].orientation = (t_dvec2){1, 0};
 	(*players)[0].movement_speed = (double){0.003};
 	(*players)[0].look_speed = (double){0.003};
 	return (0);

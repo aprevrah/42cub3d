@@ -314,6 +314,27 @@ void set_sign(t_ray *ray)
         ray->sign.y = 1;
 }
 
+void ray_cal_hit_and_dir(t_ray *ray, t_dvec2 vertical_intersection, t_dvec2 horizontal_intersection)
+{
+
+    if (squared_distance(ray->start_pos, vertical_intersection) < squared_distance(ray->start_pos, horizontal_intersection))
+    {
+        ray->hit_pos = vertical_intersection;
+        if (ray->sign.x == 1)
+            ray->texture = WEST;
+        else
+            ray->texture = EAST;
+    }
+    else
+    {
+         ray->hit_pos = horizontal_intersection;
+         if (ray->sign.y == 1)
+            ray->texture = NORTH;
+        else
+            ray->texture = SOUTH;
+    }
+}
+
 t_ray raycast(t_player player, t_map *map, double angle)
 {
     t_ray   ray;
@@ -331,35 +352,34 @@ t_ray raycast(t_player player, t_map *map, double angle)
     ray.delta.x = get_dx(angle);
     ray.delta.y = get_dy(angle);
 
+    //TODO: rethink this hacky bs... this method creates visual bugs when out of map and look dir {1, 0}
+    horizontal_intersection = (t_dvec2){ray.start_pos.x + MAX_RAY, ray.start_pos.y + MAX_RAY};
+    vertical_intersection = (t_dvec2){ray.start_pos.x + MAX_RAY, ray.start_pos.y + MAX_RAY};
     //TODO: We do need this but it could be in the loops below?
-
-    // if (angle == PI/2 || angle == 3*PI/2)
-    // {
-    //     horizontal_intersection = get_horizontal_intersection(ray.start_pos, angle);
-    //     return (horizontal_intersection);
-    //     //TODO: this is an end less loop when angle is PI/2 or ... having the max ray is a temp fix -> rethink iswall()
-    //     i = 0;
-    //     while (i < MAX_RAY)
-    //     {
-    //         if (smart_is_wall(map, horizontal_intersection, ray.sign.x, y_i, true))
-    //             return (horizontal_intersection);
-    //         horizontal_intersection.y += y_i;
-    //         i++;
-    //     }
-    // }
-    // if (angle == 0 || angle == PI)
-    // {
-    //     vertical_intersection = get_vertical_intersection(ray.start_pos, angle);
-    //     //TODO: this is an end less loop when angle is PI or 0 having the max ray is a temp fix -> rethink iswall()
-    //     i = 0;
-    //     while (i < MAX_RAY)
-    //     {
-    //         if (smart_is_wall(map, vertical_intersection, ray.sign.x, y_i, false)) //horizotal and vertical mix up here fixed
-    //             return (vertical_intersection);
-    //         vertical_intersection.x += ray.sign.x;
-    //         i++;
-    //     }
-    // }
+    if (angle == PI/2 || angle == 3*PI/2)
+    {
+        horizontal_intersection = get_horizontal_intersection(ray);
+        i = 0;
+        while (i < MAX_RAY)
+        {
+            if (smart_is_wall(map, horizontal_intersection, ray.sign.x, ray.sign.y, true))
+                return (ray_cal_hit_and_dir(&ray, vertical_intersection, horizontal_intersection), ray);
+            horizontal_intersection.y += ray.sign.y;
+            i++;
+        }
+    }
+    else if (angle == 0 || angle == PI)
+    {
+        vertical_intersection = get_vertical_intersection(ray);
+        i = 0;
+        while (i < MAX_RAY)
+        {
+            if (smart_is_wall(map, vertical_intersection, ray.sign.x, ray.sign.y, false))
+                return (ray_cal_hit_and_dir(&ray, vertical_intersection, horizontal_intersection), ray);
+            vertical_intersection.x += ray.sign.x;
+            i++;
+        }
+    }
 
     vertical_intersection = get_vertical_intersection(ray);
     horizontal_intersection = get_horizontal_intersection(ray);
@@ -388,22 +408,7 @@ t_ray raycast(t_player player, t_map *map, double angle)
     // printf("x_v = %lf , y_v = %lf\n", vertical_intersection.x, vertical_intersection.y);
     // printf("x_h = %lf , y_h = %lf\n", horizontal_intersection.x, horizontal_intersection.y);
     // ray.hit_pos = closer_to_p1(ray.start_pos, vertical_intersection, horizontal_intersection);
-    if (squared_distance(ray.start_pos, vertical_intersection) < squared_distance(ray.start_pos, horizontal_intersection))
-    {
-        ray.hit_pos = vertical_intersection;
-        if (ray.sign.x == 1)
-            ray.texture = WEST;
-        else
-            ray.texture = EAST;
-    }
-    else
-    {
-         ray.hit_pos = horizontal_intersection;
-         if (ray.sign.y == 1)
-            ray.texture = NORTH;
-        else
-            ray.texture = SOUTH;
-    }
+    ray_cal_hit_and_dir(&ray, vertical_intersection, horizontal_intersection); 
     return (ray);
 }
 
