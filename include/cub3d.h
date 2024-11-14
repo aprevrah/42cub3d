@@ -31,7 +31,7 @@
 # define PI 3.14159265358979323
 # define EPSILON 0.000001
 # define SCALE 70
-# define MAX_RAY 20
+# define MAX_RAY 50
 
 
 
@@ -50,6 +50,7 @@ typedef struct s_player
 	t_dvec2 position;
 	t_dvec2	orientation;
 	double	movement_speed;
+	double	look_speed;
 	t_map	*map;
 }						t_player;
 
@@ -107,7 +108,7 @@ typedef union u_args {
 typedef struct s_key {
     int        code;
     int        state;
-    void       (*func)(void *); // Function pointer to different actions
+    void       (*func)(t_data *data, void *); // Function pointer to different actions
     u_args     args;            // Union to hold function-specific arguments
 } t_key;
 
@@ -121,6 +122,7 @@ typedef struct s_data
 	int					line_length;
 	int					endian;
 	struct timeval		lastframe;
+	unsigned int		delta_time;
 	t_map				*map;
 	t_player			*players;
 	t_key				keys[NUM_OF_KEYS];
@@ -132,7 +134,27 @@ typedef struct s_ivec2
 	int					y;
 }						t_ivec2;
 
+
+//check if this is norm
+typedef enum {
+    NORTH,
+    EAST,
+    SOUTH,
+    WEST
+} t_direction;
+
+typedef struct s_ray
+{
+	t_dvec2				start_pos;
+	t_dvec2				hit_pos;
+	double				angle;
+	t_ivec2				sign;
+	t_dvec2				delta;
+	t_direction			texture;
+}						t_ray;
+
 //debug.c
+void					debug_render_textures(t_data *data, unsigned int count);
 void 					printmap(t_map *map);
 void					printtexture_data(t_texture_data texture_data);
 
@@ -151,13 +173,15 @@ int						init_players(t_player **players, t_map *map);
 int						loop_hook(t_data *data);
 int						handle_keydown(int keycode, t_key *keys);
 int						handle_keyup(int keycode, t_key *keys);
+void					delta_time(t_data *data);
+
 
 // main.c
 void					free_and_exit(t_data *data, int code);
 
 // oper.c
-void					move(void *args);
-void					look(void *args);
+void					move(t_data *data, void *args);
+void					look(t_data *data, void *args);
 
 // parse.c
 t_map					*parse_map(int fd);
@@ -178,9 +202,9 @@ void					free_texture_data(t_texture_data *td);
 double get_fract_part(double x);
 double  get_hi_lenght(t_dvec2 position, double angle);
 double  get_vi_lenght(t_dvec2 position, double angle);
-t_dvec2 get_horizontal_intersection(t_dvec2 position, double angle);
-t_dvec2 get_vertical_intersection(t_dvec2 position, double angle);
-t_dvec2 get_intersection(t_player player, t_map *map, double angle);
+t_dvec2 get_horizontal_intersection(t_ray ray);
+t_dvec2 get_vertical_intersection(t_ray ray);
+t_ray	raycast(t_player player, t_map *map, double angle);
 int is_wall(t_dvec2 intersection, t_map *map);
 double  deg2rad(double degrees);
 double rad2deg(double rad);
@@ -190,8 +214,5 @@ void	render_half_screen(t_data *data);
 void	render_wall(t_data *data);
 void	render_walls(t_data *data);
 void	render_minimap_rays(t_data *data);
-
-
-
 
 #endif

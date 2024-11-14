@@ -17,10 +17,10 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-int get_color_normalized(t_texture texture, double x, double y) 
+int	get_color_normalized(t_texture texture, double x, double y) 
 {
-	int x_pixel;
-	int y_pixel;
+	int	x_pixel;
+	int	y_pixel;
 
 	x = x - floor(x);
 	y = y - floor(y);
@@ -29,7 +29,7 @@ int get_color_normalized(t_texture texture, double x, double y)
 	return(get_pixel_color(texture, x_pixel, y_pixel));
 }
 
-int get_pixel_color(t_texture texture, int x, int y) 
+int	get_pixel_color(t_texture texture, int x, int y) 
 {
 	if (x < 0 || y < 0 || x >= texture.img_width || y >= texture.img_height)
 	{
@@ -118,12 +118,14 @@ void	line_put(t_data *data, t_ivec2 a, t_ivec2 b, int color)
 	}
 	draw_straight(data, a, b, color);
 }
+
 void	slice_put(t_data *data, int x, double size, double d_x, t_texture texture)
 {
 	bool	got_color;
-	int color;
-	int i;
-	int y;
+	int		color;
+	int		i;
+	int		y;
+
 	i = 0;
 	if (size > 1)
 		i = -(W_HEIGHT*0.5 - W_HEIGHT*0.5 *size);
@@ -134,16 +136,15 @@ void	slice_put(t_data *data, int x, double size, double d_x, t_texture texture)
 	//int divisor = (W_HEIGHT * size) / texture.img_height;
 	while(y < W_HEIGHT)
 	{
-		if (y < W_HEIGHT*0.5 - W_HEIGHT*0.5 * size){
+		if (y < W_HEIGHT*0.5 - W_HEIGHT*0.5 * size)
 			my_mlx_pixel_put(data, x, y, data->map->texture_data->col_C);
-			}
-		else if (y > W_HEIGHT*0.5 + W_HEIGHT*0.5 * size){
+		else if (y > W_HEIGHT*0.5 + W_HEIGHT*0.5 * size)
 			my_mlx_pixel_put(data, x, y, data->map->texture_data->col_F);
-			}
 		else
 		{
 			//we only want to get the new color if there is a new pixel in the texture
-			if (fmod(i, ((W_HEIGHT * size)/texture.img_height)) < 1 || !got_color)
+			// 1 optimization off, 0 optimization on 
+			if (1 || fmod(i, ((W_HEIGHT * size)/texture.img_height)) < 1 || !got_color)
 			{
 				color = get_color_normalized(texture, d_x, i/(W_HEIGHT * size));
 				got_color = true;

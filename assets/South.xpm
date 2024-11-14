@@ -1,0 +1,20 @@
+/* XPM */
+static const char *south_8x8_xpm[] = {
+"8 8 6 1",
+"  c #FFFFFF",
+": c #000000",
+"N c #0045AD",
+"E c #B90000",
+"W c #FF5900",
+"S c #009B48",
+
+/* Pixel data */
+"SSSSSSSS",
+"SS::::SS",
+"S:SSSSSS",
+"SS::::SS",
+"SSSSSS:S",
+"S:SSSS:S",
+"SS::::SS",
+"SSSSSSS "
+};

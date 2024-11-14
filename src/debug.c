@@ -11,6 +11,22 @@
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
+#include <mlx.h>
+
+void debug_render_textures(t_data *data, unsigned int count)
+{
+	unsigned int i;
+	int x;
+
+	x = 0;
+	i = 0;
+	while (i < count)
+	{
+		mlx_put_image_to_window(data->mlx, data->win, data->map->texture_data->textures[i].img, x, 0);
+		x += data->map->texture_data->textures[i].img_width;
+		i++;
+	}
+}
 
 void printmap(t_map *map)
 {
