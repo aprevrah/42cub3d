@@ -28,10 +28,32 @@ void delta_time(t_data *data)
 	loops++;
 }
 
+int handle_mousemove(int x, int y, t_data *data)
+{
+	static int dx;
+	t_ivec2 win_mid;
+	t_look_args look_args;
+
+	(void)y;
+	win_mid.x = W_WIDTH/2;
+	win_mid.y = W_HEIGHT/2;
+	dx = (x - win_mid.x);
+	if (dx)
+	{
+		mlx_mouse_move(data->mlx, data->win, win_mid.x, win_mid.y);
+		look_args.player = &data->players[0];
+		look_args.rotation = dx * data->players[0].look_speed * 10;
+		look(data, &look_args);
+	}
+	return (0);
+}
+
+
 int	loop_hook(t_data *data)
 {
 	int	i;
 	int	keys_pressed;
+	//static bool mouse = true;
 
 	keys_pressed = 0;
 	i = 0;
@@ -51,9 +73,9 @@ int	loop_hook(t_data *data)
 	//render toggles
 	//render_half_screen(data);
 	render_walls(data);
-	render_map(data);
+	//render_map(data);
 	//render_players(data);
-	render_minimap_rays(data);
+	//render_minimap_rays(data);
 
 	mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
 	//debug_render_textures(data, 4);
