@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 22:34:46 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/07 21:51:10 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/15 14:53:45 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,17 @@ void	free_and_exit(t_data *data, int code)
 	 	free(data->players);
 	get_next_line(data->fd, 1);
 	if (data->map && data->map->texture_data)
+	{
+		// if(data->map->texture_data->textures[0].img)
+		// 	mlx_destroy_image(data->mlx, data->map->texture_data->textures[0].img);
+		// if(data->map->texture_data->textures[1].img)
+		// 	mlx_destroy_image(data->mlx, data->map->texture_data->textures[1].img);
+		// if(data->map->texture_data->textures[2].img)
+		// 	mlx_destroy_image(data->mlx, data->map->texture_data->textures[2].img);
+		// if(data->map->texture_data->textures[3].img)
+		// 	mlx_destroy_image(data->mlx, data->map->texture_data->textures[3].img);
 		free_texture_data(data->map->texture_data);
+	}
 	if (data->map)
 		free_map(data->map);
 	if (data->img)
@@ -111,7 +121,7 @@ int	main(int argc, char **argv)
 		
 	if (init_players(&data.players, data.map))
 		free_and_exit(&data, 1);
-	free_and_exit(&data, 1);
+	//free_and_exit(&data, 1);
 	
 	
 	// if (init_mlx(&data))
@@ -133,4 +143,8 @@ int	main(int argc, char **argv)
 	// load_texture(data.map->texture_data->path_WE, &data, &data.map->texture_data->textures[3]);
 	// mlx_loop_hook(data.mlx, loop_hook, &data);
 	// mlx_loop(data.mlx);
+
+
+	free_and_exit(&data, 1);
+
 }
