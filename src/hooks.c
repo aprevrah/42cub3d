@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 23:22:56 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/20 11:58:08 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/20 12:13:55 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void delta_time(t_data *data)
 	if (gettimeofday(&tv_now, NULL))
 		printf("gettimeofday failed");
 	data->delta_time = (tv_now.tv_sec * 1000 + tv_now.tv_usec/1000) - (data->lastframe.tv_sec * 1000 + data->lastframe.tv_usec/1000);
-	printf("frametime: %dms	fps: %d loop: %ld\n", data->delta_time, 1000/data->delta_time, loops);
+	//printf("frametime: %dms	fps: %d loop: %ld\n", data->delta_time, 1000/data->delta_time, loops);
 	data->lastframe = tv_now;
 	loops++;
 }

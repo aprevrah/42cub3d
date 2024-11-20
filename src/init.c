@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 23:25:37 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/20 11:58:52 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/20 12:12:45 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,7 +167,7 @@ int	init_players(t_player **players, t_map *map)
 
 	(*players)[0].position = get_player_pos(map); 
 	(*players)[0].orientation = get_player_orientation(map);
-	(*players)[0].movement_speed = (double){0.1};
+	(*players)[0].movement_speed = (double){0.003};
 	(*players)[0].look_speed = (double){0.003};
 
 	return (0);
