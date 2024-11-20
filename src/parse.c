@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 17:24:06 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/16 15:26:40 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/20 19:40:43 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,22 +160,65 @@ int get_color(char *s, unsigned int *color)
 	return (0);
 }
 
+// int get_key(unsigned int *i, char *s, char **path)
+// {
+// 	unsigned int start;
+
+// 	skip_until(s, i, WHITESPACE, true);
+// 	if (!skip_until(s, i, WHITESPACE, false))
+// 		return (printf("Unable to parse: %s", s), 1);
+// 	start = *i;
+// 	skip_until(s, i, "\n", true);
+// 	if (*path)
+// 		return (printf("Duplicate config: %s", s), 1);
+// 	*path = ft_substr(s, start, *i - start);
+// 	if (!path)
+// 		return (printf("Malloc failed."), 1);
+// 	return (0);
+// }
+
+int count_words(char *str)
+{
+    int i;
+    int count;
+    int in_word;
+
+    i = 0;
+    count = 0;
+    in_word = 0;
+    while (str[i])
+    {
+        if (str[i] == ' ' || str[i] == '\t' || str[i] == '\n' || \
+            str[i] == '\r' || str[i] == '\v' || str[i] == '\f')
+            in_word = 0;
+        else if (!in_word)
+        {
+            in_word = 1; 
+            count++;
+        }
+        i++;
+    }
+    return (count);
+}
+
+
 int get_key(unsigned int *i, char *s, char **path)
 {
-	unsigned int start;
+	// unsigned int start;
+	(void) path;
+	(void) i;
+	// # count words, if more than 2 words -> error
+	if (count_words(s) != 2)
+	{
+		printf("test 12\n");	
+		return (1);
+	}
 
-	skip_until(s, i, WHITESPACE, true);
-	if (!skip_until(s, i, WHITESPACE, false))
-		return (printf("Unable to parse: %s", s), 1);
-	start = *i;
-	skip_until(s, i, "\n", true);
-	if (*path)
-		return (printf("Duplicate config: %s", s), 1);
-	*path = ft_substr(s, start, *i - start);
-	if (!path)
-		return (printf("Malloc failed."), 1);
-	return (0);
+	return (1);
+
+	
 }
+
 
 bool is_only_whitespace(char *s)
 {
@@ -205,7 +248,7 @@ int key_val(char *line, t_texture_data *texture_data)
 		return (get_color(&line[i], &texture_data->col_C));
 	else if (!ft_strncmp(&line[i], "F", 1))
 		return (get_color(&line[i], &texture_data->col_F));
-	printf("Unable to parse: %s", line);
+	printf("Error: Unable to parse: %s", line);
 	return (1);
 }
 
