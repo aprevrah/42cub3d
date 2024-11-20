@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 23:25:37 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/10/28 15:09:46 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/20 12:12:45 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,16 +87,88 @@ int	init_mlx(t_data *data)
 	return (0);
 }
 
+t_dvec2 get_player_pos(t_map *map)
+{
+	int i;
+	int j;
+	t_dvec2 pos;
+
+	i = 0;
+	while (i < map->height)
+	{
+		j = 0;
+		while (j < map->length)
+		{
+			if (map->arr[i][j] >= 3 && map->arr[i][j] <= 6)	
+			{
+				pos.y = i + 0.5;
+				pos.x = j + 0.5;
+				return (pos);
+			}
+			j++;
+		}
+		i++;
+	}
+	pos.x = 1.5;
+	pos.y = 1.5;
+	return (pos);
+}
+
+t_dvec2 get_player_orientation(t_map *map)
+{
+	int i;
+	int j;
+	t_dvec2 orientation;
+
+	i = 0;
+	while (i < map->height)
+	{
+		j = 0;
+		while (j < map->length)
+		{
+			if (map->arr[i][j] == 3)
+			{
+				orientation.x = 0;
+				orientation.y = -1;
+				return (orientation);
+			}
+			if (map->arr[i][j] == 4)
+			{
+				orientation.x = 1;
+				orientation.y = 0;
+				return (orientation);
+			}
+			if (map->arr[i][j] == 5)
+			{
+				orientation.x = 0;
+				orientation.y = 1;
+				return (orientation);
+			}
+			if (map->arr[i][j] == 3)
+			{
+				orientation.x = -1;
+				orientation.y = 0;
+				return (orientation);
+			}
+			j++;
+		}
+		i++;
+	}
+	orientation.x = 1.5;
+	orientation.y = 1.5;
+	return (orientation);
+}
+
 int	init_players(t_player **players, t_map *map)
 {
-	(void)map;
 	*players = (t_player *)ft_calloc(1, sizeof(t_player));
 	if (!*players)
 		return (1);
-	// defaults hard coded for now, use map later
-	(*players)[0].position = (t_dvec2){1.5, 1.5}; 
-	(*players)[0].orientation = (t_dvec2){1, 0};
+
+	(*players)[0].position = get_player_pos(map); 
+	(*players)[0].orientation = get_player_orientation(map);
 	(*players)[0].movement_speed = (double){0.003};
 	(*players)[0].look_speed = (double){0.003};
+
 	return (0);
 }

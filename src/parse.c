@@ -3,14 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 17:24:06 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/09/30 18:46:51 by aprevrha         ###   ########.fr       */
+/*   Updated: 2024/11/16 15:26:40 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
+
+
+// int	is_map_enclosed(t_map *map)
+// {
+
+
+	
+// }
 
 static char	*ft_str_append(char *a, char *b)
 {
@@ -31,21 +39,56 @@ static char	*ft_str_append(char *a, char *b)
 	return (a = NULL, b = NULL, str);
 }
 
+
+int	is_valid_char(char const s) //! only accept spaces and newline, no tab
+{
+	if (s != '0' && s != '1' && s != 'N' && s != 'O' && s != 'S' && s != 'W' && \
+	s != ' ' && s != '\t' && s != '\n' && s != '\r' && s != '\v'&& s != '\f')
+		return (0);
+	return (1);
+}	
+
+int	get_dir(char c)
+{
+	if (c == 'N')
+		return (3);
+	if (c == 'O')
+		return (4);
+	if (c == 'S')
+		return (5);
+	else
+		return (6);
+}
+
+
+
+// # also check that there is as least one direction in the map
 static int	fill_map(char const *s, t_map *map)
 {
+	(void) map;
 	int	i;
 	int	x;
 	int	y;
+	int j;
 
 	i = 0;
 	x = 0;
 	y = 0;
+	j = 0;
+
 	while (y < map->height)
 	{
 		while (s[i] && s[i] != '\n')
 		{
+			if (!is_valid_char(s[i]) || j > 1)
+				return (printf("unvalid char in map\n"), 1);
 			if (s[i] == '0')
 				map->arr[y][x] = 1;
+			if (s[i] == 'N' || s[i] == 'O' || s[i] == 'S' || s[i] == 'W')
+			{
+				j++;
+				map->arr[y][x] = get_dir(s[i]);
+			}
 			i++;
 			x++;
 		}
@@ -56,7 +99,9 @@ static int	fill_map(char const *s, t_map *map)
 		else
 			break ;
 	}
-	return (1);
+	if (j == 0)
+		return (printf("missing player position\n"), 1);
+	return (0);
 }
 
 # define WHITESPACE " \t\n\r\v\f"
@@ -164,8 +209,6 @@ int key_val(char *line, t_texture_data *texture_data)
 	return (1);
 }
 
-
-
 int read_texture_data(int fd, t_texture_data *texture_data)
 {
 	char	*line;
@@ -179,7 +222,9 @@ int read_texture_data(int fd, t_texture_data *texture_data)
 	configs = 0;
 	while (configs < 6)
 	{
-		line = get_next_line(fd);
+		line = get_next_line(fd, 0);
+		if (!line)
+			return (1);
 		status = key_val(line, texture_data);
 		free(line);
 		if (status == 0)
@@ -189,6 +234,29 @@ int read_texture_data(int fd, t_texture_data *texture_data)
 	}
 	return (0);
 }
+
+// static char	*read_map_data(int fd, t_map *map)
+// {
+// 	char	*line;
+// 	char	*content;
+	
+// 	content = NULL;
+// 	line = get_next_line(fd, 0);
+// 	while(is_only_whitespace(line))
+// 	{
+// 		free(line);
+// 		line = get_next_line(fd, 0);
+// 	}
+// 	while (line)
+// 	{
+// 		map->height++;
+// 		if (map->length < (int)ft_strlen(line) - 1)
+// 			map->length = (int)ft_strlen(line) - 1;
+// 		content = ft_str_append(content, line);
+// 		line = get_next_line(fd, 0);
+// 	}
+// 	return (content);
+// }
 
 static char	*read_map_data(int fd, t_map *map)
 {
@@ -200,7 +268,7 @@ static char	*read_map_data(int fd, t_map *map)
 	location = 0;
 	while (1)
 	{
-		line = get_next_line(fd);
+		line = get_next_line(fd, 0);
 		if (!line)
 			break ;
 		if (is_only_whitespace(line) && (location == 0 || location == 2))
@@ -246,21 +314,143 @@ int **new_2d_int_arr(int rows, int cols)
 	return (arr);
 }
 
-//This is some BS
-void gnl_clear_buffer(int fd)
-{
-	char *line;
 
-	line = NULL;
-	while (1)
+// # also check that there is as least one direction in the map
+static int	fill_map2(char const *s, t_map *map, int **arr)
+{
+	(void) map;
+	int	i;
+	int	x;
+	int	y;
+
+	i = 0;
+	x = 0;
+	y = 0;
+
+	while (y < map->height)
 	{
-		get_next_line(fd);
-		free(line);
-		if (!line)
-			return ;
+		while (s[i] && s[i] != '\n')
+		{
+			if (s[i] == '0' || s[i] == 'N' || s[i] == 'O' || s[i] == 'S' || s[i] == 'W')
+				arr[y][x] = 1;
+			if (s[i] == ' ')
+				arr[y][x] = 8;
+			i++;
+			x++;
+		}
+		while (x < map->length)
+		{
+			arr[y][x] = 8;
+			x++;
+		}
+		x = 0;
+		y++;
+		if (s[i] != '\0')
+			i++;
+		else
+			break ;
 	}
+	return (0);
 }
 
+
+//! check minimum a least 3 row and collums;
+
+int	check_sides(int **arr, int height, int length)
+{
+	int x;
+	int y;
+
+	x = 0;
+	y = 0;
+
+	while (x < length)
+	{
+		if (arr[0][x] == 1 || arr[height-1][x] == 1)
+			return (0);
+		x++;
+	}
+	
+	while (y < height)
+	{
+		if (arr[y][0] == 1 || arr[y][length-1] == 1)
+			return (0);
+		y++;
+	}
+	
+	return (1);
+}
+
+int check_middle(int **arr, int height, int length)
+{
+	int x;
+	int y;
+
+	x = 1;
+	y = 1;
+	
+	while (y < height-1)
+	{
+		x = 1;
+		while (x < length-1)
+		{
+			if (arr[y][x] == 1)
+			{
+				if ((arr[y-1][x] != 0 && arr[y-1][x] != 1) || \
+					(arr[y][x+1] != 0 && arr[y][x+1] != 1) || \
+					(arr[y+1][x] != 0 && arr[y+1][x] != 1) || \
+					(arr[y][x-1] != 0 && arr[y][x-1] != 1))
+				{
+					return (0);
+				}
+			}			
+			x++;
+		}
+		y++; 		
+	}
+	return (1);
+}
+
+int	is_wall_enclosed(char *content , t_map *map)
+{
+	int **array;
+	
+	array = new_2d_int_arr(map->height, map->length);
+	if (!array)
+		return (0);
+	
+	fill_map2(content, map,array);
+	
+	int x;
+	int y;
+
+
+	x = 0;
+	y = 0;
+	printf("\nis_wall_enclosed()\n\n");
+	while (y < map->height)
+	{
+		while (x < map->length)
+		{
+			printf("%i", array[y][x]);
+			x++;
+		}
+		printf("\n");
+		x = 0;
+		y++;
+	}
+
+	if (!check_sides(array, map->height, map->length))
+		return (printf("sides\n"), free_2d_arr((void **)array, map->height), 0);
+	
+	if (!check_middle(array, map->height, map->length))
+		return (printf("middle\n"), free_2d_arr((void **)array, map->height), 0);
+
+	free_2d_arr((void **)array, map->height);
+	return (1);
+}
+
+// # function protected and tested with valgrind
 t_map	*parse_map(int fd)
 {
 	t_map			*map;
@@ -271,23 +461,33 @@ t_map	*parse_map(int fd)
 	if (!texture_data)
 		return (NULL);
 	if (read_texture_data(fd, texture_data))
-		return (gnl_clear_buffer(fd), free_texture_data(texture_data), NULL);
+		return (get_next_line(fd, 1), free_texture_data(texture_data), NULL);
 	printtexture_data(*texture_data);
 	map = (t_map *)malloc(sizeof(t_map));
 	if (!map)
-		return (free_texture_data(texture_data), NULL);
+		return (get_next_line(fd, 1), free_texture_data(texture_data), NULL);
 	map->texture_data = texture_data;
 	map->height = 0;
 	map->length = 0;
 	content = read_map_data(fd, map);
+	if (!content)
+		return (get_next_line(fd, 1), free_texture_data(texture_data), free(map),NULL);
 	map->arr = new_2d_int_arr(map->height, map->length);
 	if (!map->arr)
-		return (free(content), free(texture_data), free_map(map), NULL);
-	fill_map(content, map);
-	printf("%s\n", content);
-	free(content);
+		return (get_next_line(fd, 1), free_texture_data(texture_data), free(map), free(content), NULL);
+	
+	if (fill_map(content, map))
+		return (get_next_line(fd, 1), free_texture_data(texture_data), free(content), free_map(map), NULL);
+	
+	if (!is_wall_enclosed(content, map))
+		return (get_next_line(fd, 1), free_texture_data(texture_data), free(content), free_map(map), NULL);
+			
+	
+	printf("\nINPUT\n%s\n", content);
 	printf("\nConverted map\n\n");
-	// maunaly check if the map was correcty filled
 	printmap(map);
+	
+	// maunaly check if the map was correcty filled
+	free(content);
 	return (map);
 }
