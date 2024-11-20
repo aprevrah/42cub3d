@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 22:34:46 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/10/25 19:30:27 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/20 12:06:38 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,23 @@
 
 void	free_and_exit(t_data *data, int code)
 {
-	// if (data->players)
-	// 	free(data->players);
-	
-	free_texture_data(data->map->texture_data);
-	free_map(data->map);
+	if (data->players)
+	 	free(data->players);
+	get_next_line(data->fd, 1);
+	if (data->map && data->map->texture_data)
+	{
+		// if(data->map->texture_data->textures[0].img)
+		// 	mlx_destroy_image(data->mlx, data->map->texture_data->textures[0].img);
+		// if(data->map->texture_data->textures[1].img)
+		// 	mlx_destroy_image(data->mlx, data->map->texture_data->textures[1].img);
+		// if(data->map->texture_data->textures[2].img)
+		// 	mlx_destroy_image(data->mlx, data->map->texture_data->textures[2].img);
+		// if(data->map->texture_data->textures[3].img)
+		// 	mlx_destroy_image(data->mlx, data->map->texture_data->textures[3].img);
+		free_texture_data(data->map->texture_data);
+	}
+	if (data->map)
+		free_map(data->map);
 	if (data->img)
 		mlx_destroy_image(data->mlx, data->img);
 	if (data->win)
@@ -71,22 +83,54 @@ int load_texture(char *path, t_data *data, t_texture *texture)
 	return (0);
 }
 
+void	init2null(t_data *data)
+{
+	data->mlx = NULL;
+	data->win = NULL;
+	data->img = NULL;
+	data->addr = NULL;
+	data->map = NULL;
+	data->players = NULL;
+	// data->map->texture_data = NULL;
+	// data->map->texture_data->path_NO = NULL;
+	// data->map->texture_data->path_SO = NULL;
+	// data->map->texture_data->path_WE = NULL;
+	// data->map->texture_data->path_EA = NULL;
+	// data->map->arr = NULL;
+	
+}
+
 int	main(int argc, char **argv)
 {
 	t_data	data;
 	int		fd;
 
+	init2null(&data);
 	if (argc != 2)
 		return (ft_printf("(Only) one argument needed.\n"), 1);
 	if (!is_file_extension(argv[1], ".cub"))
 		return (ft_printf("Wrong filetype, \".cub\" needed.\n"), 1);
 	fd = open(argv[1], O_RDONLY);
-	data.map = parse_map(fd);
+	if (fd < 0)
+		return (1);
+	data.fd = fd;
+	data.map = parse_map(fd);	
 	close(fd);
+	
+	if (!data.map)
+		free_and_exit(&data, 1);
+	
+		
 	if (init_players(&data.players, data.map))
 		free_and_exit(&data, 1);
+	//free_and_exit(&data, 1);
+	
+	
 	if (init_mlx(&data))
 		free_and_exit(&data, 1);
+	
+	
+	//free_and_exit(&data, 1);
 	render_map(&data);
 	mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
 	init_keys(data.keys, data.players);
@@ -101,4 +145,8 @@ int	main(int argc, char **argv)
 	load_texture(data.map->texture_data->path_WE, &data, &data.map->texture_data->textures[3]);
 	mlx_loop_hook(data.mlx, loop_hook, &data);
 	mlx_loop(data.mlx);
+
+
+	free_and_exit(&data, 1);
+
 }

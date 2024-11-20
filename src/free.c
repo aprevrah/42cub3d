@@ -1,5 +1,6 @@
 
 #include "../include/cub3d.h"
+#include <mlx.h>
 
 void free_2d_arr(void **arr, int rows)
 {

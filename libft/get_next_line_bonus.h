@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_bonus.h                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 17:17:20 by aprevrha          #+#    #+#             */
-/*   Updated: 2023/12/14 23:14:17 by aprevrha         ###   ########.fr       */
+/*   Updated: 2024/10/30 16:04:21 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 # include <stdlib.h>
 # include <fcntl.h>
 
-char			*get_next_line(int fd);
+char			*get_next_line(int fd, int x);
 unsigned long	gnl_ft_strlen(const char *s);
 char			*gnl_ft_strjoin(char *s1, char *s2);
 char			*gnl_ft_strchr(const char *s, int c);
