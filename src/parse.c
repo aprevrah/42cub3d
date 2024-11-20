@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 17:24:06 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/07 21:43:16 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/16 15:26:40 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,6 +223,8 @@ int read_texture_data(int fd, t_texture_data *texture_data)
 	while (configs < 6)
 	{
 		line = get_next_line(fd, 0);
+		if (!line)
+			return (1);
 		status = key_val(line, texture_data);
 		free(line);
 		if (status == 0)
@@ -312,20 +314,6 @@ int **new_2d_int_arr(int rows, int cols)
 	return (arr);
 }
 
-//This is some BS
-void gnl_clear_buffer(int fd)
-{
-	char *line;
-
-	line = NULL;
-	while (1)
-	{
-		get_next_line(fd, 0);
-		free(line);
-		if (!line)
-			return ;
-	}
-}
 
 // # also check that there is as least one direction in the map
 static int	fill_map2(char const *s, t_map *map, int **arr)

@@ -1,0 +1,30 @@
+NO: assets/cobblestone.xpm
+EA: assets/cobblestone.xpm
+SO: assets/cobblestone.xpm
+WE: assets/cobblestone.xpm
+C: #FFFFFF
+F: #010202
+
+is_wall_enclosed()
+
+000008
+011108
+011108
+011110
+000008
+
+INPUT
+11111
+10001
+10N01
+100001
+11111
+
+Converted map
+
+000000
+011100
+013100
+011110
+000000
+height: 5 length: 6

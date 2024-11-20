@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 17:00:43 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/10/30 20:16:27 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/16 15:46:33 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ char	*get_next_line(int fd, int x)
 	static char	*str[MAX_FD];
 	char		*line;
 	
-	if (x)
+	if (str[fd] && x)
 		return (free(str[fd]), NULL);
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);

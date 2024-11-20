@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 22:34:46 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/15 14:53:45 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/16 15:52:59 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,8 @@ int	main(int argc, char **argv)
 	if (!is_file_extension(argv[1], ".cub"))
 		return (ft_printf("Wrong filetype, \".cub\" needed.\n"), 1);
 	fd = open(argv[1], O_RDONLY);
+	if (fd < 0)
+		return (1);
 	data.fd = fd;
 	data.map = parse_map(fd);	
 	close(fd);
