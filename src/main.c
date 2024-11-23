@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 22:34:46 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/20 18:30:23 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/23 17:32:03 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,27 @@ void	init2null(t_data *data)
 	
 }
 
+int		init_textures(t_data *data)
+{	
+	data->map->texture_data->textures[0].img = NULL;
+	data->map->texture_data->textures[1].img = NULL;
+	data->map->texture_data->textures[2].img = NULL;
+	data->map->texture_data->textures[3].img = NULL;
+
+	
+	if (load_texture(data->map->texture_data->path_NO, data, &data->map->texture_data->textures[0]))
+		return (printf("Error: could not load texture\n"), 1);
+	if (load_texture(data->map->texture_data->path_EA, data, &data->map->texture_data->textures[1]))
+		return (printf("Error: could not load texture\n"), 1);
+	if (load_texture(data->map->texture_data->path_SO, data, &data->map->texture_data->textures[2]))
+		return (printf("Error: could not load texture\n"), 1);
+	if (load_texture(data->map->texture_data->path_WE, data, &data->map->texture_data->textures[3]))
+		return (printf("Error: could not load texture\n"), 1);
+
+	return (0);
+}
+
+
 int	main(int argc, char **argv)
 {
 	t_data	data;
@@ -119,6 +140,7 @@ int	main(int argc, char **argv)
 	
 	if (!data.map)
 		free_and_exit(&data, 1);
+
 	
 		
 	if (init_players(&data.players, data.map))
@@ -129,6 +151,8 @@ int	main(int argc, char **argv)
 	if (init_mlx(&data))
 		free_and_exit(&data, 1);
 	
+	if (init_textures(&data))
+		free_and_exit(&data, 1);
 	
 	//free_and_exit(&data, 1);
 	render_map(&data);
@@ -139,10 +163,12 @@ int	main(int argc, char **argv)
 	mlx_hook(data.win, 17, StructureNotifyMask, win_close_button, &data);
 	// test texture
 	// printtexture_data(*data.map->texture_data);
-	load_texture(data.map->texture_data->path_NO, &data, &data.map->texture_data->textures[0]);
-	load_texture(data.map->texture_data->path_EA, &data, &data.map->texture_data->textures[1]);
-	load_texture(data.map->texture_data->path_SO, &data, &data.map->texture_data->textures[2]);
-	load_texture(data.map->texture_data->path_WE, &data, &data.map->texture_data->textures[3]);
+	
+	// load_texture(data.map->texture_data->path_NO, &data, &data.map->texture_data->textures[0]);
+	// load_texture(data.map->texture_data->path_EA, &data, &data.map->texture_data->textures[1]);
+	// load_texture(data.map->texture_data->path_SO, &data, &data.map->texture_data->textures[2]);
+	// load_texture(data.map->texture_data->path_WE, &data, &data.map->texture_data->textures[3]);
+	
 	mlx_loop_hook(data.mlx, loop_hook, &data);
 	mlx_loop(data.mlx);
 

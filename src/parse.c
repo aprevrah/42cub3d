@@ -6,19 +6,12 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 17:24:06 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/20 19:40:43 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/23 17:50:43 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
-
-
-// int	is_map_enclosed(t_map *map)
-// {
-
-
-	
-// }
+#include <stdio.h>
 
 static char	*ft_str_append(char *a, char *b)
 {
@@ -59,8 +52,6 @@ int	get_dir(char c)
 	else
 		return (6);
 }
-
-
 
 // # also check that there is as least one direction in the map
 static int	fill_map(char const *s, t_map *map)
@@ -133,6 +124,31 @@ unsigned int	ft_to_int(char *str, unsigned int *i)
 	return (nbr);
 }
 
+int count_words(char *str)
+{
+    int i;
+    int count;
+    int in_word;
+
+    i = 0;
+    count = 0;
+    in_word = 0;
+    while (str[i])
+    {
+        if (str[i] == ' ' || str[i] == '\t' || str[i] == '\n' || \
+            str[i] == '\r' || str[i] == '\v' || str[i] == '\f')
+            in_word = 0;
+        else if (!in_word)
+        {
+            in_word = 1; 
+            count++;
+        }
+        i++;
+    }
+    return (count);
+}
+
+
 int get_color(char *s, unsigned int *color)
 {
 	unsigned int i;
@@ -160,64 +176,81 @@ int get_color(char *s, unsigned int *color)
 	return (0);
 }
 
-// int get_key(unsigned int *i, char *s, char **path)
-// {
-// 	unsigned int start;
 
-// 	skip_until(s, i, WHITESPACE, true);
-// 	if (!skip_until(s, i, WHITESPACE, false))
-// 		return (printf("Unable to parse: %s", s), 1);
-// 	start = *i;
-// 	skip_until(s, i, "\n", true);
-// 	if (*path)
-// 		return (printf("Duplicate config: %s", s), 1);
-// 	*path = ft_substr(s, start, *i - start);
-// 	if (!path)
-// 		return (printf("Malloc failed."), 1);
-// 	return (0);
-// }
-
-int count_words(char *str)
+int	trim_spaces_at_end(char *str)
 {
-    int i;
-    int count;
-    int in_word;
+	int i;
 
-    i = 0;
-    count = 0;
-    in_word = 0;
-    while (str[i])
-    {
-        if (str[i] == ' ' || str[i] == '\t' || str[i] == '\n' || \
-            str[i] == '\r' || str[i] == '\v' || str[i] == '\f')
-            in_word = 0;
-        else if (!in_word)
-        {
-            in_word = 1; 
-            count++;
-        }
-        i++;
-    }
-    return (count);
+	i = 0;
+	while (str[i])
+		i++;
+
+	while (i > 0 && (str[i-1] == ' ' || str[i-1] == '\t' || \
+		str[i-1] == '\r' || str[i-1] == '\v' || str[i-1] == '\f'))
+		i--;
+
+	// Null-terminate the string at the new end
+	str[i] = '\0';
+
+	return i; // Return the new length of the string
 }
 
 
 int get_key(unsigned int *i, char *s, char **path)
 {
-	// unsigned int start;
-	(void) path;
-	(void) i;
-	// # count words, if more than 2 words -> error
+	unsigned int start;
+
 	if (count_words(s) != 2)
 	{
-		printf("test 12\n");	
+		printf("Error: texture line needs 2 arguments\n");	
 		return (1);
 	}
+	if (s[*i+2] && s[*i+2] != ' ')
+	{
+		printf("ERROR: missing space after identifier\n");
+		return (1);
+	}
+	skip_until(s, i, WHITESPACE, true);
+	if (!skip_until(s, i, WHITESPACE, false))
+		return (printf("Unable to parse: %s", s), 1);
+	start = *i;
+	skip_until(s, i, "\n", true);
+	if (*path)
+		return (printf("Duplicate config: %s", s), 1);
+	*path = ft_substr(s, start, *i - start);
+	if (!path)
+		return (printf("Malloc failed."), 1);
+	trim_spaces_at_end(*path);
+	return (0);
+}
 
-	return (1);
+
+
+// int get_key(unsigned int *i, char *s, char **path)
+// {
+// 	// unsigned int start;
+// 	(void) path;
+// 	(void) i;
+	
+// 	// # count words, if more than 2 words -> error
+// 	if (count_words(s) != 2)
+// 	{
+// 		printf("Error: texture line needs 2 arguments\n");	
+// 		return (1);
+// 	}
+// 	// # check if 2nd index is ' '
+// 	if (s[2] && s[2] != ' ')
+// 	{
+// 		printf("ERROR: missing space after identifier\n");
+// 		return (1);
+// 	}
 
 	
-}
+	
+// 	return (1);
+
+	
+// }
 
 
 bool is_only_whitespace(char *s)
