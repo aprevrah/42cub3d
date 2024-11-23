@@ -214,9 +214,7 @@ double  deg2rad(double degrees);
 double rad2deg(double rad);
 double vec2angle(t_dvec2 vec);
 
-void gnl_clear_buffer(int fd);
-
-void	render_half_screen(t_data *data);
+void	gnl_clear_buffer(int fd);
 void	render_wall(t_data *data);
 void	render_walls(t_data *data);
 void	render_minimap_rays(t_data *data);
