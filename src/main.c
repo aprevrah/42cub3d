@@ -94,6 +94,7 @@ int	main(int argc, char **argv)
 	mlx_hook(data.win, 3, KeyReleaseMask, handle_keyup, data.keys);
 	mlx_hook(data.win, 17, StructureNotifyMask, win_close_button, &data);
 	mlx_hook(data.win, MotionNotify, PointerMotionMask, handle_mousemove, &data);
+	mlx_mouse_hook(data.win, handle_mouseclick, &data);
 	
 	// test texture
 	// printtexture_data(*data.map->texture_data);

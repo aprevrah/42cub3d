@@ -23,9 +23,29 @@ void delta_time(t_data *data)
 	if (gettimeofday(&tv_now, NULL))
 		printf("gettimeofday failed");
 	data->delta_time = (tv_now.tv_sec * 1000 + tv_now.tv_usec/1000) - (data->lastframe.tv_sec * 1000 + data->lastframe.tv_usec/1000);
-	printf("frametime: %dms	fps: %d loop: %ld\n", data->delta_time, 1000/data->delta_time, loops);
+	//printf("frametime: %dms	fps: %d loop: %ld\n", data->delta_time, 1000/data->delta_time, loops);
 	data->lastframe = tv_now;
 	loops++;
+}
+
+int handle_mouseclick(int button, int x, int y, t_data *data) {
+    //printf("Mouse button %d clicked at (%d, %d)\n", button, x, y);
+	(void)x;
+	(void)y;
+	if (button != 1)
+		return (0);
+	if(data->use_mouse)
+	{
+		data->use_mouse = false;
+		mlx_mouse_show(data->mlx, data->win);
+	}
+	else
+	{
+		data->use_mouse = true;
+		mlx_mouse_hide(data->mlx, data->win);
+		mlx_mouse_move(data->mlx, data->win, W_WIDTH/2, W_HEIGHT/2);
+	}
+    return 0;
 }
 
 int handle_mousemove(int x, int y, t_data *data)
@@ -33,8 +53,10 @@ int handle_mousemove(int x, int y, t_data *data)
 	static int dx;
 	t_ivec2 win_mid;
 	t_look_args look_args;
-
+	
 	(void)y;
+	if (!data->use_mouse)
+		return (0);
 	win_mid.x = W_WIDTH/2;
 	win_mid.y = W_HEIGHT/2;
 	dx = (x - win_mid.x);
@@ -53,7 +75,6 @@ int	loop_hook(t_data *data)
 {
 	int	i;
 	int	keys_pressed;
-	//static bool mouse = true;
 
 	keys_pressed = 0;
 	i = 0;
@@ -80,6 +101,7 @@ int	loop_hook(t_data *data)
 	mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
 	//debug_render_textures(data, 4);
 	delta_time(data);
+
 	return (0);
 }
 
