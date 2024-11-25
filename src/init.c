@@ -106,6 +106,7 @@ t_dvec2	get_player_pos(t_map *map)
 	return (pos);
 }
 
+//! this is kinda wack, maybe set the rot while parsing?
 t_dvec2	get_player_orientation(t_map *map)
 {
 	int		i;
@@ -113,41 +114,24 @@ t_dvec2	get_player_orientation(t_map *map)
 	t_dvec2	orientation;
 
 	i = 0;
+	orientation = (t_dvec2){1, 1};
 	while (i < map->height)
 	{
 		j = 0;
 		while (j < map->length)
 		{
 			if (map->arr[i][j] == 3)
-			{
-				orientation.x = 0;
-				orientation.y = -1;
-				return (orientation);
-			}
+				orientation = (t_dvec2){0, -1};
 			if (map->arr[i][j] == 4)
-			{
-				orientation.x = 1;
-				orientation.y = 0;
-				return (orientation);
-			}
+				orientation = (t_dvec2){1, 0};
 			if (map->arr[i][j] == 5)
-			{
-				orientation.x = 0;
-				orientation.y = 1;
-				return (orientation);
-			}
-			if (map->arr[i][j] == 3)
-			{
-				orientation.x = -1;
-				orientation.y = 0;
-				return (orientation);
-			}
+				orientation = (t_dvec2){0, 1};
+			if (map->arr[i][j] == 6)
+				orientation = (t_dvec2){-1, 0};
 			j++;
 		}
 		i++;
 	}
-	orientation.x = 1.5;
-	orientation.y = 1.5;
 	return (orientation);
 }
 
