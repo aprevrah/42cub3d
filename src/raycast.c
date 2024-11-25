@@ -251,8 +251,8 @@ t_ray raycast(t_player player, t_map *map, double angle)
     }
     if (ray.delta.x == 0)
     {
-        ray.vertical_intersection.y = -1;
-        ray.vertical_intersection.x = -1;
+        ray.vertical_intersection.y = 100000;
+        ray.vertical_intersection.x = 100000;
         //printf("i = %i\n", i);
     }
         
@@ -267,11 +267,11 @@ t_ray raycast(t_player player, t_map *map, double angle)
     }
     if (ray.delta.y == 0)
     {
-        printf("i = %i\n", i);
-        ray.vertical_intersection.y = -1;
-        ray.vertical_intersection.x = -1;
-        printf("x_v = %lf , y_v = %lf\n", ray.vertical_intersection.x, ray.vertical_intersection.y);
-        printf("x_h = %lf , y_h = %lf\n", ray.horizontal_intersection.x, ray.horizontal_intersection.y);
+       // printf("i = %i\n", i);
+        ray.vertical_intersection.y = 100000;
+        ray.vertical_intersection.x = 100000;
+        //printf("x_v = %lf , y_v = %lf\n", ray.vertical_intersection.x, ray.vertical_intersection.y);
+        //printf("x_h = %lf , y_h = %lf\n", ray.horizontal_intersection.x, ray.horizontal_intersection.y);
         //printf("\n");
     }
 

@@ -206,6 +206,9 @@ void					look(t_data *data, void *args);
 t_map					*parse_map(int fd);
 
 // render.c
+
+
+// minimap.c
 void					render_map(t_data *data);
 void					render_players(t_data *data);
 
