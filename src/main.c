@@ -92,10 +92,10 @@ void	init2null(t_data *data)
 	data->map = NULL;
 	data->players = NULL;
 	// data->map->texture_data = NULL;
-	// data->map->texture_data->path_NO = NULL;
-	// data->map->texture_data->path_SO = NULL;
-	// data->map->texture_data->path_WE = NULL;
-	// data->map->texture_data->path_EA = NULL;
+	// data->map->texture_data->path_no = NULL;
+	// data->map->texture_data->path_so = NULL;
+	// data->map->texture_data->path_we = NULL;
+	// data->map->texture_data->path_ea = NULL;
 	// data->map->arr = NULL;
 	
 }
@@ -142,10 +142,10 @@ int	main(int argc, char **argv)
 	
 	// test texture
 	// printtexture_data(*data.map->texture_data);
-	load_texture(data.map->texture_data->path_NO, &data, &data.map->texture_data->textures[0]);
-	load_texture(data.map->texture_data->path_EA, &data, &data.map->texture_data->textures[1]);
-	load_texture(data.map->texture_data->path_SO, &data, &data.map->texture_data->textures[2]);
-	load_texture(data.map->texture_data->path_WE, &data, &data.map->texture_data->textures[3]);
+	load_texture(data.map->texture_data->path_no, &data, &data.map->texture_data->textures[0]);
+	load_texture(data.map->texture_data->path_ea, &data, &data.map->texture_data->textures[1]);
+	load_texture(data.map->texture_data->path_so, &data, &data.map->texture_data->textures[2]);
+	load_texture(data.map->texture_data->path_we, &data, &data.map->texture_data->textures[3]);
 	mlx_loop_hook(data.mlx, loop_hook, &data);
 	mlx_loop(data.mlx);
 

@@ -18,10 +18,10 @@ void free_2d_arr(void **arr, int rows)
 
 void free_texture_data(t_texture_data *td)
 {
-	free(td->path_NO);
-	free(td->path_EA);
-	free(td->path_SO);
-	free(td->path_WE);
+	free(td->path_no);
+	free(td->path_ea);
+	free(td->path_so);
+	free(td->path_we);
 	free(td);
 }
 

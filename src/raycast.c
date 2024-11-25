@@ -282,6 +282,7 @@ t_ray raycast(t_player player, t_map *map, double angle)
     return (ray);
 }
 
+/* 
 double  deg2rad(double degrees)
 {
     return (PI * degrees / 180);
@@ -291,3 +292,4 @@ double rad2deg(double rad)
 {
     return (rad * 180 / PI);
 }
+*/
