@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse.c                                            :+:      :+:    :+:   */
+/*   parse_1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 17:24:06 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/23 17:50:43 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/25 17:59:44 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	is_valid_char(char const s) //! only accept spaces and newline, no tab
 	s != ' ' && s != '\t' && s != '\n' && s != '\r' && s != '\v'&& s != '\f')
 		return (0);
 	return (1);
-}	
+}
 
 int	get_dir(char c)
 {
@@ -126,35 +126,82 @@ unsigned int	ft_to_int(char *str, unsigned int *i)
 
 int count_words(char *str)
 {
-    int i;
-    int count;
-    int in_word;
+	int i;
+	int count;
+	int in_word;
 
-    i = 0;
-    count = 0;
-    in_word = 0;
-    while (str[i])
-    {
-        if (str[i] == ' ' || str[i] == '\t' || str[i] == '\n' || \
-            str[i] == '\r' || str[i] == '\v' || str[i] == '\f')
-            in_word = 0;
-        else if (!in_word)
-        {
-            in_word = 1; 
-            count++;
-        }
-        i++;
-    }
-    return (count);
+	i = 0;
+	count = 0;
+	in_word = 0;
+	while (str[i])
+	{
+		if (str[i] == ' ' || str[i] == '\t' || str[i] == '\n' || \
+			str[i] == '\r' || str[i] == '\v' || str[i] == '\f')
+			in_word = 0;
+		else if (!in_word)
+		{
+			in_word = 1;
+			count++;
+		}
+		i++;
+	}
+	return (count);
 }
 
+int	trim_spaces_at_end(char *str)
+{
+	int i;
+
+	i = 0;
+	while (str[i])
+		i++;
+
+	while (i > 0 && (str[i-1] == ' ' || str[i-1] == '\t' || \
+		str[i-1] == '\r' || str[i-1] == '\v' || str[i-1] == '\f'))
+		i--;
+
+	str[i] = '\0';
+
+	return (i);
+}
+
+int is_only_numeric_and_2_comma(char *str, int i)
+{
+	int count = 0;
+
+	if (!str || str[i] == '\0')
+		return (0);
+
+	while (str[i])
+	{
+		if ((str[i] < '0' || str[i] > '9') && str[i] != ',' &&
+			str[i] != ' ' && str[i] != '\t' && str[i] != '\r' &&
+			str[i] != '\v' && str[i] != '\f' && str[i] != '\n')
+		{
+			return (0);
+		}
+		if (str[i] == ',')
+			count++;
+		i++;
+	}
+	return (count == 2);
+}
 
 int get_color(char *s, unsigned int *color)
 {
 	unsigned int i;
-	unsigned int r, g, b;
+	unsigned int r;
+	unsigned int g;
+	unsigned int b;
 
 	i = 0;
+
+	if (count_words(s) != 2)
+		return (printf("Error: color line needs 2 arguments\n"), 1);
+	if (s[1] && s[1] != ' ')
+		return (printf("Error: missing space after identifier\n"), 1);
+	if (!is_only_numeric_and_2_comma(s, 1))
+		return (printf("Error: syntax error in color line\n"), 1);
 	skip_until(s, &i, WHITESPACE, true);
 	if (!skip_until(s, &i, WHITESPACE, false))
 		return (1);
@@ -177,23 +224,6 @@ int get_color(char *s, unsigned int *color)
 }
 
 
-int	trim_spaces_at_end(char *str)
-{
-	int i;
-
-	i = 0;
-	while (str[i])
-		i++;
-
-	while (i > 0 && (str[i-1] == ' ' || str[i-1] == '\t' || \
-		str[i-1] == '\r' || str[i-1] == '\v' || str[i-1] == '\f'))
-		i--;
-
-	// Null-terminate the string at the new end
-	str[i] = '\0';
-
-	return i; // Return the new length of the string
-}
 
 
 int get_key(unsigned int *i, char *s, char **path)
@@ -201,15 +231,9 @@ int get_key(unsigned int *i, char *s, char **path)
 	unsigned int start;
 
 	if (count_words(s) != 2)
-	{
-		printf("Error: texture line needs 2 arguments\n");	
-		return (1);
-	}
+		return (printf("Error: texture line needs 2 arguments\n"), 1);
 	if (s[*i+2] && s[*i+2] != ' ')
-	{
-		printf("ERROR: missing space after identifier\n");
-		return (1);
-	}
+		return (printf("ERROR: missing space after identifier\n"), 1);
 	skip_until(s, i, WHITESPACE, true);
 	if (!skip_until(s, i, WHITESPACE, false))
 		return (printf("Unable to parse: %s", s), 1);
@@ -223,34 +247,6 @@ int get_key(unsigned int *i, char *s, char **path)
 	trim_spaces_at_end(*path);
 	return (0);
 }
-
-
-
-// int get_key(unsigned int *i, char *s, char **path)
-// {
-// 	// unsigned int start;
-// 	(void) path;
-// 	(void) i;
-	
-// 	// # count words, if more than 2 words -> error
-// 	if (count_words(s) != 2)
-// 	{
-// 		printf("Error: texture line needs 2 arguments\n");	
-// 		return (1);
-// 	}
-// 	// # check if 2nd index is ' '
-// 	if (s[2] && s[2] != ' ')
-// 	{
-// 		printf("ERROR: missing space after identifier\n");
-// 		return (1);
-// 	}
-
-	
-	
-// 	return (1);
-
-	
-// }
 
 
 bool is_only_whitespace(char *s)
@@ -311,35 +307,12 @@ int read_texture_data(int fd, t_texture_data *texture_data)
 	return (0);
 }
 
-// static char	*read_map_data(int fd, t_map *map)
-// {
-// 	char	*line;
-// 	char	*content;
-	
-// 	content = NULL;
-// 	line = get_next_line(fd, 0);
-// 	while(is_only_whitespace(line))
-// 	{
-// 		free(line);
-// 		line = get_next_line(fd, 0);
-// 	}
-// 	while (line)
-// 	{
-// 		map->height++;
-// 		if (map->length < (int)ft_strlen(line) - 1)
-// 			map->length = (int)ft_strlen(line) - 1;
-// 		content = ft_str_append(content, line);
-// 		line = get_next_line(fd, 0);
-// 	}
-// 	return (content);
-// }
-
 static char	*read_map_data(int fd, t_map *map)
 {
 	char	*line;
 	char	*content;
 	int		location;
-	
+
 	content = NULL;
 	location = 0;
 	while (1)
@@ -446,14 +419,14 @@ int	check_sides(int **arr, int height, int length)
 			return (0);
 		x++;
 	}
-	
+
 	while (y < height)
 	{
 		if (arr[y][0] == 1 || arr[y][length-1] == 1)
 			return (0);
 		y++;
 	}
-	
+
 	return (1);
 }
 
@@ -464,7 +437,7 @@ int check_middle(int **arr, int height, int length)
 
 	x = 1;
 	y = 1;
-	
+
 	while (y < height-1)
 	{
 		x = 1;
@@ -479,10 +452,10 @@ int check_middle(int **arr, int height, int length)
 				{
 					return (0);
 				}
-			}			
+			}
 			x++;
 		}
-		y++; 		
+		y++;
 	}
 	return (1);
 }
@@ -490,13 +463,13 @@ int check_middle(int **arr, int height, int length)
 int	is_wall_enclosed(char *content , t_map *map)
 {
 	int **array;
-	
+
 	array = new_2d_int_arr(map->height, map->length);
 	if (!array)
 		return (0);
-	
+
 	fill_map2(content, map,array);
-	
+
 	int x;
 	int y;
 
@@ -518,7 +491,7 @@ int	is_wall_enclosed(char *content , t_map *map)
 
 	if (!check_sides(array, map->height, map->length))
 		return (printf("sides\n"), free_2d_arr((void **)array, map->height), 0);
-	
+
 	if (!check_middle(array, map->height, map->length))
 		return (printf("middle\n"), free_2d_arr((void **)array, map->height), 0);
 
@@ -551,18 +524,18 @@ t_map	*parse_map(int fd)
 	map->arr = new_2d_int_arr(map->height, map->length);
 	if (!map->arr)
 		return (get_next_line(fd, 1), free_texture_data(texture_data), free(map), free(content), NULL);
-	
+
 	if (fill_map(content, map))
 		return (get_next_line(fd, 1), free_texture_data(texture_data), free(content), free_map(map), NULL);
-	
+
 	if (!is_wall_enclosed(content, map))
 		return (get_next_line(fd, 1), free_texture_data(texture_data), free(content), free_map(map), NULL);
-			
-	
+
+
 	printf("\nINPUT\n%s\n", content);
 	printf("\nConverted map\n\n");
 	printmap(map);
-	
+
 	// maunaly check if the map was correcty filled
 	free(content);
 	return (map);
