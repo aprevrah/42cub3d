@@ -17,7 +17,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-int	get_color_normalized(t_texture texture, double x, double y) 
+int	get_color_normalized(t_texture texture, double x, double y)
 {
 	int	x_pixel;
 	int	y_pixel;
@@ -26,23 +26,23 @@ int	get_color_normalized(t_texture texture, double x, double y)
 	y = y - floor(y);
 	x_pixel = x * texture.img_width;
 	y_pixel = y * texture.img_height;
-	return(get_pixel_color(texture, x_pixel, y_pixel));
+	return (get_pixel_color(texture, x_pixel, y_pixel));
 }
 
-int	get_pixel_color(t_texture texture, int x, int y) 
+// maybe improve error handling
+int	get_pixel_color(t_texture texture, int x, int y)
 {
+	int	offset;
+	int	color;
+
 	if (x < 0 || y < 0 || x >= texture.img_width || y >= texture.img_height)
 	{
-    	printf("Pixel coordinates out of bounds\n");
-    	return -1; // Or some other error handling
+		printf("Pixel coordinates out of bounds\n");
+		return (-1);
 	}
-	// Calculate the pixel's memory offset
-	int offset = (y * texture.line_length) + (x * (texture.bits_per_pixel / 8));
-
-	// Read the color directly from the data buffer
-	int color = *(int *)(texture.addr + offset);
-
-	return color;
+	offset = (y * texture.line_length) + (x * (texture.bits_per_pixel / 8));
+	color = *(int *)(texture.addr + offset);
+	return (color);
 }
 
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
@@ -119,7 +119,36 @@ void	line_put(t_data *data, t_ivec2 a, t_ivec2 b, int color)
 	draw_straight(data, a, b, color);
 }
 
-void	slice_put(t_data *data, int x, double size, double d_x, t_texture texture)
+void	slice_put(t_data *data, int x, double size, double d_x,
+		t_texture texture)
+{
+	int	color;
+	int	i;
+	int	y;
+
+	i = 0;
+	if (size > 1)
+		i = -(W_HEIGHT * 0.5 - W_HEIGHT * 0.5 * size);
+	y = 0;
+	while (y < W_HEIGHT)
+	{
+		if (y < W_HEIGHT * 0.5 - W_HEIGHT * 0.5 * size)
+			my_mlx_pixel_put(data, x, y, data->map->texture_data->col_C);
+		else if (y > W_HEIGHT * 0.5 + W_HEIGHT * 0.5 * size)
+			my_mlx_pixel_put(data, x, y, data->map->texture_data->col_F);
+		else
+		{
+			color = get_color_normalized(texture, d_x, i / (W_HEIGHT * size));
+			my_mlx_pixel_put(data, x, y, color);
+			i++;
+		}
+		y++;
+	}
+}
+/* OPTIMIZATION maybe improve this somehow and use it,
+	main problem are bigger textures
+void	slice_put(t_data *data, int x, double size, double d_x,
+		t_texture texture)
 {
 	bool	got_color;
 	int		color;
@@ -131,9 +160,6 @@ void	slice_put(t_data *data, int x, double size, double d_x, t_texture texture)
 		i = -(W_HEIGHT*0.5 - W_HEIGHT*0.5 *size);
 	got_color = false;
 	y = 0;
-
-	//Pre-compute the divisor
-	//int divisor = (W_HEIGHT * size) / texture.img_height;
 	while(y < W_HEIGHT)
 	{
 		if (y < W_HEIGHT*0.5 - W_HEIGHT*0.5 * size)
@@ -142,9 +168,11 @@ void	slice_put(t_data *data, int x, double size, double d_x, t_texture texture)
 			my_mlx_pixel_put(data, x, y, data->map->texture_data->col_F);
 		else
 		{
-			//we only want to get the new color if there is a new pixel in the texture
-			// 1 optimization off, 0 optimization on 
-			if (1 || fmod(i, ((W_HEIGHT * size)/texture.img_height)) < 1 || !got_color)
+			// we only want to get the new color
+			// if there is a new pixel in the texture
+			// 1 optimization off, 0 optimization on
+			if (1 || fmod(i, ((W_HEIGHT * size)/texture.img_height)) < 1
+				|| !got_color)
 			{
 				color = get_color_normalized(texture, d_x, i/(W_HEIGHT * size));
 				got_color = true;
@@ -159,3 +187,4 @@ void	slice_put(t_data *data, int x, double size, double d_x, t_texture texture)
 		y++;
 	}
 }
+*/

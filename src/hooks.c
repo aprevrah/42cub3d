@@ -90,7 +90,6 @@ int	loop_hook(t_data *data)
 		i++;
 	}
 	// render toggles
-	// render_half_screen(data);
 	render_walls(data);
 	// render_map(data);
 	// render_players(data);

@@ -152,6 +152,8 @@ typedef struct s_ray
 	double				angle;
 	t_ivec2				sign;
 	t_dvec2				delta;
+	t_dvec2 			vertical_intersection;
+    t_dvec2 			horizontal_intersection;
 	t_direction			texture;
 }						t_ray;
 
@@ -204,8 +206,6 @@ void					free_texture_data(t_texture_data *td);
 // dda functions
 
 double get_fract_part(double x);
-double  get_hi_lenght(t_dvec2 position, double angle);
-double  get_vi_lenght(t_dvec2 position, double angle);
 t_dvec2 get_horizontal_intersection(t_ray ray);
 t_dvec2 get_vertical_intersection(t_ray ray);
 t_ray	raycast(t_player player, t_map *map, double angle);
@@ -214,7 +214,7 @@ double  deg2rad(double degrees);
 double rad2deg(double rad);
 double vec2angle(t_dvec2 vec);
 
-void	gnl_clear_buffer(int fd);
+void 	gnl_clear_buffer(int fd);
 void	render_wall(t_data *data);
 void	render_walls(t_data *data);
 void	render_minimap_rays(t_data *data);
