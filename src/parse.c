@@ -39,11 +39,10 @@ static char	*ft_str_append(char *a, char *b)
 	return (a = NULL, b = NULL, str);
 }
 
-
-int	is_valid_char(char const s) //! only accept spaces and newline, no tab
+//! only accept spaces and newline, no tab
+int	is_valid_char(char const c) 
 {
-	if (s != '0' && s != '1' && s != 'N' && s != 'O' && s != 'S' && s != 'W' && \
-	s != ' ' && s != '\t' && s != '\n' && s != '\r' && s != '\v'&& s != '\f')
+	if (!ft_strchr("01NESW \t\n\r\v\f", c))
 		return (0);
 	return (1);
 }	
@@ -52,7 +51,7 @@ int	get_dir(char c)
 {
 	if (c == 'N')
 		return (3);
-	if (c == 'O')
+	if (c == 'E')
 		return (4);
 	if (c == 'S')
 		return (5);
@@ -81,10 +80,10 @@ static int	fill_map(char const *s, t_map *map)
 		while (s[i] && s[i] != '\n')
 		{
 			if (!is_valid_char(s[i]) || j > 1)
-				return (printf("unvalid char in map\n"), 1);
+				return (printf("invalid char in map\n"), 1);
 			if (s[i] == '0')
 				map->arr[y][x] = 1;
-			if (s[i] == 'N' || s[i] == 'O' || s[i] == 'S' || s[i] == 'W')
+			if (ft_strchr("NESW", s[i]))
 			{
 				j++;
 				map->arr[y][x] = get_dir(s[i]);
@@ -194,17 +193,17 @@ int key_val(char *line, t_texture_data *texture_data)
 	if (line[i] == '\0')
 		return (2);
 	else if (!ft_strncmp(&line[i], "NO", 2))
-		return (get_key(&i, line, &texture_data->path_NO));
+		return (get_key(&i, line, &texture_data->path_no));
 	else if (!ft_strncmp(&line[i], "EA", 2))
-		return (get_key(&i, line, &texture_data->path_EA));
+		return (get_key(&i, line, &texture_data->path_ea));
 	else if (!ft_strncmp(&line[i], "SO", 2))
-		return (get_key(&i, line, &texture_data->path_SO));
+		return (get_key(&i, line, &texture_data->path_so));
 	else if (!ft_strncmp(&line[i], "WE", 2))
-		return (get_key(&i, line, &texture_data->path_WE));
+		return (get_key(&i, line, &texture_data->path_we));
 	else if (!ft_strncmp(&line[i], "C", 1))
-		return (get_color(&line[i], &texture_data->col_C));
+		return (get_color(&line[i], &texture_data->col_c));
 	else if (!ft_strncmp(&line[i], "F", 1))
-		return (get_color(&line[i], &texture_data->col_F));
+		return (get_color(&line[i], &texture_data->col_f));
 	printf("Unable to parse: %s", line);
 	return (1);
 }
@@ -215,10 +214,10 @@ int read_texture_data(int fd, t_texture_data *texture_data)
 	int		status;
 	int		configs;
 
-	texture_data->path_NO = NULL;
-	texture_data->path_EA = NULL;
-	texture_data->path_SO = NULL;
-	texture_data->path_WE = NULL;
+	texture_data->path_no = NULL;
+	texture_data->path_ea = NULL;
+	texture_data->path_so = NULL;
+	texture_data->path_we = NULL;
 	configs = 0;
 	while (configs < 6)
 	{

@@ -15,9 +15,9 @@
 
 # include "../libft/libft.h"
 # include <math.h>
+# include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
-# include <stdbool.h>
 # include <sys/time.h>
 
 # define COLOR 0x00FFFFFF
@@ -33,25 +33,22 @@
 # define SCALE 70
 # define MAX_RAY 50
 
-
-
 typedef struct s_data	t_data;
 typedef struct s_map	t_map;
 
-
 typedef struct s_dvec2
 {
-	double					x;
-	double					y;
+	double				x;
+	double				y;
 }						t_dvec2;
 
 typedef struct s_player
 {
-	t_dvec2 position;
-	t_dvec2	orientation;
-	double	movement_speed;
-	double	look_speed;
-	t_map	*map;
+	t_dvec2				position;
+	t_dvec2				orientation;
+	double				movement_speed;
+	double				look_speed;
+	t_map				*map;
 }						t_player;
 
 typedef struct s_texture
@@ -68,12 +65,12 @@ typedef struct s_texture
 
 typedef struct s_texture_data
 {
-	char				*path_NO;
-	char				*path_SO;
-	char				*path_WE;
-	char				*path_EA;
-	unsigned int		col_F;
-	unsigned int		col_C;
+	char				*path_no;
+	char				*path_so;
+	char				*path_we;
+	char				*path_ea;
+	unsigned int		col_f;
+	unsigned int		col_c;
 	t_texture			textures[4];
 }						t_texture_data;
 
@@ -86,31 +83,36 @@ typedef struct s_map
 }						t_map;
 
 // Move function arguments
-typedef struct s_move_args {
-    t_player *player;
-    t_dvec2 direction;
-} t_move_args;
+typedef struct s_move_args
+{
+	t_player			*player;
+	t_dvec2				direction;
+}						t_move_args;
 
 // Look/rotate function arguments
-typedef struct s_look_args {
-    t_player *player;
-    double rotation;
-} t_look_args;
+typedef struct s_look_args
+{
+	t_player			*player;
+	double				rotation;
+}						t_look_args;
 
 // Union to store different types of function arguments
-typedef union u_args {
-    t_move_args move_args;  // Move arguments
-    t_look_args look_args;  // Look/rotate arguments
-    void *ptr;              // Generic pointer (for other use cases)
-} u_args;
+// Last entry is  a generic pointer (for other use cases)
+typedef union u_args
+{
+	t_move_args			move_args;
+	t_look_args			look_args;
+	void				*ptr;
+}						t_args;
 
 // Define the key structure
-typedef struct s_key {
-    int        code;
-    int        state;
-    void       (*func)(t_data *data, void *); // Function pointer to different actions
-    u_args     args;            // Union to hold function-specific arguments
-} t_key;
+typedef struct s_key
+{
+	int					code;
+	int					state;
+	void				(*func)(t_data *data, void *);
+	t_args				args;
+}						t_key;
 
 typedef struct s_data
 {
@@ -136,14 +138,14 @@ typedef struct s_ivec2
 	int					y;
 }						t_ivec2;
 
-
-//check if this is norm
-typedef enum {
-    NORTH,
-    EAST,
-    SOUTH,
-    WEST
-} t_direction;
+// check if this is norm
+typedef enum e_direction
+{
+	NORTH,
+	EAST,
+	SOUTH,
+	WEST
+}						t_direction;
 
 typedef struct s_ray
 {
@@ -152,19 +154,32 @@ typedef struct s_ray
 	double				angle;
 	t_ivec2				sign;
 	t_dvec2				delta;
+	t_dvec2				vertical_intersection;
+	t_dvec2				horizontal_intersection;
 	t_direction			texture;
 }						t_ray;
 
-//debug.c
+// debug.c
 void					debug_render_textures(t_data *data, unsigned int count);
-void 					printmap(t_map *map);
+void					printmap(t_map *map);
 void					printtexture_data(t_texture_data texture_data);
 
-// draw.c
-void					my_mlx_pixel_put(t_data *data, int x, int y, int color);
+// line.c
 void					line_put(t_data *data, t_ivec2 a, t_ivec2 b, int color);
+
+// draw.c
+void					slice_put(t_data *data, int x, double size, double d_x,
+							t_texture texture);
+
+// pixel.c
+void					my_mlx_pixel_put(t_data *data, int x, int y, int color);
 int						get_pixel_color(t_texture texture, int x, int y);
-void	slice_put(t_data *data, int x, double size, double d_x, t_texture texture);
+
+// pixel.c
+int						get_color_normalized(t_texture texture, double x,
+							double y);
+int						get_pixel_color(t_texture texture, int x, int y);
+void					my_mlx_pixel_put(t_data *data, int x, int y, int color);
 
 // init.c
 int						init_keys(t_key *keys, t_player *players);
@@ -176,9 +191,9 @@ int						loop_hook(t_data *data);
 int						handle_keydown(int keycode, t_key *keys);
 int						handle_keyup(int keycode, t_key *keys);
 int						handle_mousemove(int x, int y, t_data *data);
-int 					handle_mouseclick(int button, int x, int y, t_data *data);
+int						handle_mouseclick(int button, int x, int y,
+							t_data *data);
 void					delta_time(t_data *data);
-
 
 // main.c
 void					free_and_exit(t_data *data, int code);
@@ -191,34 +206,32 @@ void					look(t_data *data, void *args);
 t_map					*parse_map(int fd);
 
 // render.c
+
+
+// minimap.c
 void					render_map(t_data *data);
 void					render_players(t_data *data);
 
 // utils.c
 
-//free.c
+// free.c
 void					free_2d_arr(void **arr, int rows);
 void					free_map(t_map *map);
 void					free_texture_data(t_texture_data *td);
 
 // dda functions
+double					get_fract_part(double x);
+t_dvec2					get_horizontal_intersection(t_ray ray);
+t_dvec2					get_vertical_intersection(t_ray ray);
+t_ray					raycast(t_player player, t_map *map, double angle);
+int						is_wall(t_dvec2 intersection, t_map *map);
+double					deg2rad(double degrees);
+double					rad2deg(double rad);
+double					vec2angle(t_dvec2 vec);
 
-double get_fract_part(double x);
-double  get_hi_lenght(t_dvec2 position, double angle);
-double  get_vi_lenght(t_dvec2 position, double angle);
-t_dvec2 get_horizontal_intersection(t_ray ray);
-t_dvec2 get_vertical_intersection(t_ray ray);
-t_ray	raycast(t_player player, t_map *map, double angle);
-int is_wall(t_dvec2 intersection, t_map *map);
-double  deg2rad(double degrees);
-double rad2deg(double rad);
-double vec2angle(t_dvec2 vec);
-
-void gnl_clear_buffer(int fd);
-
-void	render_half_screen(t_data *data);
-void	render_wall(t_data *data);
-void	render_walls(t_data *data);
-void	render_minimap_rays(t_data *data);
+void					gnl_clear_buffer(int fd);
+void					render_wall(t_data *data);
+void					render_walls(t_data *data);
+void					render_minimap_rays(t_data *data);
 
 #endif
