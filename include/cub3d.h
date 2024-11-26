@@ -32,6 +32,8 @@
 # define EPSILON 0.000001
 # define SCALE 70
 # define MAX_RAY 50
+# define COLLISION true
+# define PRINT_FPS true
 
 typedef struct s_data	t_data;
 typedef struct s_map	t_map;
@@ -156,6 +158,8 @@ typedef struct s_ray
 	t_dvec2				delta;
 	t_dvec2				vertical_intersection;
 	t_dvec2				horizontal_intersection;
+	bool				vert_hit;
+	bool				hori_hit;
 	t_direction			texture;
 }						t_ray;
 
@@ -163,6 +167,7 @@ typedef struct s_ray
 void					debug_render_textures(t_data *data, unsigned int count);
 void					printmap(t_map *map);
 void					printtexture_data(t_texture_data texture_data);
+void					printray(t_ray ray);
 
 // line.c
 void					line_put(t_data *data, t_ivec2 a, t_ivec2 b, int color);

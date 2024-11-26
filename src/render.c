@@ -27,7 +27,7 @@ void	render_vertical_line(t_data *data, double angle, int x, double angle2)
 	double	offset;
 
 	ray = raycast(data->players[0], data->map, fmod(angle, 2 * PI));
-	distance = line_length(data->players[0].position, ray.hit_pos);
+	distance = line_length(ray.start_pos, ray.hit_pos);
 	distance = cos(angle2) * distance;
 	// if (distance < 1)
 	// distance = 1;
