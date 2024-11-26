@@ -15,9 +15,6 @@
 #include <X11/keysym.h>
 #include <mlx.h>
 
-// printf("frametime: %dms	fps: %d\n", data->delta_time,
-//		1000/data->delta_time);
-
 void	delta_time(t_data *data)
 {
 	struct timeval	tv_now;
@@ -27,6 +24,9 @@ void	delta_time(t_data *data)
 	data->delta_time = (tv_now.tv_sec * 1000 + tv_now.tv_usec / 1000)
 		- (data->lastframe.tv_sec * 1000 + data->lastframe.tv_usec / 1000);
 	data->lastframe = tv_now;
+	if (PRINT_FPS)
+		printf("%dms	%dfps\n", data->delta_time, 1000
+				/ data->delta_time);
 }
 
 int	handle_mouseclick(int button, int x, int y, t_data *data)
