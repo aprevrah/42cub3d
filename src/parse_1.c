@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 17:24:06 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/25 17:59:44 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/26 16:44:12 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,48 +53,115 @@ int	get_dir(char c)
 		return (6);
 }
 
-// # also check that there is as least one direction in the map
-static int	fill_map(char const *s, t_map *map)
+int	count_players(t_map *map)
 {
-	(void) map;
-	int	i;
-	int	x;
-	int	y;
-	int j;
+	int x;
+	int y;
+	int player_count;
 
-	i = 0;
 	x = 0;
 	y = 0;
-	j = 0;
-
+	player_count = 0;
 	while (y < map->height)
 	{
-		while (s[i] && s[i] != '\n')
-		{
-			if (!is_valid_char(s[i]) || j > 1)
-				return (printf("unvalid char in map\n"), 1);
-			if (s[i] == '0')
-				map->arr[y][x] = 1;
-			if (s[i] == 'N' || s[i] == 'O' || s[i] == 'S' || s[i] == 'W')
-			{
-				j++;
-				map->arr[y][x] = get_dir(s[i]);
-			}
-			i++;
-			x++;
-		}
 		x = 0;
+		while (x < map->length)
+		{
+			if (map->arr[y][x] >= 3 && map->arr[y][x] <= 6)
+				player_count++;
+			x++;		
+		}
+		y++;	
+	}
+	if (player_count == 0)
+		printf("Error: missing player\n");
+	if (player_count > 1)
+		printf("Error: too many players\n");
+	return (player_count);
+}
+
+static int	procces_line(char const *s, t_map *map, int *i, int y)
+{
+	int x;
+
+	x = 0;
+	while (s[*i] && s[*i] != '\n')
+	{
+		if (!is_valid_char(s[*i]))
+			return (printf("unvalid char in map\n"), 1);
+		if (s[*i] == '0')
+			map->arr[y][x] = 1;
+		if (s[*i] == 'N' || s[*i] == 'O' || s[*i] == 'S' || s[*i] == 'W')
+			map->arr[y][x] = get_dir(s[*i]);
+		(*i)++;
+		x++;
+	}
+	return (0);	
+}
+
+static int	fill_map(char const *s, t_map *map)
+{
+	int	i;
+	int	y;
+
+
+	i = 0;
+	y = 0;
+	while (y < map->height)
+	{
+		if (procces_line(s, map, &i, y))
+			return (1);
 		y++;
 		if (s[i] != '\0')
 			i++;
 		else
-			break ;
+ 			break ;
 	}
-	if (j == 0)
-		return (printf("missing player position\n"), 1);
+	if (count_players(map) == 0)
+		return (printf("Error: missing player\n"), 1);
+	if (count_players(map) > 1)
+		return (printf("Error: too many players\n"), 1);
 	return (0);
 }
+// static int	fill_map(char const *s, t_map *map)
+// {
+// 	int	i;
+// 	int	x;
+// 	int	y;
+// 	int j;
 
+// 	i = 0;
+// 	x = 0;
+// 	y = 0;
+// 	j = 0;
+
+// 	while (y < map->height)
+// 	{
+// 		while (s[i] && s[i] != '\n')
+// 		{
+// 			if (!is_valid_char(s[i]) || j > 1)
+// 				return (printf("unvalid char in map\n"), 1);
+// 			if (s[i] == '0')
+// 				map->arr[y][x] = 1;
+// 			if (s[i] == 'N' || s[i] == 'O' || s[i] == 'S' || s[i] == 'W')
+// 			{
+// 				j++;
+// 				map->arr[y][x] = get_dir(s[i]);
+// 			}
+// 			i++;
+// 			x++;
+// 		}
+// 		x = 0;
+// 		y++;
+// 		if (s[i] != '\0')
+// 			i++;
+// 		else
+// 			break ;
+// 	}
+// 	if (j == 0)
+// 		return (printf("missing player position\n"), 1);
+// 	return (0);
+// }
 # define WHITESPACE " \t\n\r\v\f"
 # define NUNERIC "0123456789"
 
