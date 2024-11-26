@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 17:24:06 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/26 16:44:12 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/26 17:48:02 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,13 +162,12 @@ static int	fill_map(char const *s, t_map *map)
 // 		return (printf("missing player position\n"), 1);
 // 	return (0);
 // }
-# define WHITESPACE " \t\n\r\v\f"
-# define NUNERIC "0123456789"
 
 int	skip_until(const char *str, unsigned int *i, const char *charset,
 		bool val)
 {
 	int chars_skipped;
+	
 	chars_skipped = 0;
 	while ((ft_strchr(charset, str[*i]) != 0) != val && str[*i] != '\0')
 	{
@@ -254,44 +253,45 @@ int is_only_numeric_and_2_comma(char *str, int i)
 	return (count == 2);
 }
 
-int get_color(char *s, unsigned int *color)
+int	gc_error_check(char *s)
 {
-	unsigned int i;
-	unsigned int r;
-	unsigned int g;
-	unsigned int b;
-
-	i = 0;
-
 	if (count_words(s) != 2)
 		return (printf("Error: color line needs 2 arguments\n"), 1);
 	if (s[1] && s[1] != ' ')
 		return (printf("Error: missing space after identifier\n"), 1);
 	if (!is_only_numeric_and_2_comma(s, 1))
 		return (printf("Error: syntax error in color line\n"), 1);
+	return (0);
+} 
+
+int get_color(char *s, unsigned int *color)
+{
+	unsigned int i;
+	t_color_value color_value;
+
+	i = 0;
+	if (gc_error_check(s))
+		return (1);
 	skip_until(s, &i, WHITESPACE, true);
 	if (!skip_until(s, &i, WHITESPACE, false))
 		return (1);
-	r = ft_to_int(s, &i);
+	color_value.r = ft_to_int(s, &i);
 	if (s[i] != ',')
 		return (1);
 	i++;
 	skip_until(s, &i, WHITESPACE, false);
-	g = ft_to_int(s, &i);
+	color_value.g = ft_to_int(s, &i);
 	if (s[i] != ',')
 		return (1);
 	i++;
 	skip_until(s, &i, WHITESPACE, false);
-	b = ft_to_int(s, &i);
+	color_value.b = ft_to_int(s, &i);
 
-	if (r > 255 || g > 255 || b > 255)
-		return (1);
-	*color = (r << 16) | (g << 8) | b;
+	if (color_value.r > 255 || color_value.g > 255 || color_value.b > 255)
+		return (printf("Error: color values too high\n"), 1);
+	*color = (color_value.r << 16) | (color_value.g << 8) | color_value.b;
 	return (0);
 }
-
-
-
 
 int get_key(unsigned int *i, char *s, char **path)
 {
@@ -314,7 +314,6 @@ int get_key(unsigned int *i, char *s, char **path)
 	trim_spaces_at_end(*path);
 	return (0);
 }
-
 
 bool is_only_whitespace(char *s)
 {
@@ -406,6 +405,7 @@ static char	*read_map_data(int fd, t_map *map)
 	return (content);
 }
 
+
 int **new_2d_int_arr(int rows, int cols)
 {
 	int **arr;
@@ -431,7 +431,49 @@ int **new_2d_int_arr(int rows, int cols)
 }
 
 
-// # also check that there is as least one direction in the map
+// static int	procces_line2(char const *s, int **arr, int *i, int y)
+// {
+// 	int x;
+
+// 	x = 0;
+// 	while (s[*i] && s[*i] != '\n')
+// 	{
+// 		if (s[*i] == '0' || s[*i] == 'N' || s[*i] == 'O' || s[*i] == 'S' || s[*i] == 'W')
+// 				arr[y][x] = 1;
+// 			if (s[*i] == ' ')
+// 				arr[y][x] = 8;
+// 		(*i)++;
+// 		x++;
+// 	}
+// 	return (x);	
+// }
+
+// static int	fill_map2(char const *s, t_map *map, int **arr)
+// {
+// 	int	i;
+// 	int x;
+// 	int	y;
+
+// 	i = 0;
+// 	x = 0;
+// 	y = 0;
+// 	while (y < map->height)
+// 	{
+// 		x = procces_line2(s, arr, &i, y);
+// 		y++;
+// 		while (x < map->length)
+// 		{
+// 			arr[y][x] = 8;
+// 			x++;
+// 		}
+// 		if (s[i] != '\0')
+// 			i++;
+// 		else
+// 			break ;
+// 	}
+// 	return (0);
+// }
+
 static int	fill_map2(char const *s, t_map *map, int **arr)
 {
 	(void) map;
@@ -442,7 +484,6 @@ static int	fill_map2(char const *s, t_map *map, int **arr)
 	i = 0;
 	x = 0;
 	y = 0;
-
 	while (y < map->height)
 	{
 		while (s[i] && s[i] != '\n')
@@ -469,7 +510,6 @@ static int	fill_map2(char const *s, t_map *map, int **arr)
 	return (0);
 }
 
-
 //! check minimum a least 3 row and collums;
 
 int	check_sides(int **arr, int height, int length)
@@ -479,21 +519,18 @@ int	check_sides(int **arr, int height, int length)
 
 	x = 0;
 	y = 0;
-
 	while (x < length)
 	{
 		if (arr[0][x] == 1 || arr[height-1][x] == 1)
 			return (0);
 		x++;
 	}
-
 	while (y < height)
 	{
 		if (arr[y][0] == 1 || arr[y][length-1] == 1)
 			return (0);
 		y++;
 	}
-
 	return (1);
 }
 
@@ -504,7 +541,6 @@ int check_middle(int **arr, int height, int length)
 
 	x = 1;
 	y = 1;
-
 	while (y < height-1)
 	{
 		x = 1;
@@ -534,37 +570,53 @@ int	is_wall_enclosed(char *content , t_map *map)
 	array = new_2d_int_arr(map->height, map->length);
 	if (!array)
 		return (0);
-
 	fill_map2(content, map,array);
-
-	int x;
-	int y;
-
-
-	x = 0;
-	y = 0;
-	printf("\nis_wall_enclosed()\n\n");
-	while (y < map->height)
-	{
-		while (x < map->length)
-		{
-			printf("%i", array[y][x]);
-			x++;
-		}
-		printf("\n");
-		x = 0;
-		y++;
-	}
-
 	if (!check_sides(array, map->height, map->length))
-		return (printf("sides\n"), free_2d_arr((void **)array, map->height), 0);
-
+		return (printf("Error: map is not enclosed\n"), free_2d_arr((void **)array, map->height), 0);
 	if (!check_middle(array, map->height, map->length))
-		return (printf("middle\n"), free_2d_arr((void **)array, map->height), 0);
-
+		return (printf("Error: map is not enclosed\n"), free_2d_arr((void **)array, map->height), 0);
 	free_2d_arr((void **)array, map->height);
 	return (1);
 }
+
+// int	is_wall_enclosed(char *content , t_map *map)
+// {
+// 	int **array;
+// 	int x;
+// 	int y;
+
+// 	x = 0;
+// 	y = 0;
+// 	array = new_2d_int_arr(map->height, map->length);
+// 	if (!array)
+// 		return (0);
+// 	fill_map2(content, map,array);
+
+
+
+
+// 	printf("\nis_wall_enclosed()\n\n");
+// 	while (y < map->height)
+// 	{
+// 		while (x < map->length)
+// 		{
+// 			printf("%i", array[y][x]);
+// 			x++;
+// 		}
+// 		printf("\n");
+// 		x = 0;
+// 		y++;
+// 	}
+
+// 	if (!check_sides(array, map->height, map->length))
+// 		return (printf("sides\n"), free_2d_arr((void **)array, map->height), 0);
+
+// 	if (!check_middle(array, map->height, map->length))
+// 		return (printf("middle\n"), free_2d_arr((void **)array, map->height), 0);
+
+// 	free_2d_arr((void **)array, map->height);
+// 	return (1);
+// }
 
 // # function protected and tested with valgrind
 t_map	*parse_map(int fd)

@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/08 13:01:15 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/15 14:16:02 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/26 17:12:02 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,9 @@
 # define SCALE 70
 # define MAX_RAY 50
 
+# define WHITESPACE " \t\n\r\v\f"
+# define NUNERIC "0123456789"
+
 
 
 typedef struct s_data	t_data;
@@ -44,6 +47,13 @@ typedef struct s_dvec2
 	double					x;
 	double					y;
 }						t_dvec2;
+
+typedef struct s_color_value
+{
+	unsigned int r;
+	unsigned int g;
+	unsigned int b;
+}						t_color_value;
 
 typedef struct s_player
 {
