@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 17:24:06 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/26 17:48:02 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/27 13:52:59 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -286,7 +286,6 @@ int get_color(char *s, unsigned int *color)
 	i++;
 	skip_until(s, &i, WHITESPACE, false);
 	color_value.b = ft_to_int(s, &i);
-
 	if (color_value.r > 255 || color_value.g > 255 || color_value.b > 255)
 		return (printf("Error: color values too high\n"), 1);
 	*color = (color_value.r << 16) | (color_value.g << 8) | color_value.b;
@@ -300,17 +299,17 @@ int get_key(unsigned int *i, char *s, char **path)
 	if (count_words(s) != 2)
 		return (printf("Error: texture line needs 2 arguments\n"), 1);
 	if (s[*i+2] && s[*i+2] != ' ')
-		return (printf("ERROR: missing space after identifier\n"), 1);
+		return (printf("Error: missing space after identifier\n"), 1);
 	skip_until(s, i, WHITESPACE, true);
 	if (!skip_until(s, i, WHITESPACE, false))
-		return (printf("Unable to parse: %s", s), 1);
+		return (printf("Error: Unable to parse: %s", s), 1);
 	start = *i;
 	skip_until(s, i, "\n", true);
 	if (*path)
-		return (printf("Duplicate config: %s", s), 1);
+		return (printf("Error: Duplicate config: %s", s), 1);
 	*path = ft_substr(s, start, *i - start);
 	if (!path)
-		return (printf("Malloc failed."), 1);
+		return (printf("Error: Malloc failed."), 1);
 	trim_spaces_at_end(*path);
 	return (0);
 }
@@ -431,54 +430,27 @@ int **new_2d_int_arr(int rows, int cols)
 }
 
 
-// static int	procces_line2(char const *s, int **arr, int *i, int y)
-// {
-// 	int x;
+int	procces_line2(char const *s, int **arr, int *i, int y)
+{
+	int x;
 
-// 	x = 0;
-// 	while (s[*i] && s[*i] != '\n')
-// 	{
-// 		if (s[*i] == '0' || s[*i] == 'N' || s[*i] == 'O' || s[*i] == 'S' || s[*i] == 'W')
-// 				arr[y][x] = 1;
-// 			if (s[*i] == ' ')
-// 				arr[y][x] = 8;
-// 		(*i)++;
-// 		x++;
-// 	}
-// 	return (x);	
-// }
-
-// static int	fill_map2(char const *s, t_map *map, int **arr)
-// {
-// 	int	i;
-// 	int x;
-// 	int	y;
-
-// 	i = 0;
-// 	x = 0;
-// 	y = 0;
-// 	while (y < map->height)
-// 	{
-// 		x = procces_line2(s, arr, &i, y);
-// 		y++;
-// 		while (x < map->length)
-// 		{
-// 			arr[y][x] = 8;
-// 			x++;
-// 		}
-// 		if (s[i] != '\0')
-// 			i++;
-// 		else
-// 			break ;
-// 	}
-// 	return (0);
-// }
+	x = 0;
+	while (s[*i] && s[*i] != '\n')
+	{
+		if (s[*i] == '0' || s[*i] == 'N' || s[*i] == 'O' || s[*i] == 'S' || s[*i] == 'W')
+				arr[y][x] = 1;
+			if (s[*i] == ' ')
+				arr[y][x] = 8;
+		(*i)++;
+		x++;
+	}
+	return (x);	
+}
 
 static int	fill_map2(char const *s, t_map *map, int **arr)
 {
-	(void) map;
 	int	i;
-	int	x;
+	int x;
 	int	y;
 
 	i = 0;
@@ -486,21 +458,12 @@ static int	fill_map2(char const *s, t_map *map, int **arr)
 	y = 0;
 	while (y < map->height)
 	{
-		while (s[i] && s[i] != '\n')
-		{
-			if (s[i] == '0' || s[i] == 'N' || s[i] == 'O' || s[i] == 'S' || s[i] == 'W')
-				arr[y][x] = 1;
-			if (s[i] == ' ')
-				arr[y][x] = 8;
-			i++;
-			x++;
-		}
+		x = procces_line2(s, arr, &i, y);
 		while (x < map->length)
 		{
 			arr[y][x] = 8;
 			x++;
 		}
-		x = 0;
 		y++;
 		if (s[i] != '\0')
 			i++;
@@ -579,58 +542,25 @@ int	is_wall_enclosed(char *content , t_map *map)
 	return (1);
 }
 
-// int	is_wall_enclosed(char *content , t_map *map)
-// {
-// 	int **array;
-// 	int x;
-// 	int y;
 
-// 	x = 0;
-// 	y = 0;
-// 	array = new_2d_int_arr(map->height, map->length);
-// 	if (!array)
-// 		return (0);
-// 	fill_map2(content, map,array);
-
-
-
-
-// 	printf("\nis_wall_enclosed()\n\n");
-// 	while (y < map->height)
-// 	{
-// 		while (x < map->length)
-// 		{
-// 			printf("%i", array[y][x]);
-// 			x++;
-// 		}
-// 		printf("\n");
-// 		x = 0;
-// 		y++;
-// 	}
-
-// 	if (!check_sides(array, map->height, map->length))
-// 		return (printf("sides\n"), free_2d_arr((void **)array, map->height), 0);
-
-// 	if (!check_middle(array, map->height, map->length))
-// 		return (printf("middle\n"), free_2d_arr((void **)array, map->height), 0);
-
-// 	free_2d_arr((void **)array, map->height);
-// 	return (1);
-// }
-
-// # function protected and tested with valgrind
-t_map	*parse_map(int fd)
+t_texture_data	*get_texture_data(int fd)
 {
-	t_map			*map;
 	t_texture_data	*texture_data;
-	char			*content;
-
+	
 	texture_data = (t_texture_data *)malloc(sizeof(t_texture_data));
 	if (!texture_data)
 		return (NULL);
 	if (read_texture_data(fd, texture_data))
 		return (get_next_line(fd, 1), free_texture_data(texture_data), NULL);
-	printtexture_data(*texture_data);
+	return (texture_data);
+}
+
+t_map	*get_map(int fd, t_texture_data *texture_data)
+{
+	t_map	*map;
+	char	*content;
+
+	
 	map = (t_map *)malloc(sizeof(t_map));
 	if (!map)
 		return (get_next_line(fd, 1), free_texture_data(texture_data), NULL);
@@ -643,19 +573,73 @@ t_map	*parse_map(int fd)
 	map->arr = new_2d_int_arr(map->height, map->length);
 	if (!map->arr)
 		return (get_next_line(fd, 1), free_texture_data(texture_data), free(map), free(content), NULL);
-
 	if (fill_map(content, map))
 		return (get_next_line(fd, 1), free_texture_data(texture_data), free(content), free_map(map), NULL);
-
 	if (!is_wall_enclosed(content, map))
 		return (get_next_line(fd, 1), free_texture_data(texture_data), free(content), free_map(map), NULL);
-
-
-	printf("\nINPUT\n%s\n", content);
-	printf("\nConverted map\n\n");
-	printmap(map);
-
-	// maunaly check if the map was correcty filled
 	free(content);
+	
 	return (map);
 }
+
+
+// # function protected and tested with valgrind
+t_map	*parse_map(int fd)
+{
+	t_map			*map;
+	t_texture_data	*texture_data;
+
+
+	if ((texture_data = get_texture_data(fd)) == NULL)
+		return (NULL);
+	printtexture_data(*texture_data); //! delete
+	
+	if ((map = get_map(fd, texture_data)) == NULL)
+		return (NULL); 
+
+	return (map);
+}
+
+
+
+
+// t_map	*parse_map(int fd)
+// {
+// 	t_map			*map;
+// 	t_texture_data	*texture_data;
+// 	char			*content;
+
+// 	texture_data = (t_texture_data *)malloc(sizeof(t_texture_data));
+// 	if (!texture_data)
+// 		return (NULL);
+// 	if (read_texture_data(fd, texture_data))
+// 		return (get_next_line(fd, 1), free_texture_data(texture_data), NULL);
+// 	printtexture_data(*texture_data);
+// 	map = (t_map *)malloc(sizeof(t_map));
+// 	if (!map)
+// 		return (get_next_line(fd, 1), free_texture_data(texture_data), NULL);
+// 	map->texture_data = texture_data;
+// 	map->height = 0;
+// 	map->length = 0;
+// 	content = read_map_data(fd, map);
+// 	if (!content)
+// 		return (get_next_line(fd, 1), free_texture_data(texture_data), free(map),NULL);
+// 	map->arr = new_2d_int_arr(map->height, map->length);
+// 	if (!map->arr)
+// 		return (get_next_line(fd, 1), free_texture_data(texture_data), free(map), free(content), NULL);
+
+// 	if (fill_map(content, map))
+// 		return (get_next_line(fd, 1), free_texture_data(texture_data), free(content), free_map(map), NULL);
+
+// 	if (!is_wall_enclosed(content, map))
+// 		return (get_next_line(fd, 1), free_texture_data(texture_data), free(content), free_map(map), NULL);
+
+
+// 	printf("\nINPUT\n%s\n", content);
+// 	printf("\nConverted map\n\n");
+// 	printmap(map);
+
+// 	// maunaly check if the map was correcty filled
+// 	free(content);
+// 	return (map);
+// }
