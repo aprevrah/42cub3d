@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 23:25:37 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/20 12:12:45 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/27 15:19:18 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,8 +101,8 @@ t_dvec2	get_player_pos(t_map *map)
 		}
 		i++;
 	}
-	pos.x = 1.5;
-	pos.y = 1.5;
+	pos.x = 1.5;	//! delete
+	pos.y = 1.5;	//! delete
 	return (pos);
 }
 
