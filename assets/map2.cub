@@ -1,5 +1,6 @@
 WE assets/cobblestone.xpm
 NO assets/cobblestone.xpm
+
 EA assets/cobblestone.xpm
 SO assets/cobblestone.xpm
 C 60,60,240
@@ -26,7 +27,7 @@ F 50,50,50
  10N000000000000000101
  10000000111110111111
  111111001   1011111
-      1000  10000001
+      1001  10000001
       100111111111101
       10000000000001
       111111111111111

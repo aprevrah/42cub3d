@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 17:00:43 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/16 15:46:33 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/20 18:34:37 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ char	*get_next_line(int fd, int x)
 	char		*line;
 	
 	if (str[fd] && x)
-		return (free(str[fd]), NULL);
+		return (free(str[fd]), str[fd] = NULL, NULL);
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	if (!str[fd] || !gnl_ft_strchr(str[fd], '\n'))

@@ -6,20 +6,12 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 22:34:46 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/20 12:15:46 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/27 19:26:49 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
-#include "mlx.h"
-#include <X11/X.h>
-#include <X11/keysym.h>
-#include <fcntl.h>
-#include <mlx.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
+
 
 void	free_and_exit(t_data *data, int code)
 {
@@ -91,13 +83,35 @@ void	init2null(t_data *data)
 	data->addr = NULL;
 	data->map = NULL;
 	data->players = NULL;
-	// data->map->texture_data = NULL;
-	// data->map->texture_data->path_no = NULL;
-	// data->map->texture_data->path_so = NULL;
-	// data->map->texture_data->path_we = NULL;
-	// data->map->texture_data->path_ea = NULL;
-	// data->map->arr = NULL;
+}
+
+int		init_textures(t_data *data)
+{	
+	data->map->texture_data->textures[0].img = NULL;
+	data->map->texture_data->textures[1].img = NULL;
+	data->map->texture_data->textures[2].img = NULL;
+	data->map->texture_data->textures[3].img = NULL;
+
 	
+	if (load_texture(data->map->texture_data->path_no, data, &data->map->texture_data->textures[0]))
+		return (printf("Error: could not load texture\n"), 1);
+	if (load_texture(data->map->texture_data->path_ea, data, &data->map->texture_data->textures[1]))
+		return (printf("Error: could not load texture\n"), 1);
+	if (load_texture(data->map->texture_data->path_so, data, &data->map->texture_data->textures[2]))
+		return (printf("Error: could not load texture\n"), 1);
+	if (load_texture(data->map->texture_data->path_we, data, &data->map->texture_data->textures[3]))
+		return (printf("Error: could not load texture\n"), 1);
+
+	return (0);
+}
+
+int	check_input(int argc, char **argv)
+{
+	if (argc != 2)
+		return (printf("Error: (Only) one argument needed.\n"), 1);
+	if (!is_file_extension(argv[1], ".cub"))
+		return (printf("Error: Wrong filetype, \".cub\" needed.\n"), 1);
+	return (0);
 }
 
 int	main(int argc, char **argv)
@@ -106,31 +120,26 @@ int	main(int argc, char **argv)
 	int		fd;
 
 	init2null(&data);
-	if (argc != 2)
-		return (ft_printf("(Only) one argument needed.\n"), 1);
-	if (!is_file_extension(argv[1], ".cub"))
-		return (ft_printf("Wrong filetype, \".cub\" needed.\n"), 1);
+	if (check_input(argc, argv))
+		return (1);
+	
 	fd = open(argv[1], O_RDONLY);
 	if (fd < 0)
 		return (1);
 	data.fd = fd;
-	data.map = parse_map(fd);	
-	close(fd);
 	
-	if (!data.map)
+	if ((data.map = parse_map(fd)) == NULL)
 		free_and_exit(&data, 1);
-	
-		
+				
 	if (init_players(&data.players, data.map))
 		free_and_exit(&data, 1);
-	//free_and_exit(&data, 1);
-	
 	
 	if (init_mlx(&data))
 		free_and_exit(&data, 1);
 	
+	if (init_textures(&data))
+		free_and_exit(&data, 1);
 	
-	//free_and_exit(&data, 1);
 	render_map(&data);
 	mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
 	init_keys(data.keys, data.players);
@@ -149,7 +158,5 @@ int	main(int argc, char **argv)
 	mlx_loop_hook(data.mlx, loop_hook, &data);
 	mlx_loop(data.mlx);
 
-
-	free_and_exit(&data, 1);
-
-}
+	free_and_exit(&data, 0);
+}	
