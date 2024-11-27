@@ -193,10 +193,10 @@ t_ray	raycast(t_player player, t_map *map, double angle)
 	ray.vert_hit = false;
 	ray.hori_hit = false;
 	i = 0;
-	if (ray.delta.y == 0 || ray.delta.x == 0)
-	{
-		printray(ray);
-	}
+	// if (ray.delta.y == 0 || ray.delta.x == 0)
+	// {
+	// 	printray(ray);
+	// }
 	while (i < MAX_RAY)
 	{
 		if (!ray.vert_hit && ray.delta.x && smart_is_wall(map,
@@ -217,10 +217,10 @@ t_ray	raycast(t_player player, t_map *map, double angle)
 		}
 		i++;
 	}
-	if (ray.delta.y == 0 || ray.delta.x == 0)
-	{
-		printray(ray);
-	}
+	// if (ray.delta.y == 0 || ray.delta.x == 0)
+	// {
+	// 	printray(ray);
+	// }
 	ray_cal_hit_and_dir(&ray);
 	return (ray);
 }

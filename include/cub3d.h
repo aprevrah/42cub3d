@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/08 13:01:15 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/27 18:57:02 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/27 19:13:45 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@
 
 
 # define COLLISION true
-# define PRINT_FPS true
+# define PRINT_FPS false
 
 typedef struct s_data	t_data;
 typedef struct s_map	t_map;

@@ -40,7 +40,9 @@ char	*read_map_data(int fd, t_map *map)
 {
 	t_rmd data;
 
-	data.content = set_null(&data.location);
+	// data.content = set_null(&data.location);
+	data.content = NULL;
+	data.location = 0;
 	while (1)
 	{
 		data.line = get_next_line(fd, 0);
