@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/08 13:01:15 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/27 13:53:21 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/27 13:58:03 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,13 @@ typedef struct s_color_value
 	unsigned int g;
 	unsigned int b;
 }						t_color_value;
+
+typedef struct s_rmd
+{
+	char	*line;
+	char	*content;
+	int		location;
+}					t_rmd;
 
 typedef struct s_player
 {

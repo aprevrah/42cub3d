@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 17:24:06 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/27 13:52:59 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/27 14:11:02 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,45 +123,6 @@ static int	fill_map(char const *s, t_map *map)
 		return (printf("Error: too many players\n"), 1);
 	return (0);
 }
-// static int	fill_map(char const *s, t_map *map)
-// {
-// 	int	i;
-// 	int	x;
-// 	int	y;
-// 	int j;
-
-// 	i = 0;
-// 	x = 0;
-// 	y = 0;
-// 	j = 0;
-
-// 	while (y < map->height)
-// 	{
-// 		while (s[i] && s[i] != '\n')
-// 		{
-// 			if (!is_valid_char(s[i]) || j > 1)
-// 				return (printf("unvalid char in map\n"), 1);
-// 			if (s[i] == '0')
-// 				map->arr[y][x] = 1;
-// 			if (s[i] == 'N' || s[i] == 'O' || s[i] == 'S' || s[i] == 'W')
-// 			{
-// 				j++;
-// 				map->arr[y][x] = get_dir(s[i]);
-// 			}
-// 			i++;
-// 			x++;
-// 		}
-// 		x = 0;
-// 		y++;
-// 		if (s[i] != '\0')
-// 			i++;
-// 		else
-// 			break ;
-// 	}
-// 	if (j == 0)
-// 		return (printf("missing player position\n"), 1);
-// 	return (0);
-// }
 
 int	skip_until(const char *str, unsigned int *i, const char *charset,
 		bool val)
@@ -372,37 +333,76 @@ int read_texture_data(int fd, t_texture_data *texture_data)
 	return (0);
 }
 
+char *set_null(int *location)
+{
+	location = 0;
+
+	if (location == 0)
+		return (NULL);
+	return (NULL);
+}
+
+
 static char	*read_map_data(int fd, t_map *map)
 {
-	char	*line;
-	char	*content;
-	int		location;
+	t_rmd data;
 
-	content = NULL;
-	location = 0;
+	data.content = set_null(&data.location);
 	while (1)
 	{
-		line = get_next_line(fd, 0);
-		if (!line)
+		data.line = get_next_line(fd, 0);
+		if (!data.line)
 			break ;
-		if (is_only_whitespace(line) && (location == 0 || location == 2))
+		if (is_only_whitespace(data.line) && (data.location == 0 || data.location == 2))
 		{
-			free(line);
+			free(data.line);
 			continue ;
 		}
-		else if (location == 0)
-			location = 1;
-		else if (location == 1 && is_only_whitespace(line))
-			location = 2;
-		else if (location == 2 && !is_only_whitespace(line))
-			return(free(line), printf("Failed to read map.\n"), content);
+		else if (data.location == 0)
+			data.location = 1;
+		else if (data.location == 1 && is_only_whitespace(data.line))
+			data.location = 2;
+		else if (data.location == 2 && !is_only_whitespace(data.line))
+			return(free(data.line), printf("Failed to read map.\n"), data.content);
 		map->height++;
-		if (map->length < (int)ft_strlen(line) - 1)
-			map->length = (int)ft_strlen(line) - 1;
-		content = ft_str_append(content, line);
+		if (map->length < (int)ft_strlen(data.line) - 1)
+			map->length = (int)ft_strlen(data.line) - 1;
+		data.content = ft_str_append(data.content, data.line);
 	}
-	return (content);
+	return (data.content);
 }
+
+// static char	*read_map_data(int fd, t_map *map)
+// {
+// 	char	*line;
+// 	char	*content;
+// 	int		location;
+
+// 	content = NULL;
+// 	location = 0;
+// 	while (1)
+// 	{
+// 		line = get_next_line(fd, 0);
+// 		if (!line)
+// 			break ;
+// 		if (is_only_whitespace(line) && (location == 0 || location == 2))
+// 		{
+// 			free(line);
+// 			continue ;
+// 		}
+// 		else if (location == 0)
+// 			location = 1;
+// 		else if (location == 1 && is_only_whitespace(line))
+// 			location = 2;
+// 		else if (location == 2 && !is_only_whitespace(line))
+// 			return(free(line), printf("Failed to read map.\n"), content);
+// 		map->height++;
+// 		if (map->length < (int)ft_strlen(line) - 1)
+// 			map->length = (int)ft_strlen(line) - 1;
+// 		content = ft_str_append(content, line);
+// 	}
+// 	return (content);
+// }
 
 
 int **new_2d_int_arr(int rows, int cols)
