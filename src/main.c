@@ -6,20 +6,12 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 22:34:46 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/23 17:32:03 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/27 18:22:43 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
-#include "mlx.h"
-#include <X11/X.h>
-#include <X11/keysym.h>
-#include <fcntl.h>
-#include <mlx.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
+
 
 void	free_and_exit(t_data *data, int code)
 {
@@ -91,13 +83,6 @@ void	init2null(t_data *data)
 	data->addr = NULL;
 	data->map = NULL;
 	data->players = NULL;
-	// data->map->texture_data = NULL;
-	// data->map->texture_data->path_NO = NULL;
-	// data->map->texture_data->path_SO = NULL;
-	// data->map->texture_data->path_WE = NULL;
-	// data->map->texture_data->path_EA = NULL;
-	// data->map->arr = NULL;
-	
 }
 
 int		init_textures(t_data *data)
@@ -120,6 +105,14 @@ int		init_textures(t_data *data)
 	return (0);
 }
 
+int	check_input(int argc, char **argv)
+{
+	if (argc != 2)
+		return (printf("Error: (Only) one argument needed.\n"), 1);
+	if (!is_file_extension(argv[1], ".cub"))
+		return (printf("Error: Wrong filetype, \".cub\" needed.\n"), 1);
+	return (0);
+}
 
 int	main(int argc, char **argv)
 {
@@ -127,26 +120,19 @@ int	main(int argc, char **argv)
 	int		fd;
 
 	init2null(&data);
-	if (argc != 2)
-		return (ft_printf("(Only) one argument needed.\n"), 1);
-	if (!is_file_extension(argv[1], ".cub"))
-		return (ft_printf("Wrong filetype, \".cub\" needed.\n"), 1);
+	if (check_input(argc, argv))
+		return (1);
+	
 	fd = open(argv[1], O_RDONLY);
 	if (fd < 0)
 		return (1);
 	data.fd = fd;
-	data.map = parse_map(fd);	
-	close(fd);
 	
-	if (!data.map)
+	if ((data.map = parse_map(fd)) == NULL)
 		free_and_exit(&data, 1);
-
-	
-		
+				
 	if (init_players(&data.players, data.map))
 		free_and_exit(&data, 1);
-	//free_and_exit(&data, 1);
-	
 	
 	if (init_mlx(&data))
 		free_and_exit(&data, 1);
@@ -154,25 +140,14 @@ int	main(int argc, char **argv)
 	if (init_textures(&data))
 		free_and_exit(&data, 1);
 	
-	//free_and_exit(&data, 1);
 	render_map(&data);
 	mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
 	init_keys(data.keys, data.players);
 	mlx_hook(data.win, 2, KeyPressMask, handle_keydown, data.keys);
 	mlx_hook(data.win, 3, KeyReleaseMask, handle_keyup, data.keys);
-	mlx_hook(data.win, 17, StructureNotifyMask, win_close_button, &data);
-	// test texture
-	// printtexture_data(*data.map->texture_data);
-	
-	// load_texture(data.map->texture_data->path_NO, &data, &data.map->texture_data->textures[0]);
-	// load_texture(data.map->texture_data->path_EA, &data, &data.map->texture_data->textures[1]);
-	// load_texture(data.map->texture_data->path_SO, &data, &data.map->texture_data->textures[2]);
-	// load_texture(data.map->texture_data->path_WE, &data, &data.map->texture_data->textures[3]);
-	
+	mlx_hook(data.win, 17, StructureNotifyMask, win_close_button, &data);	
 	mlx_loop_hook(data.mlx, loop_hook, &data);
 	mlx_loop(data.mlx);
 
-
-	free_and_exit(&data, 1);
-
-}
+	free_and_exit(&data, 0);
+}	

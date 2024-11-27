@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/08 13:01:15 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/27 13:58:03 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/27 18:33:41 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,15 @@
 # include <stdlib.h>
 # include <stdbool.h>
 # include <sys/time.h>
+#include "mlx.h"
+#include <X11/X.h>
+#include <X11/keysym.h>
+#include <fcntl.h>
+#include <mlx.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 
 # define COLOR 0x00FFFFFF
 # define MAP_SEP " "
@@ -201,19 +210,59 @@ void					free_and_exit(t_data *data, int code);
 void					move(t_data *data, void *args);
 void					look(t_data *data, void *args);
 
-// parse.c
+// # parse_1.c
+t_texture_data			*get_texture_data(int fd);
+t_map					*get_map(int fd, t_texture_data *texture_data);
 t_map					*parse_map(int fd);
+
+// # parse_2.c
+int						procces_line2(char const *s, int **arr, int *i, int y);
+int						fill_map2(char const *s, t_map *map, int **arr);
+int						check_sides(int **arr, int height, int length);
+int						check_middle(int **arr, int height, int length);
+int						is_wall_enclosed(char *content , t_map *map);
+
+// # parse_3.c
+int						is_valid_char(char const s);
+int						get_dir(char c);
+int						count_players(t_map *map);
+int						procces_line(char const *s, t_map *map, int *i, int y);
+int						fill_map(char const *s, t_map *map);
+
+// # parse_4.c
+int						is_only_numeric_and_2_comma(char *str, int i);
+int						gc_error_check(char *s);
+int						get_color(char *s, unsigned int *color);
+int						get_key(unsigned int *i, char *s, char **path);
+int						key_val(char *line, t_texture_data *texture_data);
+
+// # parse_5.c
+int						read_texture_data(int fd, t_texture_data *texture_data);
+char					*set_null(int *location);
+char					*read_map_data(int fd, t_map *map);
+int						**new_2d_int_arr(int rows, int cols);
+
+// # parse_6.c
+char					*ft_str_append(char *a, char *b);
+int						count_words(char *str);
+int						trim_spaces_at_end(char *str);
+bool					is_only_whitespace(char *s);
+int						skip_until(const char *str, unsigned int *i, const char *charset, bool val);
+unsigned int			ft_to_int(char *str, unsigned int *i);
+
 
 // render.c
 void					render_map(t_data *data);
 void					render_players(t_data *data);
 
-// utils.c
+// # utils.c
+
 
 //free.c
 void					free_2d_arr(void **arr, int rows);
 void					free_map(t_map *map);
 void					free_texture_data(t_texture_data *td);
+void					gnl_clear_buffer(int fd);
 
 // dda functions
 
@@ -228,7 +277,6 @@ double  deg2rad(double degrees);
 double rad2deg(double rad);
 double vec2angle(t_dvec2 vec);
 
-void gnl_clear_buffer(int fd);
 
 void	render_half_screen(t_data *data);
 void	render_wall(t_data *data);
