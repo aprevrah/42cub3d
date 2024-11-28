@@ -38,13 +38,13 @@ int	handle_mouseclick(int button, int x, int y, t_data *data)
 	if (data->use_mouse)
 	{
 		data->use_mouse = false;
-		mlx_mouse_show(data->mlx, data->win);
+		//mlx_mouse_show(data->mlx, data->win);
 	}
 	else
 	{
 		data->use_mouse = true;
-		mlx_mouse_hide(data->mlx, data->win);
-		mlx_mouse_move(data->mlx, data->win, W_WIDTH / 2, W_HEIGHT / 2);
+		//mlx_mouse_hide(data->mlx, data->win);
+		//mlx_mouse_move(data->mlx, data->win, W_WIDTH / 2, W_HEIGHT / 2);
 	}
 	return (0);
 }
@@ -52,18 +52,15 @@ int	handle_mouseclick(int button, int x, int y, t_data *data)
 int	handle_mousemove(int x, int y, t_data *data)
 {
 	static int	dx;
-	t_ivec2		win_mid;
 	t_look_args	look_args;
 
 	(void)y;
 	if (!data->use_mouse)
 		return (0);
-	win_mid.x = W_WIDTH / 2;
-	win_mid.y = W_HEIGHT / 2;
-	dx = (x - win_mid.x);
+	dx = (x - W_WIDTH / 2);
 	if (dx)
 	{
-		mlx_mouse_move(data->mlx, data->win, win_mid.x, win_mid.y);
+		mlx_mouse_move(data->mlx, data->win, W_WIDTH / 2, W_HEIGHT / 2);
 		look_args.player = &data->players[0];
 		look_args.rotation = dx * data->players[0].look_speed * 10;
 		look(data, &look_args);
