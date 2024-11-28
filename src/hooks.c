@@ -36,6 +36,20 @@ int	handle_mouseclick(int button, int x, int y, t_data *data)
 	if (button != 1)
 		return (0);
 	if (data->use_mouse)
+		data->use_mouse = false;
+	else
+		data->use_mouse = true;
+	return (0);
+}
+
+/* LEAKS: this leaks cus mlx sucks and its docs suck even more
+int	handle_mouseclick(int button, int x, int y, t_data *data)
+{
+	(void)x;
+	(void)y;
+	if (button != 1)
+		return (0);
+	if (data->use_mouse)
 	{
 		data->use_mouse = false;
 		//mlx_mouse_show(data->mlx, data->win);
@@ -47,7 +61,7 @@ int	handle_mouseclick(int button, int x, int y, t_data *data)
 		//mlx_mouse_move(data->mlx, data->win, W_WIDTH / 2, W_HEIGHT / 2);
 	}
 	return (0);
-}
+}*/
 
 int	handle_mousemove(int x, int y, t_data *data)
 {
