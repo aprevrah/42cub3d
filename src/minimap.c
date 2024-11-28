@@ -78,21 +78,15 @@ void	render_players(t_data *data)
 	player = data->players[0];
 	player_pos_screen = (t_ivec2){round(player.position.x * SCALE),
 		round(player.position.y * SCALE)};
-	// render_rect(data, (t_ivec2){player.position.x -2, player.position.y -2},
-	//	(t_ivec2){player.position.x + 2, player.position.y + 2});
 	line_put(data, player_pos_screen, (t_ivec2){round(player_pos_screen.x
 			+ player.orientation.x * 20), round(player_pos_screen.y
 			+ player.orientation.y * 20)}, 0xf7f70a);
-	// draw rays
 	ray_hit_pos1 = raycast(player, data->map,
 			fmod(vec2angle(player.orientation), 2 * PI)).hit_pos;
 	ray_hit_pos2 = raycast(player, data->map, fmod(vec2angle(player.orientation)
 				+ PI / 8, 2 * PI)).hit_pos;
 	ray_hit_pos3 = raycast(player, data->map, fmod(vec2angle(player.orientation)
 				- PI / 8, 2 * PI)).hit_pos;
-	// printf("p_x = %lf, p_y = %lf\n", player.position.x, player.position.y);
-	// printf("orientation.x = %lf, orientation.y = %lf\n",
-	//	player.orientation.x, player.orientation.y);
 	ray_hit_pos_screen1 = (t_ivec2){ray_hit_pos1.x * SCALE, ray_hit_pos1.y
 		* SCALE};
 	line_put(data, player_pos_screen, ray_hit_pos_screen1, 0xFF0000);
@@ -168,24 +162,49 @@ void	render_minimap(t_data *data)
 		y++;
 	}
 }
+*/
 
- */
+
+
 #include <math.h>
 
 
-void draw_rectangle(t_data *data, t_ivec2 top_left, t_ivec2 bottom_right, int color)
+
+typedef struct s_rect
+{
+    t_ivec2 start;  // Starting coordinates of the rectangle
+    t_ivec2 end;    // Ending coordinates of the rectangle
+    int color;      // Color of the rectangle
+} t_rect;
+
+
+
+typedef struct s_minimap
+{
+    int size;           // Width and height of the minimap in pixels
+    int scale;          // Number of pixels per map unit
+    int player_x;       // Player's x position on the minimap (always center)
+    int player_y;       // Player's y position on the minimap (always center)
+    double offset_x;    // Player's floating-point x position in the map
+    double offset_y;    // Player's floating-point y position in the map
+} t_minimap;
+
+
+void draw_rectangle(t_data *data, t_rect rect)
 {
     int x;
     int y;
 
-    y = top_left.y;
-    while (y < bottom_right.y)
+    y = rect.start.y;
+    while (y < rect.end.y)
     {
-        x = top_left.x;
-        while (x < bottom_right.x)
+        x = rect.start.x;
+        while (x < rect.end.x)
         {
             if (x >= 0 && y >= 0 && x < W_WIDTH && y < W_HEIGHT)
-                my_mlx_pixel_put(data, x, y, color);
+            {
+                my_mlx_pixel_put(data, x, y, rect.color);
+            }
             x++;
         }
         y++;
@@ -194,17 +213,23 @@ void draw_rectangle(t_data *data, t_ivec2 top_left, t_ivec2 bottom_right, int co
 
 void render_minimap(t_data *data)
 {
-    const int minimap_size = 200;  // Width and height of the minimap in pixels
-    const int scale = 10;          // Number of pixels per map unit
-    const int player_x = minimap_size / 2; // Player is always in the center (screen coordinates)
-    const int player_y = minimap_size / 2;
-
-    t_map *map = data->map;
-
+    t_minimap minimap;
+    t_map *map;
     int x;
     int y;
-    double offset_x = data->players[0].position.x; // Use floating-point coordinates
-    double offset_y = data->players[0].position.y;
+    t_rect tile_rect;
+    t_rect player_rect;
+    double screen_x;
+    double screen_y;
+
+    minimap.size = 200;
+    minimap.scale = 10;
+    minimap.player_x = minimap.size / 2;
+    minimap.player_y = minimap.size / 2;
+    minimap.offset_x = data->players[0].position.x;
+    minimap.offset_y = data->players[0].position.y;
+
+    map = data->map;
 
     y = 0;
     while (y < map->height)
@@ -212,29 +237,24 @@ void render_minimap(t_data *data)
         x = 0;
         while (x < map->length)
         {
-            // Calculate screen coordinates relative to the player's position
-            double screen_x = (x - offset_x) * scale + player_x;
-            double screen_y = (y - offset_y) * scale + player_y;
-
-            // Draw rectangles for walls (non-zero map values)
-            if (map->arr[y][x])
-                draw_rectangle(data, 
-                               (t_ivec2){(int)screen_x, (int)screen_y}, 
-                               (t_ivec2){(int)(screen_x + scale), (int)(screen_y + scale)}, 
-                               0xFFFFFF); // Wall color
+            screen_x = (x - minimap.offset_x) * minimap.scale + minimap.player_x;
+            screen_y = (y - minimap.offset_y) * minimap.scale + minimap.player_y;
+            tile_rect.start = (t_ivec2){(int)screen_x, (int)screen_y};
+            tile_rect.end = (t_ivec2){(int)(screen_x + minimap.scale), (int)(screen_y + minimap.scale)};
+            if (map->arr[y][x] != 0)
+                tile_rect.color = 0xFFFFFF;
             else
-                draw_rectangle(data, 
-                               (t_ivec2){(int)screen_x, (int)screen_y}, 
-                               (t_ivec2){(int)(screen_x + scale), (int)(screen_y + scale)}, 
-                               0x0000FF); // Empty space color
+                tile_rect.color = 0x0000FF;
+            draw_rectangle(data, tile_rect);
+
             x++;
         }
         y++;
     }
+    player_rect.start = (t_ivec2){minimap.player_x - minimap.scale / 4, minimap.player_y - minimap.scale / 4};
+    player_rect.end = (t_ivec2){minimap.player_x + minimap.scale / 4, minimap.player_y + minimap.scale / 4};
+    player_rect.color = 0xFF0000; // Player color
 
-    // Draw the player as a small rectangle in the center
-    draw_rectangle(data, 
-                   (t_ivec2){player_x - scale / 4, player_y - scale / 4}, 
-                   (t_ivec2){player_x + scale / 4, player_y + scale / 4}, 
-                   0xFF0000); // Player color
+    draw_rectangle(data, player_rect);
 }
+

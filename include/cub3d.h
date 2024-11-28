@@ -195,10 +195,12 @@ int						init_players(t_player **players, t_map *map);
 int						loop_hook(t_data *data);
 int						handle_keydown(int keycode, t_key *keys);
 int						handle_keyup(int keycode, t_key *keys);
+void					delta_time(t_data *data);
+
+// mouse.c
 int						handle_mousemove(int x, int y, t_data *data);
 int						handle_mouseclick(int button, int x, int y,
 							t_data *data);
-void					delta_time(t_data *data);
 
 // main.c
 void					free_and_exit(t_data *data, int code);
