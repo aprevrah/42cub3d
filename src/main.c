@@ -91,12 +91,17 @@ int	load_texture(char *path, t_data *data, t_texture *texture)
 
 void	init2null(t_data *data)
 {
+	struct timeval	tv_now;
 	data->mlx = NULL;
 	data->win = NULL;
 	data->img = NULL;
 	data->addr = NULL;
 	data->map = NULL;
 	data->players = NULL;
+	data->use_mouse = false;
+	if (gettimeofday(&tv_now, NULL))
+		printf("gettimeofday failed");
+	data->lastframe = tv_now;
 	// data->map->texture_data = NULL;
 	// data->map->texture_data->path_no = NULL;
 	// data->map->texture_data->path_so = NULL;
@@ -104,12 +109,15 @@ void	init2null(t_data *data)
 	// data->map->texture_data->path_ea = NULL;
 	// data->map->arr = NULL;
 }
+#include <locale.h>
+
 
 int	main(int argc, char **argv)
 {
 	t_data	data;
 	int		fd;
-
+	
+	setlocale(LC_ALL, "");
 	init2null(&data);
 	if (argc != 2)
 		return (ft_printf("(Only) one argument needed.\n"), 1);
