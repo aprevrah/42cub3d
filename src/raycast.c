@@ -2,7 +2,7 @@
 
 double	squared_distance(t_dvec2 p1, t_dvec2 p2)
 {
-	return (p2.x - p1.x) * (p2.x - p1.x) + (p2.y - p1.y) * (p2.y - p1.y);
+	return ((p2.x - p1.x) * (p2.x - p1.x) + (p2.y - p1.y) * (p2.y - p1.y));
 }
 
 double	get_fract_part(double x)
@@ -23,7 +23,7 @@ t_dvec2	get_horizontal_intersection(t_ray ray)
 
 	position = ray.start_pos;
 	// Use fabs to check if the difference is within a small range (epsilon)
-		// ! change
+	// ! change
 	if (fabs(ray.angle - 0) < EPSILON || fabs(ray.angle - PI) < EPSILON)
 	{
 		intersection.x = position.x;
@@ -57,7 +57,7 @@ t_dvec2	get_vertical_intersection(t_ray ray)
 
 	position = ray.start_pos;
 	// Use fabs to check if the difference is within a small range (epsilon)
-		// ! change
+	// ! change
 	if (fabs(ray.angle - PI / 2) < EPSILON || fabs(ray.angle - 3 * PI
 			/ 2) < EPSILON)
 	{
@@ -116,23 +116,23 @@ double	vec2angle(t_dvec2 vec)
 	return (angle);
 }
 
-int	smart_is_wall(t_map *map, t_dvec2 intersection, int x_i, int y_i,
-		bool horizontal)
+int	smart_is_wall(t_map *map, t_dvec2 intersection, bool horizontal)
 {
 	int	x;
 	int	y;
 
 	x = (int)intersection.x;
 	y = (int)intersection.y;
-	(void)x_i;
-	(void)y_i;
-	if (x >= 0 && y >= 0 && x < map->length && y < map->height)
+	if (x < 0 || y < 0 || x >= map->length || y >= map->height)
+		return (1);
+	if (!horizontal)
 	{
-		if (!map->arr[y][x])
+		if (!map->arr[y][x] || (x - 1 >= 0 && !map->arr[y][x - 1]))
 			return (1);
-		if (horizontal && y > EPSILON && !map->arr[y - 1][x])
-			return (1);
-		if (!horizontal && x > EPSILON && !map->arr[y][x - 1])
+	}
+	else
+	{
+		if (!map->arr[y][x] || (y - 1 >= 0 && !map->arr[y - 1][x]))
 			return (1);
 	}
 	return (0);
@@ -152,15 +152,10 @@ void	set_sign(t_ray *ray)
 
 void	ray_cal_hit_and_dir(t_ray *ray)
 {
-	if (!ray->hori_hit && !ray->vert_hit)
-	{
-		ray->hit_pos = (t_dvec2){-100, -100};
-		ray->texture = NORTH;
-		return ;
-	}
-	if (!ray->hori_hit || (ray->vert_hit && squared_distance(ray->start_pos,
-				ray->vertical_intersection) < squared_distance(ray->start_pos,
-				ray->horizontal_intersection)))
+	if (ray->delta.y == 0 || (ray->delta.x != 0
+			&& squared_distance(ray->start_pos,
+				ray->horizontal_intersection) >= squared_distance(ray->start_pos,
+				ray->vertical_intersection)))
 	{
 		ray->hit_pos = ray->vertical_intersection;
 		if (ray->sign.x == 1)
@@ -178,10 +173,36 @@ void	ray_cal_hit_and_dir(t_ray *ray)
 	}
 }
 
+void	rayloop(t_ray *ray, t_map *map)
+{
+	int	i;
+
+	i = 0;
+	while (i < MAX_RAY && (!ray->hori_hit || !ray->vert_hit))
+	{
+		if (!ray->vert_hit && ray->delta.x && smart_is_wall(map,
+				ray->vertical_intersection, false))
+			ray->vert_hit = true;
+		if (!ray->vert_hit && ray->delta.x)
+		{
+			ray->vertical_intersection.x += ray->sign.x;
+			ray->vertical_intersection.y += fabs(ray->delta.y) * ray->sign.y;
+		}
+		if (!ray->hori_hit && ray->delta.y && smart_is_wall(map,
+				ray->horizontal_intersection, true))
+			ray->hori_hit = true;
+		if (!ray->hori_hit && ray->delta.y)
+		{
+			ray->horizontal_intersection.x += fabs(ray->delta.x) * ray->sign.x;
+			ray->horizontal_intersection.y += ray->sign.y;
+		}
+		i++;
+	}
+}
+
 t_ray	raycast(t_player player, t_map *map, double angle)
 {
 	t_ray	ray;
-	int		i;
 
 	ray.start_pos = player.position;
 	ray.angle = angle;
@@ -192,35 +213,7 @@ t_ray	raycast(t_player player, t_map *map, double angle)
 	ray.horizontal_intersection = get_horizontal_intersection(ray);
 	ray.vert_hit = false;
 	ray.hori_hit = false;
-	i = 0;
-	if (ray.delta.y == 0 || ray.delta.x == 0)
-	{
-		printray(ray);
-	}
-	while (i < MAX_RAY)
-	{
-		if (!ray.vert_hit && ray.delta.x && smart_is_wall(map,
-				ray.vertical_intersection, ray.sign.x, ray.sign.y, false))
-			ray.vert_hit = true;
-		if (!ray.vert_hit && ray.delta.x)
-		{
-			ray.vertical_intersection.x += ray.sign.x;
-			ray.vertical_intersection.y += fabs(ray.delta.y) * ray.sign.y;
-		}
-		if (!ray.hori_hit && ray.delta.y && smart_is_wall(map,
-				ray.horizontal_intersection, ray.sign.x, ray.sign.y, true))
-			ray.hori_hit = true;
-		if (!ray.hori_hit && ray.delta.y)
-		{
-			ray.horizontal_intersection.x += fabs(ray.delta.x) * ray.sign.x;
-			ray.horizontal_intersection.y += ray.sign.y;
-		}
-		i++;
-	}
-	if (ray.delta.y == 0 || ray.delta.x == 0)
-	{
-		printray(ray);
-	}
+	rayloop(&ray, map);
 	ray_cal_hit_and_dir(&ray);
 	return (ray);
 }

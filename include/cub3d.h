@@ -31,7 +31,7 @@
 # define PI 3.14159265358979323
 # define EPSILON 0.000001
 # define SCALE 70
-# define MAX_RAY 50
+# define MAX_RAY 3000
 # define COLLISION true
 # define PRINT_FPS true
 
@@ -216,6 +216,7 @@ t_map					*parse_map(int fd);
 // minimap.c
 void					render_map(t_data *data);
 void					render_players(t_data *data);
+void					render_minimap(t_data *data);
 
 // utils.c
 
@@ -238,5 +239,6 @@ void					gnl_clear_buffer(int fd);
 void					render_wall(t_data *data);
 void					render_walls(t_data *data);
 void					render_minimap_rays(t_data *data);
+double	vec2angle(t_dvec2 vec);
 
 #endif

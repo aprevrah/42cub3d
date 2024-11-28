@@ -94,6 +94,7 @@ int	loop_hook(t_data *data)
 	// render_map(data);
 	// render_players(data);
 	// render_minimap_rays(data);
+	render_minimap(data);
 	mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
 	delta_time(data);
 	return (0);

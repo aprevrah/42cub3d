@@ -126,3 +126,115 @@ void	render_map(t_data *data)
 		y++;
 	}
 }
+/* 
+void	nice_rect(t_data *data, t_ivec2 p1, t_ivec2 p2)
+{
+	int x;
+	int y;
+
+	y = p1.y;
+	while (y < p2.y)
+	{
+		x = p1.x;
+		while (x < p2.x)
+		{
+			if (x > 50 && y > 50 && x < 500 && y < 500)
+				my_mlx_pixel_put(data, x, y, 0x3000);
+			x++;
+		}
+		y++;
+	}
+}
+
+void	render_minimap(t_data *data)
+{
+	t_map	map;
+	int		x;
+	int		y;
+
+	map = *data->map;
+	x = 0;
+	y = 0;
+	while (y < map.height)
+	{
+		while (x < map.length)
+		{
+			if (!map.arr[y][x])
+				nice_rect(data, (t_ivec2){(x - data->players[0].position.x) * SCALE + 100, (y - data->players[0].position.y )* SCALE + 100}, (t_ivec2){(x
+						+ 1 - data->players[0].position.x) * SCALE + 100, (y + 1 - data->players[0].position.y) * SCALE + 100});
+			x++;
+		}
+		x = 0;
+		y++;
+	}
+}
+
+ */
+#include <math.h>
+
+
+void draw_rectangle(t_data *data, t_ivec2 top_left, t_ivec2 bottom_right, int color)
+{
+    int x;
+    int y;
+
+    y = top_left.y;
+    while (y < bottom_right.y)
+    {
+        x = top_left.x;
+        while (x < bottom_right.x)
+        {
+            if (x >= 0 && y >= 0 && x < W_WIDTH && y < W_HEIGHT)
+                my_mlx_pixel_put(data, x, y, color);
+            x++;
+        }
+        y++;
+    }
+}
+
+void render_minimap(t_data *data)
+{
+    const int minimap_size = 200;  // Width and height of the minimap in pixels
+    const int scale = 10;          // Number of pixels per map unit
+    const int player_x = minimap_size / 2; // Player is always in the center (screen coordinates)
+    const int player_y = minimap_size / 2;
+
+    t_map *map = data->map;
+
+    int x;
+    int y;
+    double offset_x = data->players[0].position.x; // Use floating-point coordinates
+    double offset_y = data->players[0].position.y;
+
+    y = 0;
+    while (y < map->height)
+    {
+        x = 0;
+        while (x < map->length)
+        {
+            // Calculate screen coordinates relative to the player's position
+            double screen_x = (x - offset_x) * scale + player_x;
+            double screen_y = (y - offset_y) * scale + player_y;
+
+            // Draw rectangles for walls (non-zero map values)
+            if (map->arr[y][x])
+                draw_rectangle(data, 
+                               (t_ivec2){(int)screen_x, (int)screen_y}, 
+                               (t_ivec2){(int)(screen_x + scale), (int)(screen_y + scale)}, 
+                               0xFFFFFF); // Wall color
+            else
+                draw_rectangle(data, 
+                               (t_ivec2){(int)screen_x, (int)screen_y}, 
+                               (t_ivec2){(int)(screen_x + scale), (int)(screen_y + scale)}, 
+                               0x0000FF); // Empty space color
+            x++;
+        }
+        y++;
+    }
+
+    // Draw the player as a small rectangle in the center
+    draw_rectangle(data, 
+                   (t_ivec2){player_x - scale / 4, player_y - scale / 4}, 
+                   (t_ivec2){player_x + scale / 4, player_y + scale / 4}, 
+                   0xFF0000); // Player color
+}
