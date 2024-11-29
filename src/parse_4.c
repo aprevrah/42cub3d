@@ -92,17 +92,17 @@ int key_val(char *line, t_texture_data *texture_data)
 	if (line[i] == '\0')
 		return (2);
 	else if (!ft_strncmp(&line[i], "NO", 2))
-		return (get_key(&i, line, &texture_data->path_NO));
+		return (get_key(&i, line, &texture_data->path_no));
 	else if (!ft_strncmp(&line[i], "EA", 2))
-		return (get_key(&i, line, &texture_data->path_EA));
+		return (get_key(&i, line, &texture_data->path_ea));
 	else if (!ft_strncmp(&line[i], "SO", 2))
-		return (get_key(&i, line, &texture_data->path_SO));
+		return (get_key(&i, line, &texture_data->path_so));
 	else if (!ft_strncmp(&line[i], "WE", 2))
-		return (get_key(&i, line, &texture_data->path_WE));
+		return (get_key(&i, line, &texture_data->path_we));
 	else if (!ft_strncmp(&line[i], "C", 1))
-		return (get_color(&line[i], &texture_data->col_C));
+		return (get_color(&line[i], &texture_data->col_c));
 	else if (!ft_strncmp(&line[i], "F", 1))
-		return (get_color(&line[i], &texture_data->col_F));
+		return (get_color(&line[i], &texture_data->col_f));
 	printf("Error: Unable to parse: %s", line);
 	return (1);
 }

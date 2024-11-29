@@ -2,7 +2,7 @@
 
 int	is_valid_char(char const s) //! only accept spaces and newline, no tab
 {
-	if (s != '0' && s != '1' && s != 'N' && s != 'O' && s != 'S' && s != 'W' && \
+	if (s != '0' && s != '1' && s != 'N' && s != 'E' && s != 'S' && s != 'W' && \
 	s != ' ' && s != '\t' && s != '\n' && s != '\r' && s != '\v'&& s != '\f')
 		return (0);
 	return (1);
@@ -12,7 +12,7 @@ int	get_dir(char c)
 {
 	if (c == 'N')
 		return (3);
-	if (c == 'O')
+	if (c == 'E')
 		return (4);
 	if (c == 'S')
 		return (5);
@@ -58,7 +58,7 @@ int	procces_line(char const *s, t_map *map, int *i, int y)
 			return (printf("unvalid char in map\n"), 1);
 		if (s[*i] == '0')
 			map->arr[y][x] = 1;
-		if (s[*i] == 'N' || s[*i] == 'O' || s[*i] == 'S' || s[*i] == 'W')
+		if (s[*i] == 'N' || s[*i] == 'E' || s[*i] == 'S' || s[*i] == 'W')
 			map->arr[y][x] = get_dir(s[*i]);
 		(*i)++;
 		x++;

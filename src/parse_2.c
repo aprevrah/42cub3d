@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 17:24:06 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/27 18:32:42 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/27 19:04:51 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	procces_line2(char const *s, int **arr, int *i, int y)
 	x = 0;
 	while (s[*i] && s[*i] != '\n')
 	{
-		if (s[*i] == '0' || s[*i] == 'N' || s[*i] == 'O' || s[*i] == 'S' || s[*i] == 'W')
+		if (s[*i] == '0' || s[*i] == 'N' || s[*i] == 'E' || s[*i] == 'S' || s[*i] == 'W')
 				arr[y][x] = 1;
 			if (s[*i] == ' ')
 				arr[y][x] = 8;

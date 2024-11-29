@@ -6,10 +6,10 @@ int read_texture_data(int fd, t_texture_data *texture_data)
 	int		status;
 	int		configs;
 
-	texture_data->path_NO = NULL;
-	texture_data->path_EA = NULL;
-	texture_data->path_SO = NULL;
-	texture_data->path_WE = NULL;
+	texture_data->path_no = NULL;
+	texture_data->path_ea = NULL;
+	texture_data->path_so = NULL;
+	texture_data->path_we = NULL;
 	configs = 0;
 	while (configs < 6)
 	{
@@ -40,7 +40,9 @@ char	*read_map_data(int fd, t_map *map)
 {
 	t_rmd data;
 
-	data.content = set_null(&data.location);
+	// data.content = set_null(&data.location);
+	data.content = NULL;
+	data.location = 0;
 	while (1)
 	{
 		data.line = get_next_line(fd, 0);

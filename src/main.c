@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 22:34:46 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/27 18:22:43 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/27 19:48:27 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,13 +93,13 @@ int		init_textures(t_data *data)
 	data->map->texture_data->textures[3].img = NULL;
 
 	
-	if (load_texture(data->map->texture_data->path_NO, data, &data->map->texture_data->textures[0]))
+	if (load_texture(data->map->texture_data->path_no, data, &data->map->texture_data->textures[0]))
 		return (printf("Error: could not load texture\n"), 1);
-	if (load_texture(data->map->texture_data->path_EA, data, &data->map->texture_data->textures[1]))
+	if (load_texture(data->map->texture_data->path_ea, data, &data->map->texture_data->textures[1]))
 		return (printf("Error: could not load texture\n"), 1);
-	if (load_texture(data->map->texture_data->path_SO, data, &data->map->texture_data->textures[2]))
+	if (load_texture(data->map->texture_data->path_so, data, &data->map->texture_data->textures[2]))
 		return (printf("Error: could not load texture\n"), 1);
-	if (load_texture(data->map->texture_data->path_WE, data, &data->map->texture_data->textures[3]))
+	if (load_texture(data->map->texture_data->path_we, data, &data->map->texture_data->textures[3]))
 		return (printf("Error: could not load texture\n"), 1);
 
 	return (0);
@@ -145,7 +145,12 @@ int	main(int argc, char **argv)
 	init_keys(data.keys, data.players);
 	mlx_hook(data.win, 2, KeyPressMask, handle_keydown, data.keys);
 	mlx_hook(data.win, 3, KeyReleaseMask, handle_keyup, data.keys);
-	mlx_hook(data.win, 17, StructureNotifyMask, win_close_button, &data);	
+	mlx_hook(data.win, 17, StructureNotifyMask, win_close_button, &data);
+	mlx_hook(data.win, MotionNotify, PointerMotionMask, handle_mousemove, &data);
+	mlx_mouse_hook(data.win, handle_mouseclick, &data);
+	
+	// test texture
+	// printtexture_data(*data.map->texture_data);
 	mlx_loop_hook(data.mlx, loop_hook, &data);
 	mlx_loop(data.mlx);
 
