@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/08 13:01:15 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/30 17:01:49 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/30 20:22:45 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,18 @@
 # define CUB3D_H
 
 # include "../libft/libft.h"
+# include "mlx.h"
+# include <X11/X.h>
+# include <X11/keysym.h>
+# include <fcntl.h>
 # include <math.h>
+# include <mlx.h>
 # include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <string.h>
 # include <sys/time.h>
-#include "mlx.h"
-#include <X11/X.h>
-#include <X11/keysym.h>
-#include <fcntl.h>
-#include <mlx.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
+# include <unistd.h>
 
 # define COLOR 0x00FFFFFF
 # define MAP_SEP " "
@@ -59,9 +57,9 @@ typedef struct s_dvec2
 
 typedef struct s_color_value
 {
-	unsigned int r;
-	unsigned int g;
-	unsigned int b;
+	unsigned int		r;
+	unsigned int		g;
+	unsigned int		b;
 }						t_color_value;
 
 typedef struct s_rmd
@@ -231,10 +229,15 @@ int						get_color_normalized(t_texture texture, double x,
 int						get_pixel_color(t_texture texture, int x, int y);
 void					my_mlx_pixel_put(t_data *data, int x, int y, int color);
 
-// init.c
-int						init_keys(t_key *keys, t_player *players);
+// init/init.c
+void					init_hooks(t_data *data);
 int						init_mlx(t_data *data);
+void					init2null(t_data *data);
+// init/keys.c
+int						init_keys(t_key *keys, t_player *players);
+// init/player.c
 int						init_players(t_player **players, t_map *map);
+
 
 // hooks.c
 int						loop_hook(t_data *data);
@@ -248,7 +251,7 @@ int						handle_mouseclick(int button, int x, int y,
 							t_data *data);
 
 // main.c
-void					free_and_exit(t_data *data, int code);
+
 
 // oper.c
 void					move(t_data *data, void *args);
@@ -264,7 +267,7 @@ int						procces_line2(char const *s, int **arr, int *i, int y);
 int						fill_map2(char const *s, t_map *map, int **arr);
 int						check_sides(int **arr, int height, int length);
 int						check_middle(int **arr, int height, int length);
-int						is_wall_enclosed(char *content , t_map *map);
+int						is_wall_enclosed(char *content, t_map *map);
 
 // # parse_3.c
 int						is_valid_char(char const s);
@@ -296,8 +299,8 @@ int						skip_until(const char *str, unsigned int *i, const char *charset, bool 
 // # parse_7.c
 unsigned int			ft_to_int(char *str, unsigned int *i);
 
-
 // render.c
+void					render_walls(t_data *data);
 
 // minimap.c
 void					render_minimap(t_data *data);
@@ -305,30 +308,32 @@ void					render_minimap(t_data *data);
 // debug_minimap.c
 void					render_map(t_data *data);
 void					render_players(t_data *data);
+void					render_minimap_rays(t_data *data);
 
 // # utils.c
-
 
 // free.c
 void					free_2d_arr(void **arr, int rows);
 void					free_map(t_map *map);
 void					free_texture_data(t_texture_data *td);
+void					free_and_exit(t_data *data, int code);
 void					gnl_clear_buffer(int fd);
 
 // dda functions
-double					get_fract_part(double x);
+// raycast/init_ray.c
+void					set_sign(t_ray *ray);
+double					get_dx(double angle);
+double					get_dy(double angle);
 t_dvec2					get_horizontal_intersection(t_ray ray);
 t_dvec2					get_vertical_intersection(t_ray ray);
-t_ray					raycast(t_player player, t_map *map, double angle);
-int						is_wall(t_dvec2 intersection, t_map *map);
-double					deg2rad(double degrees);
-double					rad2deg(double rad);
+
+// raycast/utils.c
+double					squared_distance(t_dvec2 p1, t_dvec2 p2);
+double					get_fract_part(double x);
 double					vec2angle(t_dvec2 vec);
 
-void					gnl_clear_buffer(int fd);
-void					render_wall(t_data *data);
-void					render_walls(t_data *data);
-void					render_minimap_rays(t_data *data);
-double					vec2angle(t_dvec2 vec);
+double					get_fract_part(double x);
+
+t_ray					raycast(t_player player, t_map *map, double angle);
 
 #endif

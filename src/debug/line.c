@@ -1,21 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   draw.c                                             :+:      :+:    :+:   */
+/*   line.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
+/*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 17:24:45 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/10/28 13:00:22 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/30 18:16:36 by aprevrha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/cub3d.h"
-#include "mlx.h"
-#include <X11/keysym.h>
-#include <fcntl.h>
-#include <stdlib.h>
-#include <unistd.h>
+#include "../../include/cub3d.h"
 
 int	isignum(int x)
 {
