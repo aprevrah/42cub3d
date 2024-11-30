@@ -25,8 +25,7 @@ void	delta_time(t_data *data)
 		- (data->lastframe.tv_sec * 1000 + data->lastframe.tv_usec / 1000);
 	data->lastframe = tv_now;
 	if (PRINT_FPS)
-		printf("%dms	%dfps\n", data->delta_time, 1000
-				/ data->delta_time);
+		printf("%dms	%dfps\n", data->delta_time, 1000 / data->delta_time);
 }
 
 int	loop_hook(t_data *data)
@@ -47,16 +46,16 @@ int	loop_hook(t_data *data)
 		}
 		i++;
 	}
-	// render toggles
 	render_walls(data);
-	// render_map(data);
-	// render_players(data);
-	// render_minimap_rays(data);
 	render_minimap(data);
 	mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
 	delta_time(data);
 	return (0);
 }
+// debug rendereres
+// render_map(data);
+// render_players(data);
+// render_minimap_rays(data);
 
 int	handle_keydown(int keycode, t_key *keys)
 {

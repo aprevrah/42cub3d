@@ -163,6 +163,24 @@ typedef struct s_ray
 	t_direction			texture;
 }						t_ray;
 
+// minimap
+typedef struct s_rect
+{
+	t_ivec2				start;
+	t_ivec2				end;
+	int					color;
+}						t_rect;
+
+typedef struct s_minimap
+{
+	int					size;
+	int					scale;
+	int					player_x;
+	int					player_y;
+	double				offset_x;
+	double				offset_y;
+}						t_minimap;
+
 // debug.c
 void					debug_render_textures(t_data *data, unsigned int count);
 void					printmap(t_map *map);
@@ -214,11 +232,12 @@ t_map					*parse_map(int fd);
 
 // render.c
 
-
 // minimap.c
+void					render_minimap(t_data *data);
+
+// debug_minimap.c
 void					render_map(t_data *data);
 void					render_players(t_data *data);
-void					render_minimap(t_data *data);
 
 // utils.c
 
@@ -241,6 +260,6 @@ void					gnl_clear_buffer(int fd);
 void					render_wall(t_data *data);
 void					render_walls(t_data *data);
 void					render_minimap_rays(t_data *data);
-double	vec2angle(t_dvec2 vec);
+double					vec2angle(t_dvec2 vec);
 
 #endif

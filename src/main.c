@@ -137,7 +137,6 @@ int	main(int argc, char **argv)
 	if (init_mlx(&data))
 		free_and_exit(&data, 1);
 	// free_and_exit(&data, 1);
-	render_map(&data);
 	mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
 	init_keys(data.keys, data.players);
 	mlx_hook(data.win, 2, KeyPressMask, handle_keydown, data.keys);
