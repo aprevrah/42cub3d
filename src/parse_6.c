@@ -1,18 +1,18 @@
 #include "../include/cub3d.h"
 
-int count_words(char *str)
+int	count_words(char *str)
 {
-	int i;
-	int count;
-	int in_word;
+	int	i;
+	int	count;
+	int	in_word;
 
 	i = 0;
 	count = 0;
 	in_word = 0;
 	while (str[i])
 	{
-		if (str[i] == ' ' || str[i] == '\t' || str[i] == '\n' || \
-			str[i] == '\r' || str[i] == '\v' || str[i] == '\f')
+		if (str[i] == ' ' || str[i] == '\t' || str[i] == '\n' || str[i] == '\r'
+			|| str[i] == '\v' || str[i] == '\f')
 			in_word = 0;
 		else if (!in_word)
 		{
@@ -26,18 +26,15 @@ int count_words(char *str)
 
 int	trim_spaces_at_end(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str[i])
 		i++;
-
-	while (i > 0 && (str[i-1] == ' ' || str[i-1] == '\t' || \
-		str[i-1] == '\r' || str[i-1] == '\v' || str[i-1] == '\f'))
+	while (i > 0 && (str[i - 1] == ' ' || str[i - 1] == '\t' || str[i
+			- 1] == '\r' || str[i - 1] == '\v' || str[i - 1] == '\f'))
 		i--;
-
 	str[i] = '\0';
-
 	return (i);
 }
 
@@ -60,19 +57,19 @@ char	*ft_str_append(char *a, char *b)
 	return (a = NULL, b = NULL, str);
 }
 
-bool is_only_whitespace(char *s)
+bool	is_only_whitespace(char *s)
 {
-	unsigned int i;
+	unsigned int	i;
+
 	i = 0;
 	skip_until(s, &i, WHITESPACE, false);
 	return (s[i] == '\0');
 }
 
-int	skip_until(const char *str, unsigned int *i, const char *charset,
-		bool val)
+int	skip_until(const char *str, unsigned int *i, const char *charset, bool val)
 {
-	int chars_skipped;
-	
+	int	chars_skipped;
+
 	chars_skipped = 0;
 	while ((ft_strchr(charset, str[*i]) != 0) != val && str[*i] != '\0')
 	{
@@ -84,7 +81,7 @@ int	skip_until(const char *str, unsigned int *i, const char *charset,
 
 unsigned int	ft_to_int(char *str, unsigned int *i)
 {
-	unsigned int	nbr;
+	unsigned int nbr;
 
 	nbr = 0;
 	while ('0' <= str[*i] && str[*i] <= '9')

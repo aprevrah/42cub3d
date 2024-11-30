@@ -1,17 +1,17 @@
 #include "../include/cub3d.h"
 
-int is_only_numeric_and_2_comma(char *str, int i)
+int	is_only_numeric_and_2_comma(char *str, int i)
 {
-	int count = 0;
+	int	count;
 
+	count = 0;
 	if (!str || str[i] == '\0')
 		return (0);
-
 	while (str[i])
 	{
-		if ((str[i] < '0' || str[i] > '9') && str[i] != ',' &&
-			str[i] != ' ' && str[i] != '\t' && str[i] != '\r' &&
-			str[i] != '\v' && str[i] != '\f' && str[i] != '\n')
+		if ((str[i] < '0' || str[i] > '9') && str[i] != ',' && str[i] != ' '
+			&& str[i] != '\t' && str[i] != '\r' && str[i] != '\v'
+			&& str[i] != '\f' && str[i] != '\n')
 		{
 			return (0);
 		}
@@ -31,12 +31,12 @@ int	gc_error_check(char *s)
 	if (!is_only_numeric_and_2_comma(s, 1))
 		return (printf("Error: syntax error in color line\n"), 1);
 	return (0);
-} 
+}
 
-int get_color(char *s, unsigned int *color)
+int	get_color(char *s, unsigned int *color)
 {
-	unsigned int i;
-	t_color_value color_value;
+	unsigned int	i;
+	t_color_value	color_value;
 
 	i = 0;
 	if (gc_error_check(s))
@@ -61,13 +61,13 @@ int get_color(char *s, unsigned int *color)
 	return (0);
 }
 
-int get_key(unsigned int *i, char *s, char **path)
+int	get_key(unsigned int *i, char *s, char **path)
 {
-	unsigned int start;
+	unsigned int	start;
 
 	if (count_words(s) != 2)
 		return (printf("Error: texture line needs 2 arguments\n"), 1);
-	if (s[*i+2] && s[*i+2] != ' ')
+	if (s[*i + 2] && s[*i + 2] != ' ')
 		return (printf("Error: missing space after identifier\n"), 1);
 	skip_until(s, i, WHITESPACE, true);
 	if (!skip_until(s, i, WHITESPACE, false))
@@ -83,7 +83,7 @@ int get_key(unsigned int *i, char *s, char **path)
 	return (0);
 }
 
-int key_val(char *line, t_texture_data *texture_data)
+int	key_val(char *line, t_texture_data *texture_data)
 {
 	unsigned int i;
 
