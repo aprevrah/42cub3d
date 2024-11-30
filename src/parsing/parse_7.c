@@ -6,11 +6,11 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 15:57:23 by tmeniga@stu       #+#    #+#             */
-/*   Updated: 2024/11/30 16:03:03 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/30 20:40:57 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/cub3d.h"
+#include "../../include/cub3d.h"
 
 unsigned int	ft_to_int(char *str, unsigned int *i)
 {

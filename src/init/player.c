@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   player.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 23:25:37 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/30 18:20:52 by aprevrha         ###   ########.fr       */
+/*   Updated: 2024/11/30 20:37:50 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

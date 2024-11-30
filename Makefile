@@ -7,7 +7,7 @@ OBJ_DIR = objs
 
 SRCS = $(addprefix $(SRC_DIR)/,\
 main.c draw.c hooks.c oper.c \
-parse_1.c parse_2.c parse_3.c parse_4.c parse_5.c parse_6.c parse_7.c \
+parsing/parse_1.c parsing/parse_2.c parsing/parse_3.c parsing/parse_4.c parsing/parse_5.c parsing/parse_6.c parsing/parse_7.c \
 debug/debug.c debug/debug_minimap.c debug/line.c\
 init/keys.c init/player.c init/init.c\
 raycast/init_ray.c raycast/raycast.c raycast/utils.c\

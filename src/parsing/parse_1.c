@@ -6,12 +6,12 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 17:24:06 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/30 19:27:23 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/30 20:40:19 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/cub3d.h"
-#include <stdio.h>
+#include "../../include/cub3d.h"
+
 
 t_texture_data	*get_texture_data(int fd)
 {
