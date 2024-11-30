@@ -14,20 +14,18 @@
 # define CUB3D_H
 
 # include "../libft/libft.h"
+# include "mlx.h"
+# include <X11/X.h>
+# include <X11/keysym.h>
+# include <fcntl.h>
 # include <math.h>
+# include <mlx.h>
 # include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <string.h>
 # include <sys/time.h>
-#include "mlx.h"
-#include <X11/X.h>
-#include <X11/keysym.h>
-#include <fcntl.h>
-#include <mlx.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
+# include <unistd.h>
 
 # define COLOR 0x00FFFFFF
 # define MAP_SEP " "
@@ -59,17 +57,17 @@ typedef struct s_dvec2
 
 typedef struct s_color_value
 {
-	unsigned int r;
-	unsigned int g;
-	unsigned int b;
+	unsigned int		r;
+	unsigned int		g;
+	unsigned int		b;
 }						t_color_value;
 
 typedef struct s_rmd
 {
-	char	*line;
-	char	*content;
-	int		location;
-}					t_rmd;
+	char				*line;
+	char				*content;
+	int					location;
+}						t_rmd;
 
 typedef struct s_player
 {
@@ -264,7 +262,7 @@ int						procces_line2(char const *s, int **arr, int *i, int y);
 int						fill_map2(char const *s, t_map *map, int **arr);
 int						check_sides(int **arr, int height, int length);
 int						check_middle(int **arr, int height, int length);
-int						is_wall_enclosed(char *content , t_map *map);
+int						is_wall_enclosed(char *content, t_map *map);
 
 // # parse_3.c
 int						is_valid_char(char const s);
@@ -291,9 +289,9 @@ char					*ft_str_append(char *a, char *b);
 int						count_words(char *str);
 int						trim_spaces_at_end(char *str);
 bool					is_only_whitespace(char *s);
-int						skip_until(const char *str, unsigned int *i, const char *charset, bool val);
+int						skip_until(const char *str, unsigned int *i,
+							const char *charset, bool val);
 unsigned int			ft_to_int(char *str, unsigned int *i);
-
 
 // render.c
 
@@ -305,7 +303,6 @@ void					render_map(t_data *data);
 void					render_players(t_data *data);
 
 // # utils.c
-
 
 // free.c
 void					free_2d_arr(void **arr, int rows);
