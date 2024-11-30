@@ -14,115 +14,79 @@
 #include <math.h>
 #include <stdio.h>
 
-void	render_rect(t_data *data, t_ivec2 p1, t_ivec2 p2)
+void	draw_rectangle(t_data *data, t_rect rect, t_rect bounds)
 {
-	t_ivec2	p1_;
-	t_ivec2	p2_;
+	int	x;
+	int	y;
 
-	p1_.x = p1.x;
-	p1_.y = p2.y;
-	p2_.x = p2.x;
-	p2_.y = p1.y;
-	line_put(data, p1, p2, COLOR);
-	line_put(data, p1, p1_, COLOR);
-	line_put(data, p1, p2_, COLOR);
-	line_put(data, p2, p1_, COLOR);
-	line_put(data, p2, p2_, COLOR);
-}
-
-void	render_minimap_ray(t_data *data, double angle)
-{
-	t_dvec2		ray_hit_pos;
-	t_ivec2		ray_hit_pos_screen;
-	t_ivec2		player_pos_screen;
-	t_player	player;
-
-	player = data->players[0];
-	ray_hit_pos = raycast(player, data->map, fmod(angle, 2 * PI)).hit_pos;
-	ray_hit_pos_screen = (t_ivec2){ray_hit_pos.x * SCALE, ray_hit_pos.y
-		* SCALE};
-	player_pos_screen = (t_ivec2){round(player.position.x * SCALE),
-		round(player.position.y * SCALE)};
-	line_put(data, player_pos_screen, ray_hit_pos_screen, 0xff6289);
-}
-
-void	render_minimap_rays(t_data *data)
-{
-	int		w_offset;
-	double	a_offset;
-
-	w_offset = 0;
-	a_offset = 0;
-	while (w_offset <= W_WIDTH / 2)
+	y = rect.start.y;
+	while (y < rect.end.y)
 	{
-		a_offset = atan(tan(PI / 4) * w_offset / ((double)W_WIDTH / 2));
-		render_minimap_ray(data, vec2angle(data->players[0].orientation)
-			+ a_offset);
-		render_minimap_ray(data, vec2angle(data->players[0].orientation)
-			- a_offset);
-		w_offset++;
-	}
-}
-
-void	render_players(t_data *data)
-{
-	t_ivec2		ray_hit_pos_screen1;
-	t_ivec2		ray_hit_pos_screen2;
-	t_ivec2		ray_hit_pos_screen3;
-	t_ivec2		player_pos_screen;
-	t_dvec2		ray_hit_pos1;
-	t_dvec2		ray_hit_pos2;
-	t_dvec2		ray_hit_pos3;
-	t_player	player;
-
-	player = data->players[0];
-	player_pos_screen = (t_ivec2){round(player.position.x * SCALE),
-		round(player.position.y * SCALE)};
-	// render_rect(data, (t_ivec2){player.position.x -2, player.position.y -2},
-	//	(t_ivec2){player.position.x + 2, player.position.y + 2});
-	line_put(data, player_pos_screen, (t_ivec2){round(player_pos_screen.x
-			+ player.orientation.x * 20), round(player_pos_screen.y
-			+ player.orientation.y * 20)}, 0xf7f70a);
-	// draw rays
-	ray_hit_pos1 = raycast(player, data->map,
-			fmod(vec2angle(player.orientation), 2 * PI)).hit_pos;
-	ray_hit_pos2 = raycast(player, data->map, fmod(vec2angle(player.orientation)
-				+ PI / 8, 2 * PI)).hit_pos;
-	ray_hit_pos3 = raycast(player, data->map, fmod(vec2angle(player.orientation)
-				- PI / 8, 2 * PI)).hit_pos;
-	// printf("p_x = %lf, p_y = %lf\n", player.position.x, player.position.y);
-	// printf("orientation.x = %lf, orientation.y = %lf\n",
-	//	player.orientation.x, player.orientation.y);
-	ray_hit_pos_screen1 = (t_ivec2){ray_hit_pos1.x * SCALE, ray_hit_pos1.y
-		* SCALE};
-	line_put(data, player_pos_screen, ray_hit_pos_screen1, 0xFF0000);
-	ray_hit_pos_screen2 = (t_ivec2){ray_hit_pos2.x * SCALE, ray_hit_pos2.y
-		* SCALE};
-	line_put(data, player_pos_screen, ray_hit_pos_screen2, 0x00FF00);
-	ray_hit_pos_screen3 = (t_ivec2){ray_hit_pos3.x * SCALE, ray_hit_pos3.y
-		* SCALE};
-	line_put(data, player_pos_screen, ray_hit_pos_screen3, COLOR);
-}
-
-void	render_map(t_data *data)
-{
-	t_map	map;
-	int		x;
-	int		y;
-
-	map = *data->map;
-	x = 0;
-	y = 0;
-	while (y < map.height)
-	{
-		while (x < map.length)
+		x = rect.start.x;
+		while (x < rect.end.x)
 		{
-			if (!map.arr[y][x])
-				render_rect(data, (t_ivec2){x * SCALE, y * SCALE}, (t_ivec2){(x
-						+ 1) * SCALE, (y + 1) * SCALE});
+			if (x >= 0 && y >= 0 && x < W_WIDTH && y < W_HEIGHT)
+			{
+				if (bounds.start.x <= x && bounds.start.y <= y
+					&& bounds.end.x > x && bounds.end.y > y)
+					my_mlx_pixel_put(data, x, y, rect.color);
+			}
 			x++;
 		}
-		x = 0;
 		y++;
 	}
+}
+
+void	render_tiles(t_data *data, t_minimap minimap, t_rect map_rect)
+{
+	t_ivec2	i;
+	t_rect	tile_rect;
+	double	sx;
+	double	sy;
+
+	i.y = 0;
+	while (i.y < data->map->height)
+	{
+		i.x = 0;
+		while (i.x < data->map->length)
+		{
+			sx = (i.x - minimap.offset_x) * minimap.scale + minimap.player_x;
+			sy = (i.y - minimap.offset_y) * minimap.scale + minimap.player_y;
+			tile_rect.start = (t_ivec2){(int)sx, (int)sy};
+			tile_rect.end = (t_ivec2){(int)(sx + minimap.scale), (int)(sy
+					+ minimap.scale)};
+			if (data->map->arr[i.y][i.x] != 0)
+				tile_rect.color = 0xFFFFFF;
+			else
+				tile_rect.color = 0x0000FF;
+			draw_rectangle(data, tile_rect, map_rect);
+			i.x++;
+		}
+		i.y++;
+	}
+}
+
+void	render_minimap(t_data *data)
+{
+	t_minimap	minimap;
+	t_rect		player_rect;
+	t_rect		map_rect;
+
+	minimap.size = 200;
+	minimap.scale = 10;
+	minimap.player_x = minimap.size / 2;
+	minimap.player_y = minimap.size / 2;
+	minimap.offset_x = data->players[0].position.x;
+	minimap.offset_y = data->players[0].position.y;
+	map_rect.start = (t_ivec2){0, 0};
+	map_rect.end = (t_ivec2){minimap.size, minimap.size};
+	map_rect.color = 0x0000FF;
+	draw_rectangle(data, map_rect, map_rect);
+	render_tiles(data, minimap, map_rect);
+	player_rect.start = (t_ivec2){minimap.player_x - minimap.scale / 4,
+		minimap.player_y - minimap.scale / 4};
+	player_rect.end = (t_ivec2){minimap.player_x + minimap.scale / 4,
+		minimap.player_y + minimap.scale / 4};
+	player_rect.color = 0xFF0000;
+	draw_rectangle(data, player_rect, map_rect);
 }

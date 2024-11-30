@@ -25,50 +25,7 @@ void	delta_time(t_data *data)
 		- (data->lastframe.tv_sec * 1000 + data->lastframe.tv_usec / 1000);
 	data->lastframe = tv_now;
 	if (PRINT_FPS)
-		printf("%dms	%dfps\n", data->delta_time, 1000
-				/ data->delta_time);
-}
-
-int	handle_mouseclick(int button, int x, int y, t_data *data)
-{
-	(void)x;
-	(void)y;
-	if (button != 1)
-		return (0);
-	if (data->use_mouse)
-	{
-		data->use_mouse = false;
-		mlx_mouse_show(data->mlx, data->win);
-	}
-	else
-	{
-		data->use_mouse = true;
-		mlx_mouse_hide(data->mlx, data->win);
-		mlx_mouse_move(data->mlx, data->win, W_WIDTH / 2, W_HEIGHT / 2);
-	}
-	return (0);
-}
-
-int	handle_mousemove(int x, int y, t_data *data)
-{
-	static int	dx;
-	t_ivec2		win_mid;
-	t_look_args	look_args;
-
-	(void)y;
-	if (!data->use_mouse)
-		return (0);
-	win_mid.x = W_WIDTH / 2;
-	win_mid.y = W_HEIGHT / 2;
-	dx = (x - win_mid.x);
-	if (dx)
-	{
-		mlx_mouse_move(data->mlx, data->win, win_mid.x, win_mid.y);
-		look_args.player = &data->players[0];
-		look_args.rotation = dx * data->players[0].look_speed * 10;
-		look(data, &look_args);
-	}
-	return (0);
+		printf("%dms	%dfps\n", data->delta_time, 1000 / data->delta_time);
 }
 
 int	loop_hook(t_data *data)
@@ -89,15 +46,16 @@ int	loop_hook(t_data *data)
 		}
 		i++;
 	}
-	// render toggles
 	render_walls(data);
-	// render_map(data);
-	// render_players(data);
-	// render_minimap_rays(data);
+	render_minimap(data);
 	mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
 	delta_time(data);
 	return (0);
 }
+// debug rendereres
+// render_map(data);
+// render_players(data);
+// render_minimap_rays(data);
 
 int	handle_keydown(int keycode, t_key *keys)
 {

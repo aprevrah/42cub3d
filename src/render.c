@@ -29,12 +29,7 @@ void	render_vertical_line(t_data *data, double angle, int x, double angle2)
 	ray = raycast(data->players[0], data->map, fmod(angle, 2 * PI));
 	distance = line_length(ray.start_pos, ray.hit_pos);
 	distance = cos(angle2) * distance;
-	// if (distance < 1)
-	// distance = 1;
 	offset = (double)1 / distance;
-	// if (offset > (double)W_HEIGHT/2)
-	// 	offset = (double)W_HEIGHT/2;
-	// make sure orientation of texture is correct
 	if (ray.texture == NORTH)
 		d_x = 1 - ray.hit_pos.x;
 	if (ray.texture == EAST)
@@ -55,7 +50,6 @@ void	render_walls(t_data *data)
 	w_offset = 0;
 	while (w_offset < W_WIDTH)
 	{
-		// Calculate the angle offset based on the pixel's position
 		a_offset = atan(tan(PI / 4) * ((W_WIDTH / 2) - (double)w_offset)
 				/ (W_WIDTH / 2));
 		render_vertical_line(data, vec2angle(data->players[0].orientation)
@@ -97,4 +91,3 @@ void	render_walls(t_data *data)
 	// }
 }
 */
-

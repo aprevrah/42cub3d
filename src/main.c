@@ -16,18 +16,22 @@
 void	free_and_exit(t_data *data, int code)
 {
 	if (data->players)
-	 	free(data->players);
+		free(data->players);
 	get_next_line(data->fd, 1);
 	if (data->map && data->map->texture_data)
 	{
-		if(data->map->texture_data->textures[0].img)
-			mlx_destroy_image(data->mlx, data->map->texture_data->textures[0].img);
-		if(data->map->texture_data->textures[1].img)
-			mlx_destroy_image(data->mlx, data->map->texture_data->textures[1].img);
-		if(data->map->texture_data->textures[2].img)
-			mlx_destroy_image(data->mlx, data->map->texture_data->textures[2].img);
-		if(data->map->texture_data->textures[3].img)
-			mlx_destroy_image(data->mlx, data->map->texture_data->textures[3].img);
+		if (data->map->texture_data->textures[0].img)
+			mlx_destroy_image(data->mlx,
+				data->map->texture_data->textures[0].img);
+		if (data->map->texture_data->textures[1].img)
+			mlx_destroy_image(data->mlx,
+				data->map->texture_data->textures[1].img);
+		if (data->map->texture_data->textures[2].img)
+			mlx_destroy_image(data->mlx,
+				data->map->texture_data->textures[2].img);
+		if (data->map->texture_data->textures[3].img)
+			mlx_destroy_image(data->mlx,
+				data->map->texture_data->textures[3].img);
 		free_texture_data(data->map->texture_data);
 	}
 	if (data->map)
@@ -53,7 +57,7 @@ int	win_close_button(t_data *data)
 int	is_file_extension(char *filename, char *extension)
 {
 	int	len;
-	int extension_len;
+	int	extension_len;
 
 	len = ft_strlen(filename);
 	extension_len = ft_strlen(extension);
@@ -64,12 +68,14 @@ int	is_file_extension(char *filename, char *extension)
 	return (1);
 }
 
-int load_texture(char *path, t_data *data, t_texture *texture)
+int	load_texture(char *path, t_data *data, t_texture *texture)
 {
-	texture->img = mlx_xpm_file_to_image(data->mlx, path, &texture->img_width, &texture->img_height);
+	texture->img = mlx_xpm_file_to_image(data->mlx, path, &texture->img_width,
+			&texture->img_height);
 	if (!texture->img)
 		return (1);
-	texture->addr = mlx_get_data_addr(texture->img, &texture->bits_per_pixel, &texture->line_length, &texture->endian);
+	texture->addr = mlx_get_data_addr(texture->img, &texture->bits_per_pixel,
+			&texture->line_length, &texture->endian);
 	if (!texture->addr)
 		return (1);
 	return (0);
@@ -77,12 +83,23 @@ int load_texture(char *path, t_data *data, t_texture *texture)
 
 void	init2null(t_data *data)
 {
+	struct timeval	tv_now;
 	data->mlx = NULL;
 	data->win = NULL;
 	data->img = NULL;
 	data->addr = NULL;
 	data->map = NULL;
 	data->players = NULL;
+	data->use_mouse = false;
+	if (gettimeofday(&tv_now, NULL))
+		printf("gettimeofday failed");
+	data->lastframe = tv_now;
+	// data->map->texture_data = NULL;
+	// data->map->texture_data->path_no = NULL;
+	// data->map->texture_data->path_so = NULL;
+	// data->map->texture_data->path_we = NULL;
+	// data->map->texture_data->path_ea = NULL;
+	// data->map->arr = NULL;
 }
 
 int		init_textures(t_data *data)
@@ -118,7 +135,8 @@ int	main(int argc, char **argv)
 {
 	t_data	data;
 	int		fd;
-
+	
+	setlocale(LC_ALL, "");
 	init2null(&data);
 	if (check_input(argc, argv))
 		return (1);
@@ -127,6 +145,7 @@ int	main(int argc, char **argv)
 	if (fd < 0)
 		return (1);
 	data.fd = fd;
+
 	
 	if ((data.map = parse_map(fd)) == NULL)
 		free_and_exit(&data, 1);
@@ -139,18 +158,18 @@ int	main(int argc, char **argv)
 	
 	if (init_textures(&data))
 		free_and_exit(&data, 1);
-	
 	render_map(&data);
 	mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
 	init_keys(data.keys, data.players);
 	mlx_hook(data.win, 2, KeyPressMask, handle_keydown, data.keys);
 	mlx_hook(data.win, 3, KeyReleaseMask, handle_keyup, data.keys);
 	mlx_hook(data.win, 17, StructureNotifyMask, win_close_button, &data);
-	mlx_hook(data.win, MotionNotify, PointerMotionMask, handle_mousemove, &data);
+	mlx_hook(data.win, MotionNotify, PointerMotionMask, handle_mousemove,
+		&data);
 	mlx_mouse_hook(data.win, handle_mouseclick, &data);
-	
 	// test texture
 	// printtexture_data(*data.map->texture_data);
+
 	mlx_loop_hook(data.mlx, loop_hook, &data);
 	mlx_loop(data.mlx);
 

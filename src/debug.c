@@ -60,12 +60,20 @@ void	printtexture_data(t_texture_data texture_data)
 	printf("F: #%06X\n", texture_data.col_f);
 }
 
-void printray(t_ray ray)
+void	printray(t_ray ray)
 {
-	printf("vert: %s\n", ray.vert_hit ? "true" : "false");
-	printf("hori: %s\n", ray.hori_hit ? "true" : "false");
+	if (ray.vert_hit)
+		printf("vert: true\n");
+	else
+		printf("vert: false\n");
+	if (ray.hori_hit)
+		printf("hori: true\n");
+	else
+		printf("hori: false\n");
 	printf("ray.sign.x = %d , ray.sign.y = %d\n", ray.sign.x, ray.sign.y);
 	printf("ray.delta.x = %lf , ray.delta.y = %lf\n", ray.delta.x, ray.delta.y);
-	printf("x_v = %lf , y_v = %lf\n", ray.vertical_intersection.x, ray.vertical_intersection.y);
-	printf("x_h = %lf , y_h = %lf\n", ray.horizontal_intersection.x, ray.horizontal_intersection.y);
+	printf("x_v = %lf , y_v = %lf\n", ray.vertical_intersection.x,
+		ray.vertical_intersection.y);
+	printf("x_h = %lf , y_h = %lf\n", ray.horizontal_intersection.x,
+		ray.horizontal_intersection.y);
 }

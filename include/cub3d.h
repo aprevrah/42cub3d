@@ -40,11 +40,10 @@
 # define PI 3.14159265358979323
 # define EPSILON 0.000001
 # define SCALE 70
-# define MAX_RAY 50
+# define MAX_RAY 3000
 
 # define WHITESPACE " \t\n\r\v\f"
 # define NUNERIC "0123456789"
-
 
 # define COLLISION true
 # define PRINT_FPS false
@@ -191,6 +190,24 @@ typedef struct s_ray
 	t_direction			texture;
 }						t_ray;
 
+// minimap
+typedef struct s_rect
+{
+	t_ivec2				start;
+	t_ivec2				end;
+	int					color;
+}						t_rect;
+
+typedef struct s_minimap
+{
+	int					size;
+	int					scale;
+	int					player_x;
+	int					player_y;
+	double				offset_x;
+	double				offset_y;
+}						t_minimap;
+
 // debug.c
 void					debug_render_textures(t_data *data, unsigned int count);
 void					printmap(t_map *map);
@@ -223,10 +240,12 @@ int						init_players(t_player **players, t_map *map);
 int						loop_hook(t_data *data);
 int						handle_keydown(int keycode, t_key *keys);
 int						handle_keyup(int keycode, t_key *keys);
+void					delta_time(t_data *data);
+
+// mouse.c
 int						handle_mousemove(int x, int y, t_data *data);
 int						handle_mouseclick(int button, int x, int y,
 							t_data *data);
-void					delta_time(t_data *data);
 
 // main.c
 void					free_and_exit(t_data *data, int code);
@@ -278,8 +297,10 @@ unsigned int			ft_to_int(char *str, unsigned int *i);
 
 // render.c
 
-
 // minimap.c
+void					render_minimap(t_data *data);
+
+// debug_minimap.c
 void					render_map(t_data *data);
 void					render_players(t_data *data);
 
@@ -306,5 +327,6 @@ void					gnl_clear_buffer(int fd);
 void					render_wall(t_data *data);
 void					render_walls(t_data *data);
 void					render_minimap_rays(t_data *data);
+double					vec2angle(t_dvec2 vec);
 
 #endif

@@ -8,7 +8,8 @@ OBJ_DIR = objs
 SRCS = $(addprefix $(SRC_DIR)/,\
 main.c draw.c hooks.c init.c oper.c \
 parse_1.c parse_2.c parse_3.c parse_4.c parse_5.c parse_6.c \
-render.c utils.c raycast.c free.c debug.c line.c pixel.c minimap.c)
+render.c utils.c raycast.c free.c debug.c line.c pixel.c minimap.c mouse.c debug_minimap.c)
+
 
 OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
 
