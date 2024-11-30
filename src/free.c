@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 18:03:08 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/30 20:24:29 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/30 20:48:56 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,17 @@ void	free_map(t_map *map)
 	free(map);
 }
 
+void	destroy_textures(t_data *data)
+{
+	if (data->map->texture_data->textures[0].img)
+		mlx_destroy_image(data->mlx, data->map->texture_data->textures[0].img);
+	if (data->map->texture_data->textures[1].img)
+		mlx_destroy_image(data->mlx, data->map->texture_data->textures[1].img);
+	if (data->map->texture_data->textures[2].img)
+		mlx_destroy_image(data->mlx, data->map->texture_data->textures[2].img);
+	if (data->map->texture_data->textures[3].img)
+		mlx_destroy_image(data->mlx, data->map->texture_data->textures[3].img);
+}
 
 void	free_and_exit(t_data *data, int code)
 {
@@ -48,24 +59,10 @@ void	free_and_exit(t_data *data, int code)
 		free(data->players);
 	get_next_line(data->fd, 1);
 	if (data->mlx && data->map->texture_data)
-	{
-		if (data->map->texture_data->textures[0].img)
-			mlx_destroy_image(data->mlx,
-				data->map->texture_data->textures[0].img);
-		if (data->map->texture_data->textures[1].img)
-			mlx_destroy_image(data->mlx,
-				data->map->texture_data->textures[1].img);
-		if (data->map->texture_data->textures[2].img)
-			mlx_destroy_image(data->mlx,
-				data->map->texture_data->textures[2].img);
-		if (data->map->texture_data->textures[3].img)
-			mlx_destroy_image(data->mlx,
-				data->map->texture_data->textures[3].img);
-		//free_texture_data(data->map->texture_data);
-	}
+		destroy_textures(data);
 	if (data->map)
 	{
-		free_texture_data(data->map->texture_data);	
+		free_texture_data(data->map->texture_data);
 		free_map(data->map);
 	}
 	if (data->img)

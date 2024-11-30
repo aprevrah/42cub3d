@@ -1,5 +1,5 @@
 CC = cc
-CFLAGS = -Wall -Werror -Wextra -Wno-unused-function -g
+CFLAGS = -Wall -Werror -Wextra
 RM = rm -f
 
 SRC_DIR = src
@@ -12,7 +12,6 @@ debug/debug.c debug/debug_minimap.c debug/line.c\
 init/keys.c init/player.c init/init.c\
 raycast/init_ray.c raycast/raycast.c raycast/utils.c\
 render.c free.c  pixel.c minimap.c mouse.c)
-
 
 OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
 

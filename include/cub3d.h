@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/08 13:01:15 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/30 20:22:45 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/30 21:31:04 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,10 @@ typedef struct s_color_value
 
 typedef struct s_rmd
 {
-	char	*line;
-	char	*content;
-	int		in_map;
-}					t_rmd;
+	char				*line;
+	char				*content;
+	int					in_map;
+}						t_rmd;
 
 typedef struct s_player
 {
@@ -100,6 +100,14 @@ typedef struct s_texture_data
 	unsigned int		col_c;
 	t_texture			textures[4];
 }						t_texture_data;
+
+typedef struct s_slice
+{
+	int					x;
+	double				size;
+	double				d_x;
+	t_texture			texture;
+}						t_slice;
 
 typedef struct s_map
 {
@@ -216,8 +224,7 @@ void					printray(t_ray ray);
 void					line_put(t_data *data, t_ivec2 a, t_ivec2 b, int color);
 
 // draw.c
-void					slice_put(t_data *data, int x, double size, double d_x,
-							t_texture texture);
+void					slice_put(t_data *data, t_slice slice);
 
 // pixel.c
 void					my_mlx_pixel_put(t_data *data, int x, int y, int color);
@@ -238,7 +245,6 @@ int						init_keys(t_key *keys, t_player *players);
 // init/player.c
 int						init_players(t_player **players, t_map *map);
 
-
 // hooks.c
 int						loop_hook(t_data *data);
 int						handle_keydown(int keycode, t_key *keys);
@@ -249,10 +255,6 @@ void					delta_time(t_data *data);
 int						handle_mousemove(int x, int y, t_data *data);
 int						handle_mouseclick(int button, int x, int y,
 							t_data *data);
-
-// main.c
-
-
 // oper.c
 void					move(t_data *data, void *args);
 void					look(t_data *data, void *args);
@@ -294,7 +296,8 @@ char					*ft_str_append(char *a, char *b);
 int						count_words(char *str);
 int						trim_spaces_at_end(char *str);
 bool					is_only_whitespace(char *s);
-int						skip_until(const char *str, unsigned int *i, const char *charset, bool val);
+int						skip_until(const char *str, unsigned int *i,
+							const char *charset, bool val);
 
 // # parse_7.c
 unsigned int			ft_to_int(char *str, unsigned int *i);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 17:24:17 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/30 18:22:02 by aprevrha         ###   ########.fr       */
+/*   Updated: 2024/11/30 21:30:29 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,24 +20,24 @@ double	line_length(t_dvec2 a, t_dvec2 b)
 void	render_vertical_line(t_data *data, double angle, int x, double angle2)
 {
 	t_ray	ray;
+	t_slice	slice;
 	double	distance;
-	double	d_x;
-	double	offset;
 
 	ray = raycast(data->players[0], data->map, fmod(angle, 2 * PI));
 	distance = line_length(ray.start_pos, ray.hit_pos);
 	distance = cos(angle2) * distance;
-	offset = (double)1 / distance;
+	slice.size = (double)1 / distance;
 	if (ray.texture == NORTH)
-		d_x = 1 - ray.hit_pos.x;
+		slice.d_x = 1 - ray.hit_pos.x;
 	if (ray.texture == EAST)
-		d_x = 1 - ray.hit_pos.y;
+		slice.d_x = 1 - ray.hit_pos.y;
 	if (ray.texture == SOUTH)
-		d_x = ray.hit_pos.x;
+		slice.d_x = ray.hit_pos.x;
 	if (ray.texture == WEST)
-		d_x = ray.hit_pos.y;
-	slice_put(data, x, offset, d_x,
-		data->map->texture_data->textures[ray.texture]);
+		slice.d_x = ray.hit_pos.y;
+	slice.texture = data->map->texture_data->textures[ray.texture];
+	slice.x = x;
+	slice_put(data, slice);
 }
 
 void	render_walls(t_data *data)
