@@ -1,6 +1,6 @@
 #include "../include/cub3d.h"
 
-int read_texture_data(int fd, t_texture_data *texture_data)
+int	read_texture_data(int fd, t_texture_data *texture_data)
 {
 	char	*line;
 	int		status;
@@ -26,19 +26,17 @@ int read_texture_data(int fd, t_texture_data *texture_data)
 	return (0);
 }
 
-char *set_null(int *location)
+char	*set_null(int *location)
 {
 	location = 0;
-
 	if (location == 0)
 		return (NULL);
 	return (NULL);
 }
 
-
 char	*read_map_data(int fd, t_map *map)
 {
-	t_rmd data;
+	t_rmd	data;
 
 	// data.content = set_null(&data.location);
 	data.content = NULL;
@@ -48,7 +46,8 @@ char	*read_map_data(int fd, t_map *map)
 		data.line = get_next_line(fd, 0);
 		if (!data.line)
 			break ;
-		if (is_only_whitespace(data.line) && (data.location == 0 || data.location == 2))
+		if (is_only_whitespace(data.line) && (data.location == 0
+				|| data.location == 2))
 		{
 			free(data.line);
 			continue ;
@@ -58,7 +57,8 @@ char	*read_map_data(int fd, t_map *map)
 		else if (data.location == 1 && is_only_whitespace(data.line))
 			data.location = 2;
 		else if (data.location == 2 && !is_only_whitespace(data.line))
-			return(free(data.line), printf("Failed to read map.\n"), data.content);
+			return (free(data.line), printf("Failed to read map.\n"),
+				data.content);
 		map->height++;
 		if (map->length < (int)ft_strlen(data.line) - 1)
 			map->length = (int)ft_strlen(data.line) - 1;
@@ -67,8 +67,7 @@ char	*read_map_data(int fd, t_map *map)
 	return (data.content);
 }
 
-
-int **new_2d_int_arr(int rows, int cols)
+int	**new_2d_int_arr(int rows, int cols)
 {
 	int **arr;
 	int i;

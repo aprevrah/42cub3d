@@ -14,25 +14,26 @@
 
 int	procces_line2(char const *s, int **arr, int *i, int y)
 {
-	int x;
+	int	x;
 
 	x = 0;
 	while (s[*i] && s[*i] != '\n')
 	{
-		if (s[*i] == '0' || s[*i] == 'N' || s[*i] == 'E' || s[*i] == 'S' || s[*i] == 'W')
-				arr[y][x] = 1;
-			if (s[*i] == ' ')
-				arr[y][x] = 8;
+		if (s[*i] == '0' || s[*i] == 'N' || s[*i] == 'E' || s[*i] == 'S'
+			|| s[*i] == 'W')
+			arr[y][x] = 1;
+		if (s[*i] == ' ')
+			arr[y][x] = 8;
 		(*i)++;
 		x++;
 	}
-	return (x);	
+	return (x);
 }
 
 int	fill_map2(char const *s, t_map *map, int **arr)
 {
 	int	i;
-	int x;
+	int	x;
 	int	y;
 
 	i = 0;
@@ -59,44 +60,44 @@ int	fill_map2(char const *s, t_map *map, int **arr)
 
 int	check_sides(int **arr, int height, int length)
 {
-	int x;
-	int y;
+	int	x;
+	int	y;
 
 	x = 0;
 	y = 0;
 	while (x < length)
 	{
-		if (arr[0][x] == 1 || arr[height-1][x] == 1)
+		if (arr[0][x] == 1 || arr[height - 1][x] == 1)
 			return (0);
 		x++;
 	}
 	while (y < height)
 	{
-		if (arr[y][0] == 1 || arr[y][length-1] == 1)
+		if (arr[y][0] == 1 || arr[y][length - 1] == 1)
 			return (0);
 		y++;
 	}
 	return (1);
 }
 
-int check_middle(int **arr, int height, int length)
+int	check_middle(int **arr, int height, int length)
 {
-	int x;
-	int y;
+	int	x;
+	int	y;
 
 	x = 1;
 	y = 1;
-	while (y < height-1)
+	while (y < height - 1)
 	{
 		x = 1;
-		while (x < length-1)
+		while (x < length - 1)
 		{
 			if (arr[y][x] == 1)
 			{
-				if ((arr[y-1][x] != 0 && arr[y-1][x] != 1) || \
-					(arr[y][x+1] != 0 && arr[y][x+1] != 1) || \
-					(arr[y+1][x] != 0 && arr[y+1][x] != 1) || \
-					(arr[y][x-1] != 0 && arr[y][x-1] != 1))
+				if ((arr[y - 1][x] != 0 && arr[y - 1][x] != 1) || (arr[y][x
+						+ 1] != 0 && arr[y][x + 1] != 1) || (arr[y + 1][x] != 0
+						&& arr[y + 1][x] != 1) || (arr[y][x - 1] != 0
+						&& arr[y][x - 1] != 1))
 				{
 					return (0);
 				}
@@ -108,18 +109,20 @@ int check_middle(int **arr, int height, int length)
 	return (1);
 }
 
-int	is_wall_enclosed(char *content , t_map *map)
+int	is_wall_enclosed(char *content, t_map *map)
 {
 	int **array;
 
 	array = new_2d_int_arr(map->height, map->length);
 	if (!array)
 		return (0);
-	fill_map2(content, map,array);
+	fill_map2(content, map, array);
 	if (!check_sides(array, map->height, map->length))
-		return (printf("Error: map is not enclosed\n"), free_2d_arr((void **)array, map->height), 0);
+		return (printf("Error: map is not enclosed\n"),
+			free_2d_arr((void **)array, map->height), 0);
 	if (!check_middle(array, map->height, map->length))
-		return (printf("Error: map is not enclosed\n"), free_2d_arr((void **)array, map->height), 0);
+		return (printf("Error: map is not enclosed\n"),
+			free_2d_arr((void **)array, map->height), 0);
 	free_2d_arr((void **)array, map->height);
 	return (1);
 }

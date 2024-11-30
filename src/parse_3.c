@@ -2,8 +2,9 @@
 
 int	is_valid_char(char const s) //! only accept spaces and newline, no tab
 {
-	if (s != '0' && s != '1' && s != 'N' && s != 'E' && s != 'S' && s != 'W' && \
-	s != ' ' && s != '\t' && s != '\n' && s != '\r' && s != '\v'&& s != '\f')
+	if (s != '0' && s != '1' && s != 'N' && s != 'E' && s != 'S' && s != 'W'
+		&& s != ' ' && s != '\t' && s != '\n' && s != '\r' && s != '\v'
+		&& s != '\f')
 		return (0);
 	return (1);
 }
@@ -22,9 +23,9 @@ int	get_dir(char c)
 
 int	count_players(t_map *map)
 {
-	int x;
-	int y;
-	int player_count;
+	int	x;
+	int	y;
+	int	player_count;
 
 	x = 0;
 	y = 0;
@@ -36,9 +37,9 @@ int	count_players(t_map *map)
 		{
 			if (map->arr[y][x] >= 3 && map->arr[y][x] <= 6)
 				player_count++;
-			x++;		
+			x++;
 		}
-		y++;	
+		y++;
 	}
 	if (player_count == 0)
 		printf("Error: missing player\n");
@@ -49,7 +50,7 @@ int	count_players(t_map *map)
 
 int	procces_line(char const *s, t_map *map, int *i, int y)
 {
-	int x;
+	int	x;
 
 	x = 0;
 	while (s[*i] && s[*i] != '\n')
@@ -63,13 +64,13 @@ int	procces_line(char const *s, t_map *map, int *i, int y)
 		(*i)++;
 		x++;
 	}
-	return (0);	
+	return (0);
 }
 
 int	fill_map(char const *s, t_map *map)
 {
-	int	i;
-	int	y;
+	int i;
+	int y;
 
 	i = 0;
 	y = 0;
@@ -81,7 +82,7 @@ int	fill_map(char const *s, t_map *map)
 		if (s[i] != '\0')
 			i++;
 		else
- 			break ;
+			break ;
 	}
 	if (count_players(map) == 0)
 		return (printf("Error: missing player\n"), 1);
