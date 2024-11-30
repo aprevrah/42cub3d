@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
+/*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 17:24:17 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/20 12:03:29 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/30 18:22:02 by aprevrha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
-#include <math.h>
-#include <stdio.h>
 
 double	line_length(t_dvec2 a, t_dvec2 b)
 {
