@@ -1,10 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/30 18:03:08 by aprevrha          #+#    #+#             */
+/*   Updated: 2024/11/30 18:03:25 by aprevrha         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../include/cub3d.h"
 #include <mlx.h>
 
-void free_2d_arr(void **arr, int rows)
+void	free_2d_arr(void **arr, int rows)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < rows)
@@ -15,8 +26,7 @@ void free_2d_arr(void **arr, int rows)
 	free(arr);
 }
 
-
-void free_texture_data(t_texture_data *td)
+void	free_texture_data(t_texture_data *td)
 {
 	free(td->path_no);
 	free(td->path_ea);
@@ -25,7 +35,7 @@ void free_texture_data(t_texture_data *td)
 	free(td);
 }
 
-void free_map(t_map *map)
+void	free_map(t_map *map)
 {
 	free_2d_arr((void **)map->arr, map->height);
 	free(map);
