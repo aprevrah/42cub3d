@@ -6,7 +6,7 @@
 /*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/08 13:01:15 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/30 17:39:08 by aprevrha         ###   ########.fr       */
+/*   Updated: 2024/11/30 19:21:51 by aprevrha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,10 +229,15 @@ int						get_color_normalized(t_texture texture, double x,
 int						get_pixel_color(t_texture texture, int x, int y);
 void					my_mlx_pixel_put(t_data *data, int x, int y, int color);
 
-// init.c
-int						init_keys(t_key *keys, t_player *players);
+// init/init.c
+void					init_hooks(t_data *data);
 int						init_mlx(t_data *data);
+void					init2null(t_data *data);
+// init/keys.c
+int						init_keys(t_key *keys, t_player *players);
+// init/player.c
 int						init_players(t_player **players, t_map *map);
+
 
 // hooks.c
 int						loop_hook(t_data *data);
@@ -246,7 +251,7 @@ int						handle_mouseclick(int button, int x, int y,
 							t_data *data);
 
 // main.c
-void					free_and_exit(t_data *data, int code);
+
 
 // oper.c
 void					move(t_data *data, void *args);
@@ -310,6 +315,7 @@ void					render_minimap_rays(t_data *data);
 void					free_2d_arr(void **arr, int rows);
 void					free_map(t_map *map);
 void					free_texture_data(t_texture_data *td);
+void					free_and_exit(t_data *data, int code);
 void					gnl_clear_buffer(int fd);
 
 // dda functions

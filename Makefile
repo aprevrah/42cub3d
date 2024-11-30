@@ -6,10 +6,12 @@ SRC_DIR = src
 OBJ_DIR = objs
 
 SRCS = $(addprefix $(SRC_DIR)/,\
-main.c draw.c hooks.c init.c oper.c \
+main.c draw.c hooks.c oper.c \
 parse_1.c parse_2.c parse_3.c parse_4.c parse_5.c parse_6.c \
+debug/debug.c debug/debug_minimap.c debug/line.c\
+init/keys.c init/player.c init/init.c\
 raycast/init_ray.c raycast/raycast.c raycast/utils.c\
-render.c utils.c free.c line.c pixel.c minimap.c mouse.c debug/debug.c debug/debug_minimap.c)
+render.c free.c  pixel.c minimap.c mouse.c)
 
 
 OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
