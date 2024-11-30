@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_6.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/30 15:49:22 by tmeniga@stu       #+#    #+#             */
+/*   Updated: 2024/11/30 16:19:04 by tmeniga@stu      ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/cub3d.h"
 
 int	count_words(char *str)
@@ -31,8 +43,8 @@ int	trim_spaces_at_end(char *str)
 	i = 0;
 	while (str[i])
 		i++;
-	while (i > 0 && (str[i - 1] == ' ' || str[i - 1] == '\t' || str[i
-			- 1] == '\r' || str[i - 1] == '\v' || str[i - 1] == '\f'))
+	while (i > 0 && (str[i - 1] == ' ' || str[i - 1] == '\t' || \
+		str[i - 1] == '\r' || str[i - 1] == '\v' || str[i - 1] == '\f'))
 		i--;
 	str[i] = '\0';
 	return (i);
@@ -77,17 +89,4 @@ int	skip_until(const char *str, unsigned int *i, const char *charset, bool val)
 		chars_skipped++;
 	}
 	return (chars_skipped);
-}
-
-unsigned int	ft_to_int(char *str, unsigned int *i)
-{
-	unsigned int nbr;
-
-	nbr = 0;
-	while ('0' <= str[*i] && str[*i] <= '9')
-	{
-		nbr = nbr * 10 + (str[*i] - '0');
-		*i += 1;
-	}
-	return (nbr);
 }

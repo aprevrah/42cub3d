@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/08 13:01:15 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/27 19:13:45 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/30 17:01:49 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ typedef struct s_rmd
 {
 	char	*line;
 	char	*content;
-	int		location;
+	int		in_map;
 }					t_rmd;
 
 typedef struct s_player
@@ -292,6 +292,8 @@ int						count_words(char *str);
 int						trim_spaces_at_end(char *str);
 bool					is_only_whitespace(char *s);
 int						skip_until(const char *str, unsigned int *i, const char *charset, bool val);
+
+// # parse_7.c
 unsigned int			ft_to_int(char *str, unsigned int *i);
 
 

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_3.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/30 15:46:20 by tmeniga@stu       #+#    #+#             */
+/*   Updated: 2024/11/30 17:10:40 by tmeniga@stu      ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/cub3d.h"
 
 int	is_valid_char(char const s) //! only accept spaces and newline, no tab
@@ -41,10 +53,6 @@ int	count_players(t_map *map)
 		}
 		y++;
 	}
-	if (player_count == 0)
-		printf("Error: missing player\n");
-	if (player_count > 1)
-		printf("Error: too many players\n");
 	return (player_count);
 }
 
@@ -69,8 +77,8 @@ int	procces_line(char const *s, t_map *map, int *i, int y)
 
 int	fill_map(char const *s, t_map *map)
 {
-	int i;
-	int y;
+	int	i;
+	int	y;
 
 	i = 0;
 	y = 0;

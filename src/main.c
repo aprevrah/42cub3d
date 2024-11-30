@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 22:34:46 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/27 19:48:27 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/30 17:24:02 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,25 +152,25 @@ int	main(int argc, char **argv)
 	if (init_players(&data.players, data.map))
 		free_and_exit(&data, 1);
 	
-	if (init_mlx(&data))
-		free_and_exit(&data, 1);
+	// if (init_mlx(&data))
+	// 	free_and_exit(&data, 1);
 	
-	if (init_textures(&data))
-		free_and_exit(&data, 1);
-	render_map(&data);
-	mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
-	init_keys(data.keys, data.players);
-	mlx_hook(data.win, 2, KeyPressMask, handle_keydown, data.keys);
-	mlx_hook(data.win, 3, KeyReleaseMask, handle_keyup, data.keys);
-	mlx_hook(data.win, 17, StructureNotifyMask, win_close_button, &data);
-	mlx_hook(data.win, MotionNotify, PointerMotionMask, handle_mousemove,
-		&data);
-	mlx_mouse_hook(data.win, handle_mouseclick, &data);
+	// if (init_textures(&data))
+	// 	free_and_exit(&data, 1);
+	// render_map(&data);
+	// mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
+	// init_keys(data.keys, data.players);
+	// mlx_hook(data.win, 2, KeyPressMask, handle_keydown, data.keys);
+	// mlx_hook(data.win, 3, KeyReleaseMask, handle_keyup, data.keys);
+	// mlx_hook(data.win, 17, StructureNotifyMask, win_close_button, &data);
+	// mlx_hook(data.win, MotionNotify, PointerMotionMask, handle_mousemove,
+	// 	&data);
+	// mlx_mouse_hook(data.win, handle_mouseclick, &data);
 	// test texture
 	// printtexture_data(*data.map->texture_data);
 
-	mlx_loop_hook(data.mlx, loop_hook, &data);
-	mlx_loop(data.mlx);
+	// mlx_loop_hook(data.mlx, loop_hook, &data);
+	// mlx_loop(data.mlx);
 
 	free_and_exit(&data, 0);
 }	

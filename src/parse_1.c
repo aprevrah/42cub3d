@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 17:24:06 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/27 18:29:28 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/30 15:44:08 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,15 +56,15 @@ t_map	*get_map(int fd, t_texture_data *texture_data)
 
 t_map	*parse_map(int fd)
 {
-	t_map *map;
-	t_texture_data *texture_data;
+	t_map			*map;
+	t_texture_data	*texture_data;
 
-	if ((texture_data = get_texture_data(fd)) == NULL)
+	texture_data = get_texture_data(fd);
+	if (!texture_data)
 		return (NULL);
-	// printtexture_data(*texture_data); //! delete
-	if ((map = get_map(fd, texture_data)) == NULL)
+	map = get_map(fd, texture_data);
+	if (!map)
 		return (NULL);
-
 	close(fd);
 	return (map);
 }
