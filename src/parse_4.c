@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 15:47:38 by tmeniga@stu       #+#    #+#             */
-/*   Updated: 2024/11/30 17:28:04 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/30 18:37:27 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ int	get_key(unsigned int *i, char *s, char **path)
 	skip_until(s, i, "\n", true);
 	if (*path)
 		return (printf("Error: Duplicate config: %s", s), 1);
-	*path = NULL; //ft_substr(s, start, *i - start);
+	*path = NULL; //ft_substr(s, start, *i - start); // (if NULL)=> leaks
 	if (!*path)
 		return (printf("Error: Malloc failed."), 1);
 	trim_spaces_at_end(*path);
