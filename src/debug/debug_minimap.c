@@ -1,18 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   render.c                                           :+:      :+:    :+:   */
+/*   debug_minimap.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
+/*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 17:24:17 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/20 12:03:29 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/30 16:05:50 by aprevrha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/cub3d.h"
-#include <math.h>
-#include <stdio.h>
+#include "../../include/cub3d.h"
 
 void	render_rect(t_data *data, t_ivec2 p1, t_ivec2 p2)
 {

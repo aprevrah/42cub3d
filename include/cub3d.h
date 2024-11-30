@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
+/*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/08 13:01:15 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/27 19:13:45 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/30 17:39:08 by aprevrha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,18 @@
 # define CUB3D_H
 
 # include "../libft/libft.h"
+# include "mlx.h"
+# include <X11/X.h>
+# include <X11/keysym.h>
+# include <fcntl.h>
 # include <math.h>
+# include <mlx.h>
 # include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <string.h>
 # include <sys/time.h>
-#include "mlx.h"
-#include <X11/X.h>
-#include <X11/keysym.h>
-#include <fcntl.h>
-#include <mlx.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
+# include <unistd.h>
 
 # define COLOR 0x00FFFFFF
 # define MAP_SEP " "
@@ -59,17 +57,17 @@ typedef struct s_dvec2
 
 typedef struct s_color_value
 {
-	unsigned int r;
-	unsigned int g;
-	unsigned int b;
+	unsigned int		r;
+	unsigned int		g;
+	unsigned int		b;
 }						t_color_value;
 
 typedef struct s_rmd
 {
-	char	*line;
-	char	*content;
-	int		location;
-}					t_rmd;
+	char				*line;
+	char				*content;
+	int					location;
+}						t_rmd;
 
 typedef struct s_player
 {
@@ -264,7 +262,7 @@ int						procces_line2(char const *s, int **arr, int *i, int y);
 int						fill_map2(char const *s, t_map *map, int **arr);
 int						check_sides(int **arr, int height, int length);
 int						check_middle(int **arr, int height, int length);
-int						is_wall_enclosed(char *content , t_map *map);
+int						is_wall_enclosed(char *content, t_map *map);
 
 // # parse_3.c
 int						is_valid_char(char const s);
@@ -291,11 +289,12 @@ char					*ft_str_append(char *a, char *b);
 int						count_words(char *str);
 int						trim_spaces_at_end(char *str);
 bool					is_only_whitespace(char *s);
-int						skip_until(const char *str, unsigned int *i, const char *charset, bool val);
+int						skip_until(const char *str, unsigned int *i,
+							const char *charset, bool val);
 unsigned int			ft_to_int(char *str, unsigned int *i);
 
-
 // render.c
+void					render_walls(t_data *data);
 
 // minimap.c
 void					render_minimap(t_data *data);
@@ -303,9 +302,9 @@ void					render_minimap(t_data *data);
 // debug_minimap.c
 void					render_map(t_data *data);
 void					render_players(t_data *data);
+void					render_minimap_rays(t_data *data);
 
 // # utils.c
-
 
 // free.c
 void					free_2d_arr(void **arr, int rows);
@@ -314,19 +313,20 @@ void					free_texture_data(t_texture_data *td);
 void					gnl_clear_buffer(int fd);
 
 // dda functions
-double					get_fract_part(double x);
+// raycast/init_ray.c
+void					set_sign(t_ray *ray);
+double					get_dx(double angle);
+double					get_dy(double angle);
 t_dvec2					get_horizontal_intersection(t_ray ray);
 t_dvec2					get_vertical_intersection(t_ray ray);
-t_ray					raycast(t_player player, t_map *map, double angle);
-int						is_wall(t_dvec2 intersection, t_map *map);
-double					deg2rad(double degrees);
-double					rad2deg(double rad);
+
+// raycast/utils.c
+double					squared_distance(t_dvec2 p1, t_dvec2 p2);
+double					get_fract_part(double x);
 double					vec2angle(t_dvec2 vec);
 
-void					gnl_clear_buffer(int fd);
-void					render_wall(t_data *data);
-void					render_walls(t_data *data);
-void					render_minimap_rays(t_data *data);
-double					vec2angle(t_dvec2 vec);
+double					get_fract_part(double x);
+
+t_ray					raycast(t_player player, t_map *map, double angle);
 
 #endif
