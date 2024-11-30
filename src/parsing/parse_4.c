@@ -6,12 +6,11 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 15:47:38 by tmeniga@stu       #+#    #+#             */
-/*   Updated: 2024/11/30 20:40:36 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/30 21:08:58 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/cub3d.h"
-
 
 int	is_only_numeric_and_2_comma(char *str, int i)
 {

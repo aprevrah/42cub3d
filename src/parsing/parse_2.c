@@ -6,12 +6,11 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 17:24:06 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/30 20:40:25 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/30 21:08:50 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/cub3d.h"
-
 
 int	procces_line2(char const *s, int **arr, int *i, int y)
 {

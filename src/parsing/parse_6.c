@@ -6,12 +6,11 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 15:49:22 by tmeniga@stu       #+#    #+#             */
-/*   Updated: 2024/11/30 20:40:51 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/30 21:09:03 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/cub3d.h"
-
 
 int	count_words(char *str)
 {

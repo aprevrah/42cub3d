@@ -6,38 +6,33 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 17:24:45 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/10/28 13:00:22 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/30 21:30:50 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
-#include "mlx.h"
-#include <X11/keysym.h>
-#include <fcntl.h>
-#include <stdlib.h>
-#include <unistd.h>
 
-void	slice_put(t_data *data, int x, double size, double d_x,
-		t_texture texture)
+void	slice_put(t_data *data, t_slice slice)
 {
 	int	color;
 	int	i;
 	int	y;
 
 	i = 0;
-	if (size > 1)
-		i = -(W_HEIGHT * 0.5 - W_HEIGHT * 0.5 * size);
+	if (slice.size > 1)
+		i = -(W_HEIGHT * 0.5 - W_HEIGHT * 0.5 * slice.size);
 	y = 0;
 	while (y < W_HEIGHT)
 	{
-		if (y < W_HEIGHT * 0.5 - W_HEIGHT * 0.5 * size)
-			my_mlx_pixel_put(data, x, y, data->map->texture_data->col_c);
-		else if (y > W_HEIGHT * 0.5 + W_HEIGHT * 0.5 * size)
-			my_mlx_pixel_put(data, x, y, data->map->texture_data->col_f);
+		if (y < W_HEIGHT * 0.5 - W_HEIGHT * 0.5 * slice.size)
+			my_mlx_pixel_put(data, slice.x, y, data->map->texture_data->col_c);
+		else if (y > W_HEIGHT * 0.5 + W_HEIGHT * 0.5 * slice.size)
+			my_mlx_pixel_put(data, slice.x, y, data->map->texture_data->col_f);
 		else
 		{
-			color = get_color_normalized(texture, d_x, i / (W_HEIGHT * size));
-			my_mlx_pixel_put(data, x, y, color);
+			color = get_color_normalized(slice.texture, slice.d_x, i / (W_HEIGHT
+						* slice.size));
+			my_mlx_pixel_put(data, slice.x, y, color);
 			i++;
 		}
 		y++;

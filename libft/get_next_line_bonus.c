@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 17:00:43 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/30 19:26:08 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/30 20:44:49 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,13 +56,12 @@ static char	*read_to_nl(int fd, char *str)
 	return (free(buffer), str);
 }
 
-
 // # if function argument x != 0 buffer will be freed
 char	*get_next_line(int fd, int x)
 {
 	static char	*str[MAX_FD];
 	char		*line;
-	
+
 	if (str[fd] && x)
 		return (free(str[fd]), str[fd] = NULL, NULL);
 	if (x)
