@@ -136,7 +136,6 @@ int	main(int argc, char **argv)
 	t_data	data;
 	int		fd;
 	
-	setlocale(LC_ALL, "");
 	init2null(&data);
 	if (check_input(argc, argv))
 		return (1);
