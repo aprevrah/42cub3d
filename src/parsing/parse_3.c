@@ -6,11 +6,12 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 15:46:20 by tmeniga@stu       #+#    #+#             */
-/*   Updated: 2024/11/30 17:10:40 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/30 20:40:32 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/cub3d.h"
+#include "../../include/cub3d.h"
+
 
 int	is_valid_char(char const s) //! only accept spaces and newline, no tab
 {

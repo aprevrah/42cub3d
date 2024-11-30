@@ -6,11 +6,11 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 15:48:24 by tmeniga@stu       #+#    #+#             */
-/*   Updated: 2024/11/30 17:39:02 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/30 20:40:45 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/cub3d.h"
+#include "../../include/cub3d.h"
 
 int	read_texture_data(int fd, t_texture_data *texture_data)
 {
