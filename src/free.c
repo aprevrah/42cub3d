@@ -6,7 +6,7 @@
 /*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 18:03:08 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/30 18:03:25 by aprevrha         ###   ########.fr       */
+/*   Updated: 2024/11/30 19:21:08 by aprevrha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,40 @@ void	free_map(t_map *map)
 {
 	free_2d_arr((void **)map->arr, map->height);
 	free(map);
+}
+
+
+void	free_and_exit(t_data *data, int code)
+{
+	if (data->players)
+		free(data->players);
+	get_next_line(data->fd, 1);
+	if (data->map && data->map->texture_data)
+	{
+		if (data->map->texture_data->textures[0].img)
+			mlx_destroy_image(data->mlx,
+				data->map->texture_data->textures[0].img);
+		if (data->map->texture_data->textures[1].img)
+			mlx_destroy_image(data->mlx,
+				data->map->texture_data->textures[1].img);
+		if (data->map->texture_data->textures[2].img)
+			mlx_destroy_image(data->mlx,
+				data->map->texture_data->textures[2].img);
+		if (data->map->texture_data->textures[3].img)
+			mlx_destroy_image(data->mlx,
+				data->map->texture_data->textures[3].img);
+		free_texture_data(data->map->texture_data);
+	}
+	if (data->map)
+		free_map(data->map);
+	if (data->img)
+		mlx_destroy_image(data->mlx, data->img);
+	if (data->win)
+		mlx_destroy_window(data->mlx, data->win);
+	if (data->mlx)
+	{
+		mlx_destroy_display(data->mlx);
+		free(data->mlx);
+	}
+	exit(code);
 }
