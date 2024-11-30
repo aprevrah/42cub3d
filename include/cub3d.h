@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
+/*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/08 13:01:15 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/27 19:13:45 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/30 17:39:08 by aprevrha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -294,6 +294,7 @@ int						skip_until(const char *str, unsigned int *i,
 unsigned int			ft_to_int(char *str, unsigned int *i);
 
 // render.c
+void					render_walls(t_data *data);
 
 // minimap.c
 void					render_minimap(t_data *data);
@@ -301,6 +302,7 @@ void					render_minimap(t_data *data);
 // debug_minimap.c
 void					render_map(t_data *data);
 void					render_players(t_data *data);
+void					render_minimap_rays(t_data *data);
 
 // # utils.c
 
@@ -311,19 +313,20 @@ void					free_texture_data(t_texture_data *td);
 void					gnl_clear_buffer(int fd);
 
 // dda functions
-double					get_fract_part(double x);
+// raycast/init_ray.c
+void					set_sign(t_ray *ray);
+double					get_dx(double angle);
+double					get_dy(double angle);
 t_dvec2					get_horizontal_intersection(t_ray ray);
 t_dvec2					get_vertical_intersection(t_ray ray);
-t_ray					raycast(t_player player, t_map *map, double angle);
-int						is_wall(t_dvec2 intersection, t_map *map);
-double					deg2rad(double degrees);
-double					rad2deg(double rad);
+
+// raycast/utils.c
+double					squared_distance(t_dvec2 p1, t_dvec2 p2);
+double					get_fract_part(double x);
 double					vec2angle(t_dvec2 vec);
 
-void					gnl_clear_buffer(int fd);
-void					render_wall(t_data *data);
-void					render_walls(t_data *data);
-void					render_minimap_rays(t_data *data);
-double					vec2angle(t_dvec2 vec);
+double					get_fract_part(double x);
+
+t_ray					raycast(t_player player, t_map *map, double angle);
 
 #endif
