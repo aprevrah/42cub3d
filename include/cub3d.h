@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aprevrha <aprevrha@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/08 13:01:15 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/30 19:21:51 by aprevrha         ###   ########.fr       */
+/*   Updated: 2024/11/30 20:22:45 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,10 @@ typedef struct s_color_value
 
 typedef struct s_rmd
 {
-	char				*line;
-	char				*content;
-	int					location;
-}						t_rmd;
+	char	*line;
+	char	*content;
+	int		in_map;
+}					t_rmd;
 
 typedef struct s_player
 {
@@ -294,8 +294,9 @@ char					*ft_str_append(char *a, char *b);
 int						count_words(char *str);
 int						trim_spaces_at_end(char *str);
 bool					is_only_whitespace(char *s);
-int						skip_until(const char *str, unsigned int *i,
-							const char *charset, bool val);
+int						skip_until(const char *str, unsigned int *i, const char *charset, bool val);
+
+// # parse_7.c
 unsigned int			ft_to_int(char *str, unsigned int *i);
 
 // render.c

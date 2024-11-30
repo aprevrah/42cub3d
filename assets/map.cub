@@ -1,14 +1,13 @@
 NO assets/North.xpm
 WE assets/West.xpm
-EA assets/East.xpm
+EAS assets/East.xpm
 SO assets/South.xpm
 
-
-C 60,60,144
+C 60,60,251
 F 50,50,50
 
 11111
-10001
-10E01
-10001
+11111
+11E11
+11111
 11111

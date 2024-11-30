@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_5.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/30 15:48:24 by tmeniga@stu       #+#    #+#             */
+/*   Updated: 2024/11/30 17:39:02 by tmeniga@stu      ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/cub3d.h"
 
 int	read_texture_data(int fd, t_texture_data *texture_data)
@@ -34,43 +46,44 @@ char	*set_null(int *location)
 	return (NULL);
 }
 
-char	*read_map_data(int fd, t_map *map)
+char	*read_map_data_small(int fd, t_map *map, t_rmd data)
 {
-	t_rmd	data;
-
-	// data.content = set_null(&data.location);
-	data.content = NULL;
-	data.location = 0;
 	while (1)
 	{
 		data.line = get_next_line(fd, 0);
 		if (!data.line)
 			break ;
-		if (is_only_whitespace(data.line) && (data.location == 0
-				|| data.location == 2))
+		if (is_only_whitespace(data.line) && (!data.in_map))
 		{
 			free(data.line);
 			continue ;
 		}
-		else if (data.location == 0)
-			data.location = 1;
-		else if (data.location == 1 && is_only_whitespace(data.line))
-			data.location = 2;
-		else if (data.location == 2 && !is_only_whitespace(data.line))
-			return (free(data.line), printf("Failed to read map.\n"),
-				data.content);
+		else if (!data.in_map)
+			data.in_map = 1;
 		map->height++;
 		if (map->length < (int)ft_strlen(data.line) - 1)
 			map->length = (int)ft_strlen(data.line) - 1;
 		data.content = ft_str_append(data.content, data.line);
+		if (!data.content)
+			return (NULL);
 	}
+	return (data.content);
+}
+
+char	*read_map_data(int fd, t_map *map)
+{
+	t_rmd	data;
+
+	data.content = NULL;
+	data.in_map = 0;
+	data.content = read_map_data_small(fd, map, data);
 	return (data.content);
 }
 
 int	**new_2d_int_arr(int rows, int cols)
 {
-	int **arr;
-	int i;
+	int	**arr;
+	int	i;
 
 	arr = (int **)ft_calloc(rows, sizeof(int *));
 	if (!arr)

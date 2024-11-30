@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_4.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/30 15:47:38 by tmeniga@stu       #+#    #+#             */
+/*   Updated: 2024/11/30 19:06:22 by tmeniga@stu      ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/cub3d.h"
 
 int	is_only_numeric_and_2_comma(char *str, int i)
@@ -76,8 +88,8 @@ int	get_key(unsigned int *i, char *s, char **path)
 	skip_until(s, i, "\n", true);
 	if (*path)
 		return (printf("Error: Duplicate config: %s", s), 1);
-	*path = ft_substr(s, start, *i - start);
-	if (!path)
+	*path = ft_substr(s, start, *i - start); // (if NULL)=> leaks
+	if (!*path)
 		return (printf("Error: Malloc failed."), 1);
 	trim_spaces_at_end(*path);
 	return (0);
@@ -85,7 +97,7 @@ int	get_key(unsigned int *i, char *s, char **path)
 
 int	key_val(char *line, t_texture_data *texture_data)
 {
-	unsigned int i;
+	unsigned int	i;
 
 	i = 0;
 	skip_until(line, &i, WHITESPACE, false);

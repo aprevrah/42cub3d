@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/24 17:24:06 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/27 19:04:51 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/11/30 15:45:51 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ int	check_middle(int **arr, int height, int length)
 
 int	is_wall_enclosed(char *content, t_map *map)
 {
-	int **array;
+	int	**array;
 
 	array = new_2d_int_arr(map->height, map->length);
 	if (!array)
