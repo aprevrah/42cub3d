@@ -20,7 +20,10 @@ void	delta_time(t_data *data)
 	struct timeval	tv_now;
 
 	if (gettimeofday(&tv_now, NULL))
-		printf("gettimeofday failed");
+	{
+		printf("Error: gettimeofday failed\n");
+		free_and_exit(data, 1);
+	}
 	data->delta_time = (tv_now.tv_sec * 1000 + tv_now.tv_usec / 1000)
 		- (data->lastframe.tv_sec * 1000 + data->lastframe.tv_usec / 1000);
 	data->lastframe = tv_now;
@@ -48,7 +51,8 @@ int	loop_hook(t_data *data)
 	}
 	render_walls(data);
 	render_minimap(data);
-	mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
+	if (mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0))
+		free_and_exit(data, 1);
 	delta_time(data);
 	return (0);
 }
