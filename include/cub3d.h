@@ -241,7 +241,7 @@ void					init_hooks(t_data *data);
 int						init_mlx(t_data *data);
 void					init2null(t_data *data);
 // init/keys.c
-int						init_keys(t_key *keys, t_player *players);
+void					init_keys(t_key *keys, t_player *players);
 // init/player.c
 int						init_players(t_player **players, t_map *map);
 

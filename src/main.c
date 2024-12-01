@@ -91,5 +91,5 @@ int	main(int argc, char **argv)
 	init_keys(data.keys, data.players);
 	init_hooks(&data);
 	mlx_loop(data.mlx);
-	free_and_exit(&data, 0);
+	free_and_exit(&data, 1);
 }
