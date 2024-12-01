@@ -21,7 +21,7 @@ void	delta_time(t_data *data)
 
 	if (gettimeofday(&tv_now, NULL))
 	{
-		printf("Error: gettimeofday failed\n");
+		err("Error: gettimeofday failed\n");
 		free_and_exit(data, 1);
 	}
 	data->delta_time = (tv_now.tv_sec * 1000 + tv_now.tv_usec / 1000)

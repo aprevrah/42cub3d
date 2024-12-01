@@ -226,6 +226,9 @@ void					line_put(t_data *data, t_ivec2 a, t_ivec2 b, int color);
 // draw.c
 void					slice_put(t_data *data, t_slice slice);
 
+// error.c
+void					err(char *str);
+
 // pixel.c
 void					my_mlx_pixel_put(t_data *data, int x, int y, int color);
 int						get_pixel_color(t_texture texture, int x, int y);

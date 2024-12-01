@@ -11,7 +11,7 @@ parsing/parse_1.c parsing/parse_2.c parsing/parse_3.c parsing/parse_4.c parsing/
 debug/debug.c debug/debug_minimap.c debug/line.c\
 init/keys.c init/player.c init/init.c\
 raycast/init_ray.c raycast/raycast.c raycast/utils.c\
-render.c free.c  pixel.c minimap.c mouse.c)
+render.c free.c  pixel.c minimap.c mouse.c error.c)
 
 OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
 

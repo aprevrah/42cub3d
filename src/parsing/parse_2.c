@@ -118,10 +118,10 @@ int	is_wall_enclosed(char *content, t_map *map)
 		return (0);
 	fill_map2(content, map, array);
 	if (!check_sides(array, map->height, map->length))
-		return (printf("Error: map is not enclosed\n"),
+		return (err("Error: map is not enclosed\n"),
 			free_2d_arr((void **)array, map->height), 0);
 	if (!check_middle(array, map->height, map->length))
-		return (printf("Error: map is not enclosed\n"),
+		return (err("Error: map is not enclosed\n"),
 			free_2d_arr((void **)array, map->height), 0);
 	free_2d_arr((void **)array, map->height);
 	return (1);
