@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 15:48:24 by tmeniga@stu       #+#    #+#             */
-/*   Updated: 2024/12/01 17:17:51 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/12/01 18:30:45 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	read_texture_data(char *str, t_texture_data *texture_data)
 	configs = 0;
 	while (configs < 6)
 	{
-		line = get_line(str);
+		line = get_line(&str);
 		if (!line)
 			return (1);
 		status = key_val(line, texture_data);
@@ -50,13 +50,9 @@ char	*read_map_data_small(char *str, t_map *map, t_rmd data)
 {
 	while (1)
 	{
-		data.line = get_line(str);
-		if (!data.line || *data.line == '\0')
-		{
-			if (*data.line == '\0')
-				return (free(data.line), data.line = NULL, data.content);
+		data.line = get_line(&str);
+		if (!data.line)
 			break ;
-		}
 		if (is_only_whitespace(data.line) && (!data.in_map))
 		{
 			free(data.line);

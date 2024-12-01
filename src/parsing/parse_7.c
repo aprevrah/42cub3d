@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 15:57:23 by tmeniga@stu       #+#    #+#             */
-/*   Updated: 2024/12/01 17:23:32 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/12/01 18:49:20 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,27 @@ int		ft_strlen1(char const *str)
 		i++;
 	return (i);
 }
+char *ft_substr1(char *str, int start, int len) 
+{
+    char *substr;
+    int i = 0;
+
+    if (!str || start < 0 || len < 0)
+        return NULL;
+
+    substr = malloc(sizeof(char) * (len + 1));
+    if (!substr)
+        return NULL;
+
+    while (i < len && str[start + i]) 
+	{
+        substr[i] = str[start + i];
+        i++;
+    }
+    substr[i] = '\0';
+    return substr;
+}
+
 char	*ft_strjoin1(char const *s1, char const *s2)
 {
 	size_t	i;
@@ -61,46 +82,59 @@ char	*ft_strjoin1(char const *s1, char const *s2)
 	return (res);
 }
 
-void	remove_line(char *str, int i)
+char *remove_line(char *str, int i) 
 {
-	int j;
+    char *new_str;
+    int len;
 
-	j = 0;
-	while (str[i])
-		str[j++] = str[i++];
-	str[j] = '\0';
-	j++;
-	while (str[j])
-    {
-        str[j++] = '\0';
+    len = ft_strlen1(str);
+    if (i >= len) { // If no characters remain to copy
+        free(str);
+        return NULL;
     }
+
+    new_str = ft_substr(str, i, len - i);
+    if (!new_str) { // Allocation failed
+        free(str);
+        return NULL;
+    }
+
+    free(str); // Free the old string
+    return new_str;
 }
 
-char	*get_line(char *str)
+char *get_line(char **str) 
 {
-	int		i;
-	int		j;
-	char	*line;
-	
-	if (!str)
-		return (NULL);
-	i = 0;
-	while (str[i] && str[i] != '\n')
-		i++;
-	if (str[i] == '\n')
-		i++;
-	line = malloc(sizeof(char) * (i + 1));
-	if (!line)
-		return (NULL);
-	j = 0;
-	while (j < i)
-	{
-		line[j] = str[j];
-		j++;
-	}
-	line[j] = '\0';
-	remove_line(str, i);
-	return (line);
+    int i = 0;
+    char *line;
+
+    if (!str || !(*str))
+        return NULL;
+
+    // Find newline or end of string
+    while ((*str)[i] && (*str)[i] != '\n')
+        i++;
+
+    // Include the newline
+    if ((*str)[i] == '\n')
+        i++;
+
+    // Allocate memory for the line
+    line = malloc(sizeof(char) * (i + 1));
+    if (!line)
+        return NULL;
+
+    // Copy the line into the new string
+    for (int j = 0; j < i; j++)
+        line[j] = (*str)[j];
+    line[i] = '\0';
+
+    // Remove the line from the original string
+    char *new_str = remove_line(*str, i);
+	// free(*str);
+	*str = new_str;
+
+    return line;
 }
 
 char	*read_file(int fd)

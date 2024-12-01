@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/08 13:01:15 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/12/01 16:03:43 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/12/01 18:20:26 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -301,7 +301,7 @@ int						skip_until(const char *str, unsigned int *i,
 
 // # parse_7.c
 unsigned int			ft_to_int(char *str, unsigned int *i);
-char					*get_line(char *str);
+char					*get_line(char **str);
 char					*ft_strjoin1(char const *s1, char const *s2);
 char					*read_file(int fd);
 
