@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/08 13:01:15 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/30 21:31:04 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/12/01 16:03:43 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,8 +260,8 @@ void					move(t_data *data, void *args);
 void					look(t_data *data, void *args);
 
 // # parse_1.c
-t_texture_data			*get_texture_data(int fd);
-t_map					*get_map(int fd, t_texture_data *texture_data);
+t_texture_data			*get_texture_data(char *str);
+t_map					*get_map(char *str, t_texture_data *texture_data);
 t_map					*parse_map(int fd);
 
 // # parse_2.c
@@ -286,9 +286,9 @@ int						get_key(unsigned int *i, char *s, char **path);
 int						key_val(char *line, t_texture_data *texture_data);
 
 // # parse_5.c
-int						read_texture_data(int fd, t_texture_data *texture_data);
+int						read_texture_data(char *str, t_texture_data *texture_data);
 char					*set_null(int *location);
-char					*read_map_data(int fd, t_map *map);
+char					*read_map_data(char *str, t_map *map);
 int						**new_2d_int_arr(int rows, int cols);
 
 // # parse_6.c
@@ -301,6 +301,10 @@ int						skip_until(const char *str, unsigned int *i,
 
 // # parse_7.c
 unsigned int			ft_to_int(char *str, unsigned int *i);
+char					*get_line(char *str);
+char					*ft_strjoin1(char const *s1, char const *s2);
+char					*read_file(int fd);
+
 
 // render.c
 void					render_walls(t_data *data);

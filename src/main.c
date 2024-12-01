@@ -6,7 +6,7 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 22:34:46 by aprevrha          #+#    #+#             */
-/*   Updated: 2024/11/30 20:49:43 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/12/01 17:20:23 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,17 +79,36 @@ int	main(int argc, char **argv)
 	data.fd = open(argv[1], O_RDONLY);
 	if (data.fd < 0)
 		return (1);
+
+	// char *str;
+	// char *line;
+
+	// str = read_file(data.fd);
+	
+	// while (1)
+	// {
+	// 	line = get_line(str);
+	// 	if (line)
+	// 	{
+	// 		printf("%s", line);
+	// 		free(line);
+	// 	}
+	// 	if (!line || *line == '\0')
+	// 		break ;
+	// }
+
+	// free(str);
 	data.map = parse_map(data.fd);
 	if (data.map == NULL)
 		free_and_exit(&data, 1);
 	if (init_players(&data.players, data.map))
 		free_and_exit(&data, 1);
-	if (init_mlx(&data))
-		free_and_exit(&data, 1);
-	if (init_textures(&data))
-		free_and_exit(&data, 1);
-	init_keys(data.keys, data.players);
-	init_hooks(&data);
-	mlx_loop(data.mlx);
+	// if (init_mlx(&data))
+	// 	free_and_exit(&data, 1);
+	// if (init_textures(&data))
+	// 	free_and_exit(&data, 1);
+	// init_keys(data.keys, data.players);
+	// init_hooks(&data);
+	// mlx_loop(data.mlx);
 	free_and_exit(&data, 0);
 }

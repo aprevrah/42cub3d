@@ -6,13 +6,13 @@
 /*   By: tmeniga@student.42vienna.com <tmeniga>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 15:48:24 by tmeniga@stu       #+#    #+#             */
-/*   Updated: 2024/11/30 20:40:45 by tmeniga@stu      ###   ########.fr       */
+/*   Updated: 2024/12/01 17:17:51 by tmeniga@stu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/cub3d.h"
 
-int	read_texture_data(int fd, t_texture_data *texture_data)
+int	read_texture_data(char *str, t_texture_data *texture_data)
 {
 	char	*line;
 	int		status;
@@ -25,7 +25,7 @@ int	read_texture_data(int fd, t_texture_data *texture_data)
 	configs = 0;
 	while (configs < 6)
 	{
-		line = get_next_line(fd, 0);
+		line = get_line(str);
 		if (!line)
 			return (1);
 		status = key_val(line, texture_data);
@@ -46,13 +46,17 @@ char	*set_null(int *location)
 	return (NULL);
 }
 
-char	*read_map_data_small(int fd, t_map *map, t_rmd data)
+char	*read_map_data_small(char *str, t_map *map, t_rmd data)
 {
 	while (1)
 	{
-		data.line = get_next_line(fd, 0);
-		if (!data.line)
+		data.line = get_line(str);
+		if (!data.line || *data.line == '\0')
+		{
+			if (*data.line == '\0')
+				return (free(data.line), data.line = NULL, data.content);
 			break ;
+		}
 		if (is_only_whitespace(data.line) && (!data.in_map))
 		{
 			free(data.line);
@@ -70,13 +74,13 @@ char	*read_map_data_small(int fd, t_map *map, t_rmd data)
 	return (data.content);
 }
 
-char	*read_map_data(int fd, t_map *map)
+char	*read_map_data(char *str, t_map *map)
 {
 	t_rmd	data;
 
 	data.content = NULL;
 	data.in_map = 0;
-	data.content = read_map_data_small(fd, map, data);
+	data.content = read_map_data_small(str, map, data);
 	return (data.content);
 }
 
