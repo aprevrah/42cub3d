@@ -60,10 +60,10 @@ t_map	*parse_map(int fd)
 
 	texture_data = get_texture_data(fd);
 	if (!texture_data)
-		return (NULL);
+		return (close(fd), NULL);
 	map = get_map(fd, texture_data);
 	if (!map)
-		return (NULL);
+		return (close(fd), NULL);
 	close(fd);
 	return (map);
 }

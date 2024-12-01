@@ -64,7 +64,7 @@ void	init2null(t_data *data)
 	data->use_mouse = false;
 	if (gettimeofday(&tv_now, NULL))
 	{
-		printf("Error: gettimeofday failed\n");
+		err("Error: gettimeofday failed\n");
 		free_and_exit(data, 1);
 	}
 	data->lastframe = tv_now;

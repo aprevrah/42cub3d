@@ -36,7 +36,7 @@ int	get_pixel_color(t_texture texture, int x, int y)
 
 	if (x < 0 || y < 0 || x >= texture.img_width || y >= texture.img_height)
 	{
-		printf("Pixel coordinates out of bounds\n");
+		err("Pixel coordinates out of bounds\n");
 		return (-1);
 	}
 	offset = (y * texture.line_length) + (x * (texture.bits_per_pixel / 8));

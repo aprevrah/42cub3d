@@ -64,7 +64,7 @@ int	procces_line(char const *s, t_map *map, int *i, int y)
 	while (s[*i] && s[*i] != '\n')
 	{
 		if (!is_valid_char(s[*i]))
-			return (printf("unvalid char in map\n"), 1);
+			return (err("unvalid char in map\n"), 1);
 		if (s[*i] == '0')
 			map->arr[y][x] = 1;
 		if (s[*i] == 'N' || s[*i] == 'E' || s[*i] == 'S' || s[*i] == 'W')
@@ -93,8 +93,8 @@ int	fill_map(char const *s, t_map *map)
 			break ;
 	}
 	if (count_players(map) == 0)
-		return (printf("Error: missing player\n"), 1);
+		return (err("Error: missing player\n"), 1);
 	if (count_players(map) > 1)
-		return (printf("Error: too many players\n"), 1);
+		return (err("Error: too many players\n"), 1);
 	return (0);
 }

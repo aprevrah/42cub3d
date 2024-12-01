@@ -47,25 +47,25 @@ int	init_textures(t_data *data)
 	data->map->texture_data->textures[3].img = NULL;
 	if (load_texture(data->map->texture_data->path_no, data,
 			&data->map->texture_data->textures[0]))
-		return (printf("Error: could not load texture\n"), 1);
+		return (err("Error: could not load texture\n"), 1);
 	if (load_texture(data->map->texture_data->path_ea, data,
 			&data->map->texture_data->textures[1]))
-		return (printf("Error: could not load texture\n"), 1);
+		return (err("Error: could not load texture\n"), 1);
 	if (load_texture(data->map->texture_data->path_so, data,
 			&data->map->texture_data->textures[2]))
-		return (printf("Error: could not load texture\n"), 1);
+		return (err("Error: could not load texture\n"), 1);
 	if (load_texture(data->map->texture_data->path_we, data,
 			&data->map->texture_data->textures[3]))
-		return (printf("Error: could not load texture\n"), 1);
+		return (err("Error: could not load texture\n"), 1);
 	return (0);
 }
 
 int	check_input(int argc, char **argv)
 {
 	if (argc != 2)
-		return (printf("Error: (Only) one argument needed.\n"), 1);
+		return (err("Error: (Only) one argument needed.\n"), 1);
 	if (!is_file_extension(argv[1], ".cub"))
-		return (printf("Error: Wrong filetype, \".cub\" needed.\n"), 1);
+		return (err("Error: Wrong filetype, \".cub\" needed.\n"), 1);
 	return (0);
 }
 
@@ -78,7 +78,7 @@ int	main(int argc, char **argv)
 		return (1);
 	data.fd = open(argv[1], O_RDONLY);
 	if (data.fd < 0)
-		return (1);
+		return (err("Error: Could not open file.\n"), 1);
 	data.map = parse_map(data.fd);
 	if (data.map == NULL)
 		free_and_exit(&data, 1);
