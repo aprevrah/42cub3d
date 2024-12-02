@@ -15,7 +15,7 @@ render.c free.c  pixel.c minimap.c mouse.c error.c)
 
 OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
 
-NAME = cub3d
+NAME = cub3D
 
 NUM_PROC = $(shell nproc)
 MAKEFLAGS = -j$(NUM_PROC)
@@ -50,6 +50,8 @@ fclean: clean
 re: fclean
 	+make all
 
+bonus: all
+
 # Map to be use for profiling
 MAP_PATH = assets/map.cub
 
@@ -71,4 +73,4 @@ prof: fclean
 	gprof -p -b $(PROFILE_DIR)/$(NAME) $(PROFILE_DIR)/gmon.out
 	@echo "${GREEN}For more stats, use this command:${NC}"
 	@echo "${CYAN}gprof $(PROFILE_DIR)/$(NAME) $(PROFILE_DIR)/gmon.out${NC}"
-.PHONY: all clean fclean re prof
+.PHONY: all clean fclean re bonus prof

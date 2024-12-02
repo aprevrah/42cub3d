@@ -27,18 +27,14 @@
 # include <sys/time.h>
 # include <unistd.h>
 
-# define COLOR 0x00FFFFFF
-# define MAP_SEP " "
 # define W_WIDTH 1280
 # define W_HEIGHT 720
 # define NUM_OF_KEYS 7 // Change to number of keys added
-# define R_SPEED 0.03
-# define T_SPEED 10
-# define S_SPEED 0.03
 # define PI 3.14159265358979323
-# define EPSILON 0.000001
-# define SCALE 70
 # define MAX_RAY 3000
+
+# define COLOR 0x00FFFFFF // debug minimap
+# define SCALE 70 // debug minimap
 
 # define WHITESPACE " \t\n\r\v\f"
 # define NUNERIC "0123456789"
@@ -131,8 +127,6 @@ typedef struct s_look_args
 	double				rotation;
 }						t_look_args;
 
-// Union to store different types of function arguments
-// Last entry is  a generic pointer (for other use cases)
 typedef union u_args
 {
 	t_move_args			move_args;
@@ -140,7 +134,6 @@ typedef union u_args
 	void				*ptr;
 }						t_args;
 
-// Define the key structure
 typedef struct s_key
 {
 	int					code;
@@ -173,7 +166,6 @@ typedef struct s_ivec2
 	int					y;
 }						t_ivec2;
 
-// check if this is norm
 typedef enum e_direction
 {
 	NORTH,
@@ -315,8 +307,6 @@ void					render_minimap(t_data *data);
 void					render_map(t_data *data);
 void					render_players(t_data *data);
 void					render_minimap_rays(t_data *data);
-
-// # utils.c
 
 // free.c
 void					free_2d_arr(void **arr, int rows);
