@@ -1,7 +1,7 @@
-NO assets/North.xpm
-WE assets/West.xpm
-EA assets/East.xpm
-SO assets/South.xpm
+NO assets/dir/North.xpm
+WE assets/dir/West.xpm
+EA assets/dir/East.xpm
+SO assets/dir/South.xpm
 
 C 60,60,251
 F 50,50,50

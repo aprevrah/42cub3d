@@ -15,7 +15,7 @@ render.c free.c  pixel.c minimap.c mouse.c error.c)
 
 OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
 
-NAME = cub3d
+NAME = cub3D
 
 NUM_PROC = $(shell nproc)
 MAKEFLAGS = -j$(NUM_PROC)

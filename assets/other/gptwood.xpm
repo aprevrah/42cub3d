@@ -1,0 +1,42 @@
+/* XPM */
+static char *wooden_texture_xpm[] = {
+"32 32 6 1",               /* width, height, colors, chars per pixel */
+"  c #8B4513",             /* SaddleBrown - dark brown */
+". c #A0522D",             /* Sienna - medium brown */
+"X c #CD853F",             /* Peru - lighter brown */
+"o c #D2691E",             /* Chocolate - orange brown */
+"+ c #DEB887",             /* BurlyWood - light brown */
+"@ c #8B5A2B",             /* DarkBrown - darker brown */
+"   . . . . X X X . . . . . o o o o X X X X X . . ",
+"   . X X X . . . . X o o o o . . X X X X o o X . ",
+" X X X . . X . X X X o + + o o . X . X X X X o o ",
+" . . . X X X X . . . o o + + o o o X X X X o o X ",
+" . . X X X X . X . X X o o o + o o X . . X o o o ",
+" X X . . . . . . X X X o o o + o o X . X X o o X ",
+" o o X X X . . . . o o X X o o o o o X X X X o o ",
+" o o o o o X X X . X X o X X X X o o X X . X X X ",
+" . X o o o . . o o o o o o X X X o o o X X X X o ",
+" X X X o o o o o o o o X X X o o o o o o o X X X ",
+" o o X X X o o o o o o o o o o o o o o X X X X . ",
+" o o o X X X X X o o o o o o X X X o o o o o X o ",
+" . X o X X X X X X o o o o o X X o o X o o X X o ",
+" X X o X X X X o o X X o o o X X X o o o o X o X ",
+" o X o o o X o o X X X X o o o X X o o o o o o o ",
+" o X o o o X o X o o o o X o o X X X X X X X X X ",
+" X o o o X X o o o X o o o o X o o o X X X X X o ",
+" X o o o o o X X X o o o o o o o o o X X X X o o ",
+" X X X o o o o o o X X o o o o X X X X X o o o o ",
+" o o X X X o o o o o X X X o X X X o o X X o o X ",
+" o o o X X X o o o X o X o X X X X o o o X o X X ",
+" X o o o X X X X o o X o o X X o o o o o X X X X ",
+" X X X o o X X o o X X X o X o o o X X X o X o o ",
+" o X X o o o X o o o X X o X o o o o o X X X X o ",
+" o o X X o o o X o o o o o X o o X X X X X X o o ",
+" X X X X X o X X o o o o X X X X X o o X X o X X ",
+" X o o X X X o o X o o X X X o o X o X X o X X X ",
+" o o o o X X X o o X o X o o o o X o X X X X X X ",
+" o o X X o X o o X X o o o o o X o X o X X X o o ",
+" o X X X X X o o o X X X o o o X X o o X o o o X ",
+" . X X o o o X o o o o o X X X X X o o o o o o o ",
+" X X X X X X o X X X o o o o X X X o X o X o X X "
+};

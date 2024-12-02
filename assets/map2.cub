@@ -1,9 +1,9 @@
-SO assets/cobblestone.xpm
-WE assets/cobblestone.xpm
-NO assets/cobblestone.xpm
+SO assets/mc/cobblestone.xpm
+WE assets/mc/cobblestone.xpm
+NO assets/mc/cobblestone.xpm
 C 60,000,240
 F     50,50,50 
-EA assets/cobblestone.xpm
+EA assets/mc/cobblestone.xpm
 
 
 

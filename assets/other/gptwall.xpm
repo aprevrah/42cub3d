@@ -1,0 +1,24 @@
+/* XPM */
+static char *concrete_wall_xpm[] = {
+"16 16 5 1",              /* width, height, colors, chars per pixel */
+"  c #808080",            /* Light gray */
+". c #A9A9A9",            /* Dark gray */
+"X c #696969",            /* Darker gray */
+"o c #BEBEBE",            /* Lighter gray */
+"+ c #C0C0C0",            /* Lightest gray */
+"  ................",
+". X X X . o o o . ",
+". X + + X X X X . ",
+". X + o X X X X o ",
+". + o o o o X X o ",
+"o + + + + + o o o ",
+"o + + + + X X X X ",
+". o o o + X X X X ",
+". X X + + o o o o ",
+". X X o o X X X X ",
+". X X X o X X X X ",
+"o + + X + o o o o ",
+"o + + + + + X X X ",
+". o o o o o X X X ",
+". X X X X X X X X ",
+".................." };
